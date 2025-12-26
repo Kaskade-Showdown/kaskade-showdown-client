@@ -869,7 +869,7 @@ export const Dex = new class implements ModdedDex {
 		if (pokemon.shiny) spriteData.shiny = true;
 		if (dex.modid === 'gen7letsgo') gen = 8;
 		if (Dex.prefs('nopastgens')) gen = 9;
-		if (Dex.prefs('bwgfx') && gen > 5) gen = 5;
+		if (!Dex.prefs('bwgfx') && gen > 5) gen = 5;
 		// TODO: refactor after we get home sprites for Z-A Megas and Eternal Floette
 		let homeExists = (!species.isNonstandard || !['CAP', 'Custom'].includes(species.isNonstandard) ||
 			species.id === "xerneasneutral") && ![
