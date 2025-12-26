@@ -204,11 +204,11 @@ function requireNoCache(pathSpec) {
 		const id = entry[0];
 		let name = '';
 		switch (entry[1]) {
-			case 'pokemon': name = Dex.species.get(id).name; break;
-			case 'move': name = Dex.moves.get(id).name; break;
-			case 'item': name = Dex.items.get(id).name; break;
-			case 'ability': name = Dex.abilities.get(id).name; break;
-			case 'article': name = BattleArticleTitles[id] || ''; break;
+		case 'pokemon': name = Dex.species.get(id).name; break;
+		case 'move': name = Dex.moves.get(id).name; break;
+		case 'item': name = Dex.items.get(id).name; break;
+		case 'ability': name = Dex.abilities.get(id).name; break;
+		case 'article': name = BattleArticleTitles[id] || ''; break;
 		}
 		let res = '';
 		let nonAlnum = 0;
@@ -413,7 +413,7 @@ process.stdout.write("Building `data/teambuilder-tables.js`... ");
 					if (species.isNonstandard && ['LGPE', 'CAP', 'Future'].includes(species.isNonstandard)) return 'Illegal';
 					return species.tags.includes('Mythical') ? 'Mythical' :
 						species.tags.includes('Restricted Legendary') ? 'Restricted Legendary' :
-							species.nfe ? (species.prevo ? 'NFE' : 'LC') : 'Regular';
+						species.nfe ? (species.prevo ? 'NFE' : 'LC') : 'Regular';
 				}
 				if (species.tier === 'CAP' || species.tier === 'CAP NFE' || species.tier === 'CAP LC') {
 					return species.tier;
@@ -682,254 +682,254 @@ process.stdout.write("Building `data/teambuilder-tables.js`... ");
 			}
 			switch (id) {
 			// new items
-				case 'weatherballoon':
-				case 'volatilespray':
-				case 'energychannelizer':
-				case 'portableturbine':
-				case 'energynullifier':
+			case 'weatherballoon':
+			case 'volatilespray':
+			case 'energychannelizer':
+			case 'portableturbine':
+			case 'energynullifier':
 			// type boost items
-				case 'charmingtalisman':
+			case 'charmingtalisman':
 			// poor items
-				case 'frostorb':
+			case 'frostorb':
 			// undecided
-				case 'pikaspresso':
-				case 'worcanecoldbrew':
-				case 'sandygastmocha':
-				case 'mystictamroastdoppio':
-				case 'coffeegeistcappuccino':
-				case 'flatunovan':
-					newItems.push(id);
-					break;
+			case 'pikaspresso':
+			case 'worcanecoldbrew':
+			case 'sandygastmocha':
+			case 'mystictamroastdoppio':
+			case 'coffeegeistcappuccino':
+			case 'flatunovan':
+				newItems.push(id);
+				break;
 			// popular items
-				case 'choiceband':
-				case 'choicespecs':
-				case 'eviolite':
-					popularItems.push(id);
-					break;
+			case 'choiceband':
+			case 'choicespecs':
+			case 'eviolite':
+				popularItems.push(id);
+				break;
 			// great everywhere but metronome
-				case 'leftovers':
-				case 'lifeorb':
-				case 'choicescarf':
-				case 'assaultvest':
-				case 'focussash':
-				case 'powerherb':
-				case 'rockyhelmet':
-					if (!isMetBattle) goodItems.push(id);
-					else popularItems.push(id);
-					break;
+			case 'leftovers':
+			case 'lifeorb':
+			case 'choicescarf':
+			case 'assaultvest':
+			case 'focussash':
+			case 'powerherb':
+			case 'rockyhelmet':
+				if (!isMetBattle) goodItems.push(id);
+				else popularItems.push(id);
+				break;
 			// just singles
-				case 'airballoon':
-				case 'loadeddice':
-				case 'heavydutyboots':
-				case 'expertbelt':
-				case 'salacberry':
-					if (isDoubles || isMetBattle) goodItems.push(id);
-					else popularItems.push(id);
-					break;
+			case 'airballoon':
+			case 'loadeddice':
+			case 'heavydutyboots':
+			case 'expertbelt':
+			case 'salacberry':
+				if (isDoubles || isMetBattle) goodItems.push(id);
+				else popularItems.push(id);
+				break;
 			// just doubles
-				case 'safetygoggles':
-				case 'ejectbutton':
-				case 'ejectpack':
-					if (isDoubles) popularItems.push(id);
-					else goodItems.push(id);
-					break;
+			case 'safetygoggles':
+			case 'ejectbutton':
+			case 'ejectpack':
+				if (isDoubles) popularItems.push(id);
+				else goodItems.push(id);
+				break;
 			// doubles + metronome
-				case 'covertcloak':
-				case 'clearamulet':
-				case 'weaknesspolicy':
-					if (isDoubles || isMetBattle) popularItems.push(id);
-					else goodItems.push(id);
-					break;
+			case 'covertcloak':
+			case 'clearamulet':
+			case 'weaknesspolicy':
+				if (isDoubles || isMetBattle) popularItems.push(id);
+				else goodItems.push(id);
+				break;
 			// metronome only
-				case 'mirrorherb':
-					if (isMetBattle) popularItems.push(id);
-					else goodItems.push(id);
-					break;
+			case 'mirrorherb':
+				if (isMetBattle) popularItems.push(id);
+				else goodItems.push(id);
+				break;
 			// generation specific
-				case 'mentalherb':
-					if (isMetBattle) goodItems.push(id);
-					else if (genNum > 4) popularItems.push(id);
-					else poorItems.push(id);
-					break;
-				case 'lumberry':
-					if (genNum === 2 || genNum > 6) goodItems.push(id);
-					else popularItems.push(id);
-					break;
-				case 'sitrusberry':
-					if (genNum > 3 && (genNum < 7 || isDoubles)) popularItems.push(id);
-					else if (genNum > 6) healingBerryItems.push(id);
-					else poorItems.push(id);
-					break;
-				case 'aguavberry':
-				case 'figyberry':
-				case 'iapapaberry':
-				case 'magoberry':
-				case 'wikiberry':
-					if (genNum === 7) popularItems.push(id);
-					else if (genNum >= 8) healingBerryItems.push(id);
-					else poorItems.push(id);
-					break;
-				case 'berryjuice':
-					if (genNum === 2) poorItems.push(id);
-					else goodItems.push(id);
-					break;
-				case 'dragonfang':
-					if (genNum === 2) poorItems.push(id);
-					else typeBoostItems.push(id);
-					break;
-				case 'dragonscale':
-					if (genNum === 2) typeBoostItems.push(id);
-					else poorItems.push(id);
-					break;
-				case 'mail':
-					if (genNum >= 6) unreleasedItems.push(id);
-					else goodItems.push(id);
-					break;
+			case 'mentalherb':
+				if (isMetBattle) goodItems.push(id);
+				else if (genNum > 4) popularItems.push(id);
+				else poorItems.push(id);
+				break;
+			case 'lumberry':
+				if (genNum === 2 || genNum > 6) goodItems.push(id);
+				else popularItems.push(id);
+				break;
+			case 'sitrusberry':
+				if (genNum > 3 && (genNum < 7 || isDoubles)) popularItems.push(id);
+				else if (genNum > 6) healingBerryItems.push(id);
+				else poorItems.push(id);
+				break;
+			case 'aguavberry':
+			case 'figyberry':
+			case 'iapapaberry':
+			case 'magoberry':
+			case 'wikiberry':
+				if (genNum === 7) popularItems.push(id);
+				else if (genNum >= 8) healingBerryItems.push(id);
+				else poorItems.push(id);
+				break;
+			case 'berryjuice':
+				if (genNum === 2) poorItems.push(id);
+				else goodItems.push(id);
+				break;
+			case 'dragonfang':
+				if (genNum === 2) poorItems.push(id);
+				else typeBoostItems.push(id);
+				break;
+			case 'dragonscale':
+				if (genNum === 2) typeBoostItems.push(id);
+				else poorItems.push(id);
+				break;
+			case 'mail':
+				if (genNum >= 6) unreleasedItems.push(id);
+				else goodItems.push(id);
+				break;
 			// Legendaries
-				case 'adamantorb':
-				case 'griseousorb':
-				case 'lustrousorb':
-				case 'blueorb':
-				case 'redorb':
-				case 'souldew':
+			case 'adamantorb':
+			case 'griseousorb':
+			case 'lustrousorb':
+			case 'blueorb':
+			case 'redorb':
+			case 'souldew':
 			// falls through
 			// Other
-				case 'leek':
-				case 'stick':
-				case 'thickclub':
-				case 'lightball':
-				case 'luckypunch':
-				case 'quickpowder':
-				case 'metalpowder':
-				case 'deepseascale':
-				case 'deepseatooth':
-					specificItems.push(id);
-					break;
+			case 'leek':
+			case 'stick':
+			case 'thickclub':
+			case 'lightball':
+			case 'luckypunch':
+			case 'quickpowder':
+			case 'metalpowder':
+			case 'deepseascale':
+			case 'deepseatooth':
+				specificItems.push(id);
+				break;
 			// Fling-only
-				case 'rarebone':
-				case 'belueberry':
-				case 'blukberry':
-				case 'cornnberry':
-				case 'durinberry':
-				case 'hondewberry':
-				case 'magostberry':
-				case 'nanabberry':
-				case 'nomelberry':
-				case 'pamtreberry':
-				case 'pinapberry':
-				case 'pomegberry':
-				case 'qualotberry':
-				case 'rabutaberry':
-				case 'razzberry':
-				case 'spelonberry':
-				case 'tamatoberry':
-				case 'watmelberry':
-				case 'wepearberry':
-				case 'energypowder':
-				case 'electirizer':
-				case 'oldamber':
-				case 'dawnstone':
-				case 'dubiousdisc':
-				case 'duskstone':
-				case 'firestone':
-				case 'icestone':
-				case 'leafstone':
-				case 'magmarizer':
-				case 'moonstone':
-				case 'ovalstone':
-				case 'prismscale':
-				case 'protector':
-				case 'reapercloth':
-				case 'sachet':
-				case 'shinystone':
-				case 'sunstone':
-				case 'thunderstone':
-				case 'upgrade':
-				case 'waterstone':
-				case 'whippeddream':
-				case 'bottlecap':
-				case 'goldbottlecap':
-				case 'galaricacuff':
-				case 'chippedpot':
-				case 'crackedpot':
-				case 'galaricawreath':
-				case 'auspiciousarmor':
-				case 'maliciousarmor':
-				case 'masterpieceteacup':
-				case 'metalalloy':
-				case 'unremarkableteacup':
-				case 'bignugget':
+			case 'rarebone':
+			case 'belueberry':
+			case 'blukberry':
+			case 'cornnberry':
+			case 'durinberry':
+			case 'hondewberry':
+			case 'magostberry':
+			case 'nanabberry':
+			case 'nomelberry':
+			case 'pamtreberry':
+			case 'pinapberry':
+			case 'pomegberry':
+			case 'qualotberry':
+			case 'rabutaberry':
+			case 'razzberry':
+			case 'spelonberry':
+			case 'tamatoberry':
+			case 'watmelberry':
+			case 'wepearberry':
+			case 'energypowder':
+			case 'electirizer':
+			case 'oldamber':
+			case 'dawnstone':
+			case 'dubiousdisc':
+			case 'duskstone':
+			case 'firestone':
+			case 'icestone':
+			case 'leafstone':
+			case 'magmarizer':
+			case 'moonstone':
+			case 'ovalstone':
+			case 'prismscale':
+			case 'protector':
+			case 'reapercloth':
+			case 'sachet':
+			case 'shinystone':
+			case 'sunstone':
+			case 'thunderstone':
+			case 'upgrade':
+			case 'waterstone':
+			case 'whippeddream':
+			case 'bottlecap':
+			case 'goldbottlecap':
+			case 'galaricacuff':
+			case 'chippedpot':
+			case 'crackedpot':
+			case 'galaricawreath':
+			case 'auspiciousarmor':
+			case 'maliciousarmor':
+			case 'masterpieceteacup':
+			case 'metalalloy':
+			case 'unremarkableteacup':
+			case 'bignugget':
 			// swse
-				case 'peatblock':
-				case 'keybone':
-				case 'amazedrive':
-					uselessItems.push(id);
-					break;
+			case 'peatblock':
+			case 'keybone':
+			case 'amazedrive':
+				uselessItems.push(id);
+				break;
 			// outclassed items
-				case 'aspearberry':
-				case 'bindingband':
-				case 'cheriberry':
-				case 'destinyknot':
-				case 'enigmaberry':
-				case 'floatstone':
-				case 'ironball':
-				case 'jabocaberry':
-				case 'oranberry':
-				case 'machobrace':
-				case 'pechaberry':
-				case 'persimberry':
-				case 'poweranklet':
-				case 'powerband':
-				case 'powerbelt':
-				case 'powerbracer':
-				case 'powerlens':
-				case 'powerweight':
-				case 'rawstberry':
-				case 'ringtarget':
-				case 'rowapberry':
-				case 'bigroot':
-				case 'focusband':
+			case 'aspearberry':
+			case 'bindingband':
+			case 'cheriberry':
+			case 'destinyknot':
+			case 'enigmaberry':
+			case 'floatstone':
+			case 'ironball':
+			case 'jabocaberry':
+			case 'oranberry':
+			case 'machobrace':
+			case 'pechaberry':
+			case 'persimberry':
+			case 'poweranklet':
+			case 'powerband':
+			case 'powerbelt':
+			case 'powerbracer':
+			case 'powerlens':
+			case 'powerweight':
+			case 'rawstberry':
+			case 'ringtarget':
+			case 'rowapberry':
+			case 'bigroot':
+			case 'focusband':
 			// gen 2
-				case 'psncureberry':
-				case 'przcureberry':
-				case 'burntberry':
-				case 'bitterberry':
-				case 'iceberry':
-				case 'berry':
-					poorItems.push(id);
-					break;
-				default:
-					if (
-						item.name.endsWith(" Ball") || item.name.endsWith(" Fossil") || item.name.startsWith("Fossilized ") ||
-						item.name.endsWith(" Sweet") || item.name.endsWith(" Apple")
-					) {
-						uselessItems.push(id);
-					} else if (item.name.startsWith("TR")) {
-						uselessItems.push(id);
-					} else if (item.name.endsWith(" Gem") && item.name !== "Normal Gem") {
-						if (genNum >= 6) {
-							unreleasedItems.push(id);
-						} else {
-							nicheItems.push(id);
-						}
-					} else if (item.name.endsWith(" Berry")) {
-						nicheBerryItems.push(id);
-					} else if (item.name.endsWith(" Plate")) {
-						// plateItems.push(id);
-						futureItems.push(id);
-					} else if (item.name.endsWith(" Drive")) {
-						specificItems.push(id);
-					} else if (item.name.endsWith(" Memory")) {
-						specificItems.push(id);
-					} else if (item.name.startsWith("Rusted")) {
-						specificItems.push(id);
-					} else if (item.itemUser) {
-						specificItems.push(id);
-					} else if (item.megaStone) {
-						specificItems.push(id);
+			case 'psncureberry':
+			case 'przcureberry':
+			case 'burntberry':
+			case 'bitterberry':
+			case 'iceberry':
+			case 'berry':
+				poorItems.push(id);
+				break;
+			default:
+				if (
+					item.name.endsWith(" Ball") || item.name.endsWith(" Fossil") || item.name.startsWith("Fossilized ") ||
+					item.name.endsWith(" Sweet") || item.name.endsWith(" Apple")
+				) {
+					uselessItems.push(id);
+				} else if (item.name.startsWith("TR")) {
+					uselessItems.push(id);
+				} else if (item.name.endsWith(" Gem") && item.name !== "Normal Gem") {
+					if (genNum >= 6) {
+						unreleasedItems.push(id);
 					} else {
 						nicheItems.push(id);
 					}
+				} else if (item.name.endsWith(" Berry")) {
+					nicheBerryItems.push(id);
+				} else if (item.name.endsWith(" Plate")) {
+					// plateItems.push(id);
+					futureItems.push(id);
+				} else if (item.name.endsWith(" Drive")) {
+					specificItems.push(id);
+				} else if (item.name.endsWith(" Memory")) {
+					specificItems.push(id);
+				} else if (item.name.startsWith("Rusted")) {
+					specificItems.push(id);
+				} else if (item.itemUser) {
+					specificItems.push(id);
+				} else if (item.megaStone) {
+					specificItems.push(id);
+				} else {
+					nicheItems.push(id);
+				}
 			}
 		}
 		items.push(...newItems);

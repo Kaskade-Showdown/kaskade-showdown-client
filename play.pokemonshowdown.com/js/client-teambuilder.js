@@ -1253,7 +1253,7 @@
 				buf += '</ol>';
 				var formatInfo = this.formatResources[this.curTeam.format];
 				// data's there and loaded
-				/* if (formatInfo && formatInfo !== true) {
+				if (formatInfo && formatInfo !== true) {
 					if (formatInfo.resources.length || formatInfo.url) {
 						buf += '<div style="padding-left: 5px"><h3 style="font-size: 12px">Teambuilding resources for this tier:</h3></div><ul>';
 						for (var i = 0; i < formatInfo.resources.length; i++) {
@@ -1264,7 +1264,7 @@
 					buf += '</ul>';
 					var desc = formatInfo.resources.length ? 'more ' : '';
 					buf += '<div style="padding-left: 5px">Find ' + desc + 'helpful resources for this tier on <a href="https://discord.gg/nrM6eBSTAy">the Discord</a>.</div>';
-				} */
+				}
 				buf += '<form id="pokepasteForm" style="display:inline" method="post" action="https://pokepast.es/create" target="_blank">';
 				buf += '<input type="hidden" name="title" id="pasteTitle">';
 				buf += '<input type="hidden" name="paste" id="pasteData">';
