@@ -14,17 +14,19 @@
  * @license MIT
  */
 
+import { Dex, toID } from "./battle-dex";
+
 /**
  * String that contains only lowercase alphanumeric characters.
  */
-type ID = string & {__isID: true};
+export type ID = string & { __isID: true };
 
-interface Nature {
+export interface Nature {
 	plus?: StatNameExceptHP;
 	minus?: StatNameExceptHP;
 }
 
-const BattleNatures: {[k in NatureName]: Nature} = {
+export const BattleNatures: { [k in NatureName]: Nature } = {
 	Adamant: {
 		plus: 'atk',
 		minus: 'spa',
@@ -111,7 +113,7 @@ const BattleNatures: {[k in NatureName]: Nature} = {
 		minus: 'atk',
 	},
 };
-const BattleStatIDs: {[k: string]: StatName | undefined} = {
+export const BattleStatIDs: { [k: string]: StatName | undefined } = {
 	HP: 'hp',
 	hp: 'hp',
 	Atk: 'atk',
@@ -133,7 +135,7 @@ const BattleStatIDs: {[k: string]: StatName | undefined} = {
 	spe: 'spe',
 };
 /** Stat short names */
-const BattleStatNames = {
+export const BattleStatNames = {
 	hp: 'HP',
 	atk: 'Atk',
 	def: 'Def',
@@ -142,13 +144,13 @@ const BattleStatNames = {
 	spe: 'Spe',
 } as const;
 
-const BattleBaseSpeciesChart = [
+export const BattleBaseSpeciesChart = [
 	"unown", "burmy", "shellos", "gastrodon", "deerling", "sawsbuck", "vivillon", "flabebe", "floette", "florges", "furfrou", "minior", "alcremie", "tatsugiri",
 	"botnyak",
 	"pokestarufo", "pokestarbrycenman", "pokestarmt", "pokestarmt2", "pokestartransport", "pokestargiant", "pokestarhumanoid", "pokestarmonster", "pokestarf00", "pokestarf002", "pokestarspirit", "pokestarblackdoor", "pokestarwhitedoor", "pokestarblackbelt",
 ] as ID[];
 
-const BattlePokemonIconIndexes: {[id: string]: number} = {
+export const BattlePokemonIconIndexes: { [id: string]: number } = {
 	egg: 1164 + 3,
 
 	// Kaskade
@@ -1028,9 +1030,13 @@ const BattlePokemonIconIndexes: {[id: string]: number} = {
 	cresceidon: 1812 + 73,
 	chuggalong: 1812 + 74,
 	shox: 1812 + 75,
+	chuggon: 1812 + 76,
+	draggalong: 1812 + 77,
+	ramnarok: 1812 + 78,
+	ramnarokradiant: 1812 + 79,
 };
 
-const BattlePokemonIconIndexesLeft: {[id: string]: number} = {
+export const BattlePokemonIconIndexesLeft: { [id: string]: number } = {
 	pikachubelle: 1908 + 0,
 	pikachupopstar: 1908 + 1,
 	clefairy: 1908 + 2,
@@ -1140,7 +1146,7 @@ const BattlePokemonIconIndexesLeft: {[id: string]: number} = {
 	blacephalon: 1908 + 105,
 };
 
-const BattleAvatarNumbers: {[k: string]: string} = {
+export const BattleAvatarNumbers: { [k: string]: string } = {
 	1: 'lucas',
 	2: 'dawn',
 	3: 'youngster-gen4dp',
@@ -1455,18 +1461,18 @@ const BattleAvatarNumbers: {[k: string]: string} = {
 	1010: '#1010',
 };
 
-type StatName = 'hp' | 'atk' | 'def' | 'spa' | 'spd' | 'spe';
-type NatureName = 'Adamant' | 'Bashful' | 'Bold' | 'Brave' | 'Calm' | 'Careful' | 'Docile' | 'Gentle' |
+export type StatName = 'hp' | 'atk' | 'def' | 'spa' | 'spd' | 'spe';
+export type NatureName = 'Adamant' | 'Bashful' | 'Bold' | 'Brave' | 'Calm' | 'Careful' | 'Docile' | 'Gentle' |
 	'Hardy' | 'Hasty' | 'Impish' | 'Jolly' | 'Lax' | 'Lonely' | 'Mild' | 'Modest' | 'Naive' | 'Naughty' |
 	'Quiet' | 'Quirky' | 'Rash' | 'Relaxed' | 'Sassy' | 'Serious' | 'Timid';
-type StatNameExceptHP = 'atk' | 'def' | 'spa' | 'spd' | 'spe';
-type TypeName = 'Normal' | 'Fighting' | 'Flying' | 'Poison' | 'Ground' | 'Rock' | 'Bug' | 'Ghost' | 'Steel' |
+export type StatNameExceptHP = 'atk' | 'def' | 'spa' | 'spd' | 'spe';
+export type TypeName = 'Normal' | 'Fighting' | 'Flying' | 'Poison' | 'Ground' | 'Rock' | 'Bug' | 'Ghost' | 'Steel' |
 	'Fire' | 'Water' | 'Grass' | 'Electric' | 'Psychic' | 'Ice' | 'Dragon' | 'Dark' | 'Fairy' | 'Stellar' | '???';
-type StatusName = 'par' | 'psn' | 'frz' | 'slp' | 'brn' | 'fst';
-type BoostStatName = 'atk' | 'def' | 'spa' | 'spd' | 'spe' | 'evasion' | 'accuracy' | 'spc';
-type GenderName = 'M' | 'F' | 'N';
+export type StatusName = 'par' | 'psn' | 'frz' | 'slp' | 'brn' | 'fst';
+export type BoostStatName = 'atk' | 'def' | 'spa' | 'spd' | 'spe' | 'evasion' | 'accuracy' | 'spc';
+export type GenderName = 'M' | 'F' | 'N';
 
-interface Effect {
+export interface Effect {
 	readonly id: ID;
 	readonly name: string;
 	readonly gen: number;
@@ -1478,7 +1484,7 @@ interface Effect {
 	readonly exists: boolean;
 }
 
-class PureEffect implements Effect {
+export class PureEffect implements Effect {
 	readonly effectType = 'PureEffect';
 	readonly id: ID;
 	readonly name: string;
@@ -1492,7 +1498,7 @@ class PureEffect implements Effect {
 	}
 }
 
-class Item implements Effect {
+export class Item implements Effect {
 	// effect
 	readonly effectType = 'Item';
 	readonly id: ID;
@@ -1515,7 +1521,7 @@ class Item implements Effect {
 	readonly onMemory: TypeName;
 	readonly onDrive: TypeName;
 	readonly fling: any;
-	readonly naturalGift: any;
+	readonly naturalGift: { basePower: number, type: TypeName };
 	readonly isPokeball: boolean;
 	readonly itemUser?: readonly string[];
 
@@ -1560,7 +1566,7 @@ class Item implements Effect {
 	}
 }
 
-interface MoveFlags {
+export interface MoveFlags {
 	/** The move has an animation when used on an ally. */
 	allyanim?: 1 | 0;
 	/** Power is multiplied by 1.5 when used by a Pokemon with the Strong Jaw Ability. */
@@ -1611,12 +1617,12 @@ interface MoveFlags {
 	wind?: 1 | 0;
 }
 
-type MoveTarget = 'normal' | 'any' | 'adjacentAlly' | 'adjacentFoe' | 'adjacentAllyOrSelf' | // single-target
+export type MoveTarget = 'normal' | 'any' | 'adjacentAlly' | 'adjacentFoe' | 'adjacentAllyOrSelf' | // single-target
 	'self' | 'randomNormal' | // single-target, automatic
 	'allAdjacent' | 'allAdjacentFoes' | // spread
 	'allySide' | 'foeSide' | 'all'; // side and field
 
-class Move implements Effect {
+export class Move implements Effect {
 	// effect
 	readonly effectType = 'Move';
 	readonly id: ID;
@@ -1634,6 +1640,7 @@ class Move implements Effect {
 	readonly pressureTarget: MoveTarget;
 	readonly flags: Readonly<MoveFlags>;
 	readonly critRatio: number;
+	readonly damage?: number | 'level' | false | null;
 
 	readonly desc: string;
 	readonly shortDesc: string;
@@ -1642,10 +1649,10 @@ class Move implements Effect {
 	readonly zMove?: {
 		basePower?: number,
 		effect?: string,
-		boost?: {[stat in StatName]?: number},
+		boost?: { [stat in StatName]?: number },
 	};
 	readonly isMax: boolean | string;
-	readonly maxMove: {basePower: number};
+	readonly maxMove: { basePower: number };
 	readonly ohko: true | 'Ice' | null;
 	readonly recoil: number[] | null;
 	readonly heal: number[] | null;
@@ -1654,7 +1661,7 @@ class Move implements Effect {
 	readonly basePowerCallback: boolean;
 	readonly noPPBoosts: boolean;
 	readonly status: string;
-	readonly secondaries: ReadonlyArray<any> | null;
+	readonly secondaries: readonly any[] | null;
 	readonly num: number;
 
 	constructor(id: ID, name: string, data: any) {
@@ -1675,6 +1682,7 @@ class Move implements Effect {
 		this.pressureTarget = data.pressureTarget || this.target;
 		this.flags = data.flags || {};
 		this.critRatio = data.critRatio === 0 ? 0 : (data.critRatio || 1);
+		this.damage = data.damage;
 
 		// TODO: move to text.js
 		this.desc = data.desc;
@@ -1693,43 +1701,43 @@ class Move implements Effect {
 		this.secondaries = data.secondaries || (data.secondary ? [data.secondary] : null);
 
 		this.isMax = data.isMax || false;
-		this.maxMove = data.maxMove || {basePower: 0};
+		this.maxMove = data.maxMove || { basePower: 0 };
 		if (this.category !== 'Status' && !this.maxMove?.basePower) {
 			if (this.isZ || this.isMax) {
-				this.maxMove = {basePower: 1};
+				this.maxMove = { basePower: 1 };
 			} else if (!this.basePower) {
-				this.maxMove = {basePower: 100};
+				this.maxMove = { basePower: 100 };
 			} else if (['Fighting', 'Poison'].includes(this.type)) {
 				if (this.basePower >= 150) {
-					this.maxMove = {basePower: 100};
+					this.maxMove = { basePower: 100 };
 				} else if (this.basePower >= 110) {
-					this.maxMove = {basePower: 95};
+					this.maxMove = { basePower: 95 };
 				} else if (this.basePower >= 75) {
-					this.maxMove = {basePower: 90};
+					this.maxMove = { basePower: 90 };
 				} else if (this.basePower >= 65) {
-					this.maxMove = {basePower: 85};
+					this.maxMove = { basePower: 85 };
 				} else if (this.basePower >= 55) {
-					this.maxMove = {basePower: 80};
+					this.maxMove = { basePower: 80 };
 				} else if (this.basePower >= 45) {
-					this.maxMove = {basePower: 75};
-				} else  {
-					this.maxMove = {basePower: 70};
+					this.maxMove = { basePower: 75 };
+				} else {
+					this.maxMove = { basePower: 70 };
 				}
 			} else {
 				if (this.basePower >= 150) {
-					this.maxMove = {basePower: 150};
+					this.maxMove = { basePower: 150 };
 				} else if (this.basePower >= 110) {
-					this.maxMove = {basePower: 140};
+					this.maxMove = { basePower: 140 };
 				} else if (this.basePower >= 75) {
-					this.maxMove = {basePower: 130};
+					this.maxMove = { basePower: 130 };
 				} else if (this.basePower >= 65) {
-					this.maxMove = {basePower: 120};
+					this.maxMove = { basePower: 120 };
 				} else if (this.basePower >= 55) {
-					this.maxMove = {basePower: 110};
+					this.maxMove = { basePower: 110 };
 				} else if (this.basePower >= 45) {
-					this.maxMove = {basePower: 100};
-				} else  {
-					this.maxMove = {basePower: 90};
+					this.maxMove = { basePower: 100 };
+				} else {
+					this.maxMove = { basePower: 90 };
 				}
 			}
 		}
@@ -1787,7 +1795,7 @@ class Move implements Effect {
 	}
 }
 
-interface AbilityFlags {
+export interface AbilityFlags {
 	/** Can be suppressed by Mold Breaker and related effects */
 	breakable?: 1;
 	/** Ability can't be suppressed by e.g. Gastro Acid or Neutralizing Gas */
@@ -1806,7 +1814,7 @@ interface AbilityFlags {
 	notransform?: 1;
 }
 
-class Ability implements Effect {
+export class Ability implements Effect {
 	// effect
 	readonly effectType = 'Ability';
 	readonly id: ID;
@@ -1853,7 +1861,7 @@ class Ability implements Effect {
 	}
 }
 
-class Species implements Effect {
+export class Species implements Effect {
 	// effect
 	readonly effectType = 'Species';
 	readonly id: ID;
@@ -1870,7 +1878,7 @@ class Species implements Effect {
 
 	// basic data
 	readonly num: number;
-	readonly types: ReadonlyArray<TypeName>;
+	readonly types: readonly TypeName[];
 	readonly abilities: Readonly<{
 		0: string, 1?: string, H?: string, S?: string,
 	}>;
@@ -1884,28 +1892,29 @@ class Species implements Effect {
 	readonly heightm: number;
 	readonly gender: GenderName;
 	readonly color: string;
-	readonly genderRatio: Readonly<{M: number, F: number}> | null;
-	readonly eggGroups: ReadonlyArray<string>;
-	readonly tags: ReadonlyArray<string>;
+	readonly genderRatio: Readonly<{ M: number, F: number }> | null;
+	readonly eggGroups: readonly string[];
+	readonly tags: readonly string[];
 
 	// format data
-	readonly otherFormes: ReadonlyArray<string> | null;
-	readonly cosmeticFormes: ReadonlyArray<string> | null;
-	readonly evos: ReadonlyArray<string> | null;
+	readonly otherFormes: readonly string[] | null;
+	readonly cosmeticFormes: readonly string[] | null;
+	readonly evos: readonly string[] | null;
 	readonly prevo: string;
 	readonly evoType: 'trade' | 'useItem' | 'levelMove' | 'levelExtra' | 'levelFriendship' | 'levelHold' | 'other' | '';
 	readonly evoLevel: number;
 	readonly evoMove: string;
 	readonly evoItem: string;
 	readonly evoCondition: string;
-	readonly requiredItems: ReadonlyArray<string>;
+	readonly nfe: boolean;
+	readonly requiredItems: readonly string[];
 	readonly tier: string;
 	readonly isTotem: boolean;
 	readonly isMega: boolean;
 	readonly isPrimal: boolean;
 	readonly canGigantamax: boolean;
 	readonly cannotDynamax: boolean;
-	readonly forceTeraType: TypeName;
+	readonly requiredTeraType: TypeName;
 	readonly battleOnly: string | string[] | undefined;
 	readonly isNonstandard: string | null;
 	readonly unreleasedHidden: boolean | 'Past';
@@ -1923,15 +1932,16 @@ class Species implements Effect {
 		const baseId = toID(this.baseSpecies);
 		this.formeid = (baseId === this.id ? '' : '-' + toID(this.forme));
 		this.spriteid = baseId + this.formeid;
-		if (this.spriteid.slice(-5) === 'totem') this.spriteid = this.spriteid.slice(0, -5);
+		if (this.spriteid.endsWith('totem')) this.spriteid = this.spriteid.slice(0, -5);
 		if (this.spriteid === 'greninja-bond') this.spriteid = 'greninja';
-		if (this.spriteid.slice(-1) === '-') this.spriteid = this.spriteid.slice(0, -1);
+		if (this.spriteid === 'rockruff-dusk') this.spriteid = 'rockruff';
+		if (this.spriteid.endsWith('-')) this.spriteid = this.spriteid.slice(0, -1);
 		this.baseForme = data.baseForme || '';
 
 		this.num = data.num || 0;
 		this.types = data.types || ['???'];
-		this.abilities = data.abilities || {0: "No Ability"};
-		this.baseStats = data.baseStats || {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
+		this.abilities = data.abilities || { 0: "No Ability" };
+		this.baseStats = data.baseStats || { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
 		this.bst = this.baseStats.hp + this.baseStats.atk + this.baseStats.def +
 			this.baseStats.spa + this.baseStats.spd + this.baseStats.spe;
 		this.weightkg = data.weightkg || 0;
@@ -1952,6 +1962,7 @@ class Species implements Effect {
 		this.evoMove = data.evoMove || '';
 		this.evoItem = data.evoItem || '';
 		this.evoCondition = data.evoCondition || '';
+		this.nfe = data.nfe || false;
 		this.requiredItems = data.requiredItems || (data.requiredItem ? [data.requiredItem] : []);
 		this.tier = data.tier || '';
 
@@ -1960,7 +1971,7 @@ class Species implements Effect {
 		this.isPrimal = !!(this.forme && this.formeid === '-primal');
 		this.canGigantamax = !!data.canGigantamax;
 		this.cannotDynamax = !!data.cannotDynamax;
-		this.forceTeraType = data.forceTeraType || '';
+		this.requiredTeraType = data.requiredTeraType || '';
 		this.battleOnly = data.battleOnly || (this.isMega ? this.baseSpecies : undefined);
 		this.isNonstandard = data.isNonstandard || null;
 		this.unreleasedHidden = data.unreleasedHidden || false;
@@ -1996,19 +2007,21 @@ class Species implements Effect {
 	}
 }
 
-interface Type extends Effect {
-	damageTaken?: AnyObject;
-	HPivs?: Partial<StatsTable>;
-	HPdvs?: Partial<StatsTable>;
+export interface Type extends Effect {
+	damageTaken?: Record<Dex.TypeName, Dex.WeaknessType>;
+	HPivs?: Partial<Dex.StatsTable>;
+	HPdvs?: Partial<Dex.StatsTable>;
 }
 
+declare const require: any;
+declare const global: any;
 if (typeof require === 'function') {
 	// in Node
-	(global as any).BattleBaseSpeciesChart = BattleBaseSpeciesChart;
-	(global as any).BattleNatures = BattleNatures;
-	(global as any).PureEffect = PureEffect;
-	(global as any).Species = Species;
-	(global as any).Ability = Ability;
-	(global as any).Item = Item;
-	(global as any).Move = Move;
+	global.BattleBaseSpeciesChart = BattleBaseSpeciesChart;
+	global.BattleNatures = BattleNatures;
+	global.PureEffect = PureEffect;
+	global.Species = Species;
+	global.Ability = Ability;
+	global.Item = Item;
+	global.Move = Move;
 }

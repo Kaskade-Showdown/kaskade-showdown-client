@@ -660,6 +660,8 @@ function pokeConvertInner($text) {
 			$out[] = '|-blow-away '.resolvePokemon($line).' Spikes';
 		} else if (endsRemove($line, ' blew away Toxic Spikes!')) {
 			$out[] = '|-blow-away '.resolvePokemon($line).' ToxicSpikes';
+		} else if (endsRemove($line, ' blew away Steel Barbs!')) {
+			$out[] = '|-blow-away '.resolvePokemon($line).' SteelBarbs';
 		} else if (endsRemove($line, ' fell for the taunt!')) {
 			$out[] = '|-start|'.resolvePokemon($line).' taunt';
 		} else if (endsRemove($line, '\'s Flash Fire raised the power of its Fire-type moves!')) {
@@ -721,6 +723,9 @@ function pokeConvertInner($text) {
 		} else if (preg_match('/^\<Poison spikes were scattered all around the feet of ([^<>]+)\'s team!\>?$/', $line, $matches)) {
 			$side = (isFoe($matches[1])?'foe':'ally');
 			$out[] = '|-side-condition '.$side.' ToxicSpikes';
+		} else if (preg_match('/^\<Sharp-pointed pieces of steel started floating around ([^<>]+)\'s team!\>?$/', $line, $matches)) {
+			$side = (isFoe($matches[1])?'foe':'ally');
+			$out[] = '|-side-condition '.$side.' SteelBarbs';
 		} else if (preg_match('/^\<A tailwind started blowing behind ([^<>]+)\'s team!\>?$/', $line, $matches)) {
 			$side = (isFoe($matches[1])?'foe':'ally');
 			$out[] = '|-side-condition '.$side.' Tailwind';
