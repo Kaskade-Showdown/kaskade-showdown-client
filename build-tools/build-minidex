@@ -91,7 +91,7 @@ function updateSizes() {
 	fs.writeFileSync('data/pokedex-mini-bw.js', g5buf);
 }
 
-if (fs.existsSync('sprites/ani/')) {
+if (fs.existsSync('sprites/gen5ani/')) {
 	updateSizes();
 	console.log('DONE');
 } else {
