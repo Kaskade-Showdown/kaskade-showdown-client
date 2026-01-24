@@ -280,7 +280,8 @@ export const BattlePokemonIconIndexes: { [id: string]: number } = {
 	lamentu: 1026 + 123,
 	endramodai: 1026 + 124,
 
-	////////// Regional Forms
+	/////////////////////////////////////
+	// Regional Forms
 	// Alola
 	rattataalola: 1176 + 0,
 	raticatealola: 1176 + 1,
@@ -384,7 +385,8 @@ export const BattlePokemonIconIndexes: { [id: string]: number } = {
 	bruxishkaskade: 1231 + 36,
 	dubwoolkaskade: 1231 + 37,
 
-	////////// Gimmick Forms
+	/////////////////////////////////////
+	// Gimmick Forms
 	// Mega
 	venusaurmega: 1272 + 0,
 	charizardmegax: 1272 + 1,
@@ -473,7 +475,8 @@ export const BattlePokemonIconIndexes: { [id: string]: number } = {
 	urshifugmax: 1322 + 32,
 	urshifurapidstrikegmax: 1322 + 33,
 
-	////////// Misc. forms
+	/////////////////////////////////////
+	// Misc. forms
 	// Gen 1
 	venusaurf: 1356 + 0,
 	butterfreef: 1356 + 1,

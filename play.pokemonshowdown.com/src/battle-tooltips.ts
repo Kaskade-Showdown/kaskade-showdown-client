@@ -990,7 +990,7 @@ export class BattleTooltips {
 			}
 
 			let types = serverPokemon?.terastallized ? [serverPokemon.teraType] : this.getPokemonTypes(pokemon);
-			let knownPokemon = serverPokemon || clientPokemon!;
+			// let knownPokemon = serverPokemon || clientPokemon!;
 
 			if (pokemon.terastallized) {
 				text += `<small>(Terastallized)</small><br />`;
@@ -1161,7 +1161,8 @@ export class BattleTooltips {
 		let irritantweatherbuf = scene.irritantWeatherLeft() || `(No active Irritant Weathergy)`;
 		let energyweatherbuf = scene.energyWeatherLeft() || `(No active Energy Weathergy)`;
 		let clearingweatherbuf = scene.clearingWeatherLeft() || `(No active Clearing Weathergy)`;
-		let cataclysmweatherbuf = scene.cataclysmWeatherLeft() + scene.pseudoWeathersLeft() || `(No active Cataclysm Weathergy)`;
+		let cataclysmweatherbuf = scene.cataclysmWeatherLeft() +
+			scene.pseudoWeathersLeft() || `(No active Cataclysm Weathergy)`;
 		while (climateweatherbuf.startsWith('<br />')) {
 			climateweatherbuf = climateweatherbuf.slice(6);
 		}
@@ -1238,7 +1239,7 @@ export class BattleTooltips {
 			}
 
 			if (pokemon.status === 'fst') {
-			stats.spa = Math.floor(stats.spa * 0.5);
+				stats.spa = Math.floor(stats.spa * 0.5);
 			}
 
 			// Paralysis is calculated later in newer generations, so we need to apply it early here
@@ -1278,8 +1279,8 @@ export class BattleTooltips {
 		// the only stat modifying items in gen 2 were light ball, thick club, metal powder
 		if (item === 'lightball') {
 			if (this.battle.gen !== 4 && (speciesName === 'Pikachu' || speciesName === 'Pichu')) {
-			if (this.battle.gen > 4) stats.atk *= 2;
-			stats.spa *= 2;
+				if (this.battle.gen > 4) stats.atk *= 2;
+				stats.spa *= 2;
 			}
 			if (speciesName === 'Raichu' || speciesName === 'Emolga' || speciesName === 'Guruchi') {
 				stats.atk *= 1.5;
@@ -1320,7 +1321,7 @@ export class BattleTooltips {
 		let irritantWeather = this.battle.irritantWeather;
 		let energyWeather = this.battle.energyWeather;
 		let clearingWeather = this.battle.clearingWeather;
-		let cataclysmWeather = this.battle.cataclysmWeather;
+		// let cataclysmWeather = this.battle.cataclysmWeather;
 		if (this.battle.abilityActive(['Air Lock', 'Cloud Nine'])) {
 			climateWeather = '' as ID;
 		}
@@ -1514,7 +1515,7 @@ export class BattleTooltips {
 		}
 		if (ability === 'grasspelt') {
 			if (this.battle.hasPseudoWeather('Grassy Terrain') ||
-			(serverPokemon.item !== 'safetygoggles' && this.battle.irritantWeather.includes('Pollen Storm'))) {
+				(serverPokemon.item !== 'safetygoggles' && this.battle.irritantWeather.includes('Pollen Storm'))) {
 				stats.def = Math.floor(stats.def * 1.5);
 			}
 		}
@@ -2171,7 +2172,7 @@ export class BattleTooltips {
 			}
 		}
 		if ((this.pokemonHasType(pokemon, 'Bug') || this.pokemonHasType(pokemon, 'Bug')) &&
-		!value.tryItem('Safety Goggles')) {
+			!value.tryItem('Safety Goggles')) {
 			if (value.tryIrritantWeather('Swarm Signal')) {
 				accuracyModifiers.push(5461);
 				value.modify(4 / 3, 'Pheromones');
@@ -3478,9 +3479,9 @@ export class BattleStatGuesser {
 			} else if (hasMove['substitute'] && (set.item || '').endsWith('Berry')) {
 				hpDivisibility = 4;
 				hpShouldBeDivisible = true;
-			} else if (SRweak >= 2 || hasMove['bellydrum']) {
+			} else if ((SRweak || SBweak) >= 2 || hasMove['bellydrum']) {
 				hpDivisibility = 2;
-			} else if (SRweak >= 1 || hasMove['substitute'] || hasMove['transform']) {
+			} else if ((SRweak || SBweak) >= 1 || hasMove['substitute'] || hasMove['transform']) {
 				hpDivisibility = 4;
 			} else if (set.ability !== 'Magic Guard') {
 				hpDivisibility = 8;

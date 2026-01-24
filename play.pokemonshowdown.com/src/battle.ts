@@ -3579,7 +3579,7 @@ export class Battle {
 		if (!status) {
 			output.status = '';
 		} else if (status === 'par' || status === 'brn' || status === 'slp' || status === 'frz' || status === 'tox' ||
-		status === 'fst' || status === 'blt') {
+			status === 'fst' || status === 'blt') {
 			output.status = status;
 		} else if (status === 'psn' && output.status !== 'tox') {
 			output.status = status;

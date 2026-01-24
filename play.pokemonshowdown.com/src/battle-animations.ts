@@ -1023,7 +1023,7 @@ export class BattleScene implements BattleSceneStub {
 		let weatherhtml = ``;
 
 		if (this.battle.irritantWeather) {
-			const weatherNameTable: {[id: string]: string} = {
+			const weatherNameTable: { [id: string]: string } = {
 				sandstorm: 'Sandstorm',
 				duststorm: 'Dust Storm',
 				pollinate: 'Pollen Storm',
@@ -1052,7 +1052,7 @@ export class BattleScene implements BattleSceneStub {
 		let weatherhtml = ``;
 
 		if (this.battle.energyWeather) {
-			const weatherNameTable: {[id: string]: string} = {
+			const weatherNameTable: { [id: string]: string } = {
 				auraprojection: 'Battle Aura',
 				haunt: 'Paranormal Activity',
 				daydream: 'Dreamscape',
@@ -1084,7 +1084,7 @@ export class BattleScene implements BattleSceneStub {
 		let weatherhtml = ``;
 
 		if (this.battle.clearingWeather) {
-			const weatherNameTable: {[id: string]: string} = {
+			const weatherNameTable: { [id: string]: string } = {
 				strongwinds: 'Strong Winds',
 			};
 			weatherhtml = `${weatherNameTable[this.battle.clearingWeather] || this.battle.clearingWeather}`;
@@ -1114,7 +1114,7 @@ export class BattleScene implements BattleSceneStub {
 		let weatherhtml = ``;
 
 		if (this.battle.cataclysmWeather) {
-			const weatherNameTable: {[id: string]: string} = {
+			const weatherNameTable: { [id: string]: string } = {
 				cataclysmiclight: 'Cataclysmic Light',
 			};
 			weatherhtml = `${weatherNameTable[this.battle.cataclysmWeather] || this.battle.cataclysmWeather}`;
@@ -1234,7 +1234,7 @@ export class BattleScene implements BattleSceneStub {
 		let energyWeatherhtml = this.energyWeatherLeft();
 		let clearingWeatherhtml = this.clearingWeatherLeft();
 		let cataclysmWeatherhtml = this.cataclysmWeatherLeft();
-		
+
 		if (climateWeatherhtml) climateWeatherhtml = `<br />` + climateWeatherhtml;
 		if (irritantWeatherhtml) irritantWeatherhtml = `<br />` + irritantWeatherhtml;
 		if (energyWeatherhtml) energyWeatherhtml = `<br />` + energyWeatherhtml;
@@ -1245,6 +1245,7 @@ export class BattleScene implements BattleSceneStub {
 		for (const side of this.battle.sides) {
 			cataclysmWeatherhtml += this.sideConditionsLeft(side);
 		}
+		// eslint-disable-next-line @stylistic/max-len
 		let weatherTexthtml = climateWeatherhtml + irritantWeatherhtml + energyWeatherhtml + clearingWeatherhtml + cataclysmWeatherhtml;
 
 		if (instant) {
@@ -1264,7 +1265,7 @@ export class BattleScene implements BattleSceneStub {
 			this.$energyWeather.attr('class', energyWeather ? 'weather ' + energyWeather + 'weather' : 'weather');
 			this.$clearingWeather.attr('class', clearingWeather ? 'weather ' + clearingWeather + 'weather' : 'weather');
 			this.$cataclysmWeather.attr('class', cataclysmWeather ? 'weather ' + cataclysmWeather + 'weather' : 'weather');
-			this.$weatherText.attr('class','weather weatherText');
+			this.$weatherText.attr('class', 'weather weatherText');
 			this.$climateWeather.css('opacity', isIntense || !climateWeather ? 0.9 : 0.5);
 			this.$irritantWeather.css('opacity', !irritantWeather ? 0.9 : 0.5);
 			this.$energyWeather.css('opacity', !energyWeather ? 0.9 : 0.5);
@@ -1283,7 +1284,7 @@ export class BattleScene implements BattleSceneStub {
 			this.$climateWeather.animate({
 				opacity: 0,
 			}, this.curClimateWeather ? 300 : 100, () => {
-				//this.$climateWeather.html('<em>' + climateWeatherhtml + '</em>');
+				// this.$climateWeather.html('<em>' + climateWeatherhtml + '</em>');
 				this.$climateWeather.attr('class', climateWeather ? 'weather ' + climateWeather + 'weather' : 'weather');
 				this.$climateWeather.animate({ opacity: isIntense || !climateWeather ? 0.9 : 0.5 }, 300);
 			});
@@ -1296,9 +1297,9 @@ export class BattleScene implements BattleSceneStub {
 			this.$irritantWeather.animate({
 				opacity: 0,
 			}, this.curIrritantWeather ? 300 : 100, () => {
-				//this.$irritantWeather.html('<em>' + irritantWeatherhtml + '</em>');
+				// this.$irritantWeather.html('<em>' + irritantWeatherhtml + '</em>');
 				this.$irritantWeather.attr('class', irritantWeather ? 'weather ' + irritantWeather + 'weather' : 'weather');
-				this.$irritantWeather.animate({opacity: !irritantWeather ? 0.9 : 0.5}, 300);
+				this.$irritantWeather.animate({ opacity: !irritantWeather ? 0.9 : 0.5 }, 300);
 			});
 			this.curIrritantWeather = irritantWeather;
 		} /* else {
@@ -1309,9 +1310,9 @@ export class BattleScene implements BattleSceneStub {
 			this.$energyWeather.animate({
 				opacity: 0,
 			}, this.curEnergyWeather ? 300 : 100, () => {
-				//this.$energyWeather.html('<em>' + energyWeatherhtml + '</em>');
+				// this.$energyWeather.html('<em>' + energyWeatherhtml + '</em>');
 				this.$energyWeather.attr('class', energyWeather ? 'weather ' + energyWeather + 'weather' : 'weather');
-				this.$energyWeather.animate({opacity: !energyWeather ? 0.9 : 0.5}, 300);
+				this.$energyWeather.animate({ opacity: !energyWeather ? 0.9 : 0.5 }, 300);
 			});
 			this.curEnergyWeather = energyWeather;
 		} /* else {
@@ -1322,9 +1323,9 @@ export class BattleScene implements BattleSceneStub {
 			this.$clearingWeather.animate({
 				opacity: 0,
 			}, this.curClearingWeather ? 300 : 100, () => {
-				//this.$clearingWeather.html('<em>' + clearingWeatherhtml + '</em>');
+				// this.$clearingWeather.html('<em>' + clearingWeatherhtml + '</em>');
 				this.$clearingWeather.attr('class', clearingWeather ? 'weather ' + clearingWeather + 'weather' : 'weather');
-				this.$clearingWeather.animate({opacity: !clearingWeather ? 0.9 : 0.5}, 300);
+				this.$clearingWeather.animate({ opacity: !clearingWeather ? 0.9 : 0.5 }, 300);
 			});
 			this.curClearingWeather = clearingWeather;
 		} /* else {
@@ -1335,9 +1336,9 @@ export class BattleScene implements BattleSceneStub {
 			this.$cataclysmWeather.animate({
 				opacity: 0,
 			}, this.curCataclysmWeather ? 300 : 100, () => {
-				//this.$cataclysmWeather.html('<em>' + cataclysmWeatherhtml + '</em>');
+				// this.$cataclysmWeather.html('<em>' + cataclysmWeatherhtml + '</em>');
 				this.$cataclysmWeather.attr('class', cataclysmWeather ? 'weather ' + cataclysmWeather + 'weather' : 'weather');
-				this.$cataclysmWeather.animate({opacity: !cataclysmWeather ? 0.9 : 0.5}, 300);
+				this.$cataclysmWeather.animate({ opacity: !cataclysmWeather ? 0.9 : 0.5 }, 300);
 			});
 			this.curCataclysmWeather = cataclysmWeather;
 		} /* else {
@@ -1359,7 +1360,7 @@ export class BattleScene implements BattleSceneStub {
 			opacity: 0.9,
 		}, 100, () => {
 			this.$weatherText.html('<em>' + weatherTexthtml + '</em>');
-			this.$weatherText.attr('class','weather weatherText');
+			this.$weatherText.attr('class', 'weather weatherText');
 		});
 	}
 	resetTurn() {

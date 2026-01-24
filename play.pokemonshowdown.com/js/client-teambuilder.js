@@ -3721,7 +3721,7 @@
 				var form = (formid ? formid[0].toUpperCase() + formid.slice(1) : '');
 				var spriteid = baseid + (form ? '-' + formid : '');
 				var data = Dex.getTeambuilderSpriteData(spriteid, dex);
-				var spriteSize = data.spriteDir === 'sprites/dex' ? 120 : 96;
+				var spriteSize = data.spriteDir === 'sprites/gen5' ? 120 : 96;
 				maxSpriteSize = Math.max(maxSpriteSize, spriteSize);
 				var spriteDim = 'width: ' + spriteSize + 'px; height: ' + spriteSize + 'px;';
 				var resize = (data.h ? 'background-size:' + data.h + 'px;' : '');

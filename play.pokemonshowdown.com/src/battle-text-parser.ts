@@ -1171,7 +1171,7 @@ export class BattleTextParser {
 			let templateId = 'block';
 			if (['desolateland', 'primordialsea'].includes(blocker) &&
 				!['sunnyday', 'raindance', 'hail', 'snowscape', 'chillyreception',
-				'bloodmoon', 'foghorn'].includes(id)) {
+					'bloodmoon', 'foghorn'].includes(id)) {
 				templateId = 'blockMove';
 			} else if (blocker === 'uproar' && kwArgs.msg) {
 				templateId = 'blockSelf';

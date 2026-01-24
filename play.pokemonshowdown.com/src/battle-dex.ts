@@ -788,12 +788,18 @@ export const Dex = new class implements ModdedDex {
 		}
 
 		if (isFemale) {
-			if (['venusaur', 'butterfree', 'rattata', 'raticate', 'raticatekaskade', 'pikachu', 'pikachustarter', 'raichu', 'zubat', 'golbat', 'gloom', 'vileplume', 'kadabra', 'alakazam', 'doduo', 'dodrio', 'hypno', 'rhyhorn', 'rhydon', 'goldeen', 'seaking', 'scyther', 'magikarp', 'gyarados', 'eevee', 'eeveestarter',
-				'meganium', 'ledyba', 'ledian', 'xatu', 'sudowoodo', 'politoed', 'aipom', 'wooper', 'quagsire', 'murkrow', 'wobbuffet', 'girafarig', 'gligar', 'steelix', 'scizor', 'heracross', 'sneasel', 'sneaselhisui', 'ursaring', 'octillery', 'houndoom', 'donphan',
-				'torchic', 'combusken', 'blaziken', 'butterfree', 'dustox', 'ludicolo', 'nuzelaf', 'shiftry', 'meditite', 'medicham', 'roselia', 'gulpin', 'swalot', 'numel', 'camerupt', 'cacturne', 'milotic', 'relicanth',
-				'starly', 'staravia', 'staraptor', 'bidoof', 'bibarel', 'kricketot', 'kricketune', 'shinx', 'shinxkaskade', 'luxio', 'luxiokaskade', 'luxray', 'luxraykaskade', 'roserade', 'combee', 'pachirisu', 'buizel', 'floatzel', 'ambipom', 'ambipomkaskade', 'gible', 'gabite', 'garchomp', 'hippopotas', 'hippowdon', 'croagunk', 'toxicroak', 'finneon', 'lumineon', 'snover', 'snoverlowland', 'abomasnow', 'abomasnowlowland', 'weavile', 'rhyperior', 'tangrowth', 'mamoswine',
-				'unfezant', 'frillish', 'jellicent',
-				'pyroar', 'meowstic',
+			if (['venusaur', 'butterfree', 'rattata', 'raticate', 'raticatekaskade', 'pikachu', 'pikachustarter', 'raichu', 'zubat',
+				'golbat', 'gloom', 'vileplume', 'kadabra', 'alakazam', 'doduo', 'dodrio', 'hypno', 'rhyhorn', 'rhydon', 'goldeen',
+				'seaking', 'scyther', 'magikarp', 'gyarados', 'eevee', 'eeveestarter', 'meganium', 'ledyba', 'ledian', 'xatu',
+				'sudowoodo', 'politoed', 'aipom', 'wooper', 'quagsire', 'murkrow', 'wobbuffet', 'girafarig', 'gligar', 'steelix',
+				'scizor', 'heracross', 'sneasel', 'sneaselhisui', 'ursaring', 'octillery', 'houndoom', 'donphan', 'torchic',
+				'combusken', 'blaziken', 'butterfree', 'dustox', 'ludicolo', 'nuzelaf', 'shiftry', 'meditite', 'medicham', 'roselia',
+				'gulpin', 'swalot', 'numel', 'camerupt', 'cacturne', 'milotic', 'relicanth', 'starly', 'staravia', 'staraptor',
+				'bidoof', 'bibarel', 'kricketot', 'kricketune', 'shinx', 'shinxkaskade', 'luxio', 'luxiokaskade', 'luxray',
+				'luxraykaskade', 'roserade', 'combee', 'pachirisu', 'buizel', 'floatzel', 'ambipom', 'ambipomkaskade', 'gible',
+				'gabite', 'garchomp', 'hippopotas', 'hippowdon', 'croagunk', 'toxicroak', 'finneon', 'lumineon', 'snover',
+				'snoverlowland', 'abomasnow', 'abomasnowlowland', 'weavile', 'rhyperior', 'tangrowth', 'mamoswine', 'unfezant',
+				'frillish', 'jellicent', 'pyroar', 'meowstic',
 				'catteraxe', 'auditar', 'oxillery', 'tamroast', 'weepollen'].includes(id)) {
 				num = BattlePokemonIconIndexes[id + 'f'];
 			}
