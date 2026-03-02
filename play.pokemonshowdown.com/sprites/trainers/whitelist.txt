@@ -554,7 +554,6 @@ teamrocketgruntf-gen3.png
 teamrocketgruntm-gen3.png
 teamrocket.png
 thorton.png
-tofrug-stack.png
 triathletebikerf-gen3.png
 triathletebikerm-gen3.png
 triathleterunnerf-gen3.png
@@ -615,3 +614,4 @@ youngster-gen4.png
 youngster.png
 zinnia.png
 zinzolin.png
+tofrug-stack.png
