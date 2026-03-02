@@ -163,7 +163,7 @@ export const PSBackground = new class extends PSStreamModel<string | null> {
 			if (location.host === 'smogtours.psim.us') {
 				bgid = 'shaymin';
 			} else {
-				const bgs = ['horizon', 'ocean', 'shaymin', 'charizards', 'kaskade'];
+				const bgs = ['horizon', 'ocean', 'shaymin', 'charizards', 'kaskademap'];
 				bgid = bgs[Math.floor(Math.random() * bgs.length)];
 				// if someone clicked the random button, try to roll a different bg than before
 				if (bgid === this.curId) bgid = bgs[Math.floor(Math.random() * bgs.length)];
@@ -254,7 +254,7 @@ export const PSBackground = new class extends PSStreamModel<string | null> {
 				"",
 			];
 			break;
-		case 'kaskade':
+		case 'kaskademap':
 			menuColors = [
 				"37.159090909090914,74.57627118644066%",
 				"10.874999999999998,70.79646017699115%",
