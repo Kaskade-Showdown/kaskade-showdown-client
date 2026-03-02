@@ -1189,8 +1189,8 @@ export const BattlePokemonIconIndexesLeft: { [id: string]: number } = {
 };
 
 export const BattleAvatarNumbers: { [k: string]: string } = {
-	1: 'lucas',
-	2: 'dawn',
+	1: 'tofrug-stack',
+	2: 'wren',
 	3: 'youngster-gen4dp',
 	4: 'lass-gen4dp',
 	5: 'camper',
