@@ -642,7 +642,7 @@ export class Side {
 	}
 
 	rollTrainerSprites() {
-		let sprites = ['tofrug-stack', 'wren'];
+		let sprites = ['lark', 'robin', 'wren'];
 		this.avatar = sprites[Math.floor(Math.random() * sprites.length)];
 	}
 

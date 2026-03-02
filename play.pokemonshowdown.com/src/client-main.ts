@@ -610,7 +610,7 @@ class PSUser extends PSStreamModel<PSLoginState | null> {
 	named = false;
 	away = false;
 	registered: { name: string, userid: ID } | null = null;
-	avatar = "wren";
+	avatar = "lark";
 	challstr = '';
 	loggingIn: string | null = null;
 	initializing = true;

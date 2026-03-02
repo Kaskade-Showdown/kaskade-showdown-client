@@ -1189,11 +1189,11 @@ export const BattlePokemonIconIndexesLeft: { [id: string]: number } = {
 };
 
 export const BattleAvatarNumbers: { [k: string]: string } = {
-	1: 'tofrug-stack',
-	2: 'wren',
-	3: 'youngster-gen4dp',
-	4: 'lass-gen4dp',
-	5: 'camper',
+	1: 'lark',
+	2: 'robin',
+	3: 'wren',
+	4: 'jay',
+	5: 'tofrug-stack',
 	6: 'picnicker',
 	7: 'bugcatcher-gen4dp',
 	8: 'aromalady',

@@ -614,5 +614,9 @@ youngster-gen4.png
 youngster.png
 zinnia.png
 zinzolin.png
+
+jay.png
+lark.png
+robin.png
 tofrug-stack.png
 wren.png
