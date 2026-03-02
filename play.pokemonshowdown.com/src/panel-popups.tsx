@@ -1366,6 +1366,10 @@ class BackgroundListPanel extends PSRoomPanel {
 					<span class="bg" style="background: #344b6c"></span>{}
 					Solid blue
 				</button>
+				<button onClick={this.setBg} value="kaskade" class={option('kaskade')}>
+					<span class="bg" style="background-position: 0 -450px"></span>{}
+					Kaskade region
+				</button>
 			</div>
 			<div style="clear: left"></div>
 			<p><strong>Custom</strong></p>

@@ -842,6 +842,7 @@
 			buf += '<button name="setBg" value="ocean" class="option' + (cur === 'ocean' ? ' cur' : '') + '"><span class="bg" style="background-position:0 -' + (90 * 3) + 'px"></span>Ocean</button>';
 			buf += '<button name="setBg" value="shaymin" class="option' + (cur === 'shaymin' ? ' cur' : '') + '"><span class="bg" style="background-position:0 -' + (90 * 4) + 'px"></span>Shaymin</button>';
 			buf += '<button name="setBg" value="solidblue" class="option' + (cur === 'solidblue' ? ' cur' : '') + '"><span class="bg" style="background: #344b6c"></span>Solid blue</button>';
+			buf += '<button name="setBg" value="kaskade" class="option' + (cur === 'kaskade' ? ' cur' : '') + '"><span class="bg" style="background-position:0 -' + (90 * 5) + 'px"></span>Kaskade map</button>';
 
 			buf += '</div><div style="clear:left"></div>';
 			buf += '<p><strong>Custom</strong></p>';
