@@ -9,7 +9,7 @@ Our forums are hosted by our affiliate, [Smogon University](http://smogon.com/):
 We have a Help chatroom, where our staff can help you with most problems. If you need private communication, you can PM staff members in the chatroom.
 
 <blockquote>
-	<a class="button bigbutton" href="//play.pokemonshowdown.com/help">Pokémon Showdown Help chatroom</a>
+	<a class="button bigbutton" href="//play.pokemonshowdown.com/help">Kaskade Showdown Help chatroom</a>
 </blockquote>
 
 For contacting the staff, use the following e-mail address. <strong>ABUSIVE USERS SHOULD BE REPORTED WITH THE `/report` COMMAND, NOT THROUGH E-MAIL</strong>.

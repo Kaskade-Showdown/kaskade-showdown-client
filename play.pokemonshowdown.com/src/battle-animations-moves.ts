@@ -1,5 +1,5 @@
 /**
- * Pokemon Showdown Move Animations
+ * Kaskade Showdown Move Animations
  *
  * Licensing note: PS's client has complicated licensing:
  * - The client as a whole is AGPLv3

@@ -32,7 +32,7 @@ Eloが1000の場合、 勝者にはK = 80、敗者にはK = 20となります。
 
 これによりレーティングのインフレーションを防止できます。 人気のないフォーマット(OUやRandom Battles以外の現行世代ではないもの)では、緩やかに減少します。</br>これらのフォーマットでは"rating decay"により1日あたり2ポイント減少します。
 
-なお、「公式」のElo基準はありません。通常のK-scalingとレートの最低値は一般的で、rating decayはやや一般的ですが、Pokémon Showdownの動的なK-scalingは独特なようです。
+なお、「公式」のElo基準はありません。通常のK-scalingとレートの最低値は一般的で、rating decayはやや一般的ですが、Kaskade Showdownの動的なK-scalingは独特なようです。
 
 ## PS Glicko-1
 

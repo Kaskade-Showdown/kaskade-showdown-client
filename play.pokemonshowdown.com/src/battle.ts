@@ -1,5 +1,5 @@
 /**
- * Pokemon Showdown Battle
+ * Kaskade Showdown Battle
  *
  * This is the main file for handling battle animations
  *

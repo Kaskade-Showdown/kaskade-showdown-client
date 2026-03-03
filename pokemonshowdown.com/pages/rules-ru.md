@@ -1,6 +1,6 @@
 # Pravila
 
-# Pokémon Showdown Pravila
+# Kaskade Showdown Pravila
 
 ## Global'nyy
 

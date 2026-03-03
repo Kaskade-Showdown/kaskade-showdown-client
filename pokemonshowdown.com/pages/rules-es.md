@@ -1,6 +1,6 @@
 # Reglas
 
-# Reglas de Pokémon Showdown
+# Reglas de Kaskade Showdown
 
 ## Reglas principales
 

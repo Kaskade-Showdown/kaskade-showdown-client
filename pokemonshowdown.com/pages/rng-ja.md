@@ -12,7 +12,7 @@
 
 ## PSのRNGの仕組み
 
-Pokémon Showdownでは、Switchや3DSで発売されている実際のポケモンゲームが使用しているのと全く同じ種類のRNGを使用しています。
+Kaskade Showdownでは、Switchや3DSで発売されている実際のポケモンゲームが使用しているのと全く同じ種類のRNGを使用しています。
 
 ソースコードはここから確認できます:[pokemon-showdown/prng.ts at master - smogon/pokemon-showdown - GitHub](https://github.com/smogon/Pokemon-Showdown/blob/master/sim/prng.ts)
 

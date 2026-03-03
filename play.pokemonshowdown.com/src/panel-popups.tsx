@@ -1856,7 +1856,7 @@ class RulesPanel extends PSRoomPanel<PopupRoom> {
 					<p><strong style="color:red">{(BattleLog.escapeHTML(message) || 'You have been warned for breaking the rules.')}
 					</strong></p>
 				}
-				<h2>Pok&eacute;mon Showdown Rules</h2>
+				<h2>Kaskade Showdown Rules</h2>
 				<p><b>1.</b> Be nice to people. Respect people. Don't be rude or mean to people.</p>
 				<p><b>2.</b> {' '}
 					Follow US laws (PS is based in the US). No porn (minors use PS), don't distribute pirated material, {' '}

@@ -101,7 +101,7 @@ Per cambiare lo sfondo, clicca sulla rotella delle impostazioni nell'angolo in a
 
 ### Cos'è Smogon?
 
-Smogon è la principale e più precisa guida online riguardante le battaglie competitive su Pokémon; comprende articoli sulle strategie, guide, forum e il proprio simulatore, Pokémon Showdown. Le tier di Smogon sono alla base di Pokémon Showdown.
+Smogon è la principale e più precisa guida online riguardante le battaglie competitive su Pokémon; comprende articoli sulle strategie, guide, forum e il proprio simulatore, Kaskade Showdown. Le tier di Smogon sono alla base di Kaskade Showdown.
 
 ### Cosa significano AG, Ubers, OU, UU, RU, NU o LC?
 

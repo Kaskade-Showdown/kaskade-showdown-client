@@ -1,7 +1,7 @@
 Desktop apps
 ============
 
-Pokémon Showdown for desktop is made with [NW.js][1].
+Kaskade Showdown for desktop is made with [NW.js][1].
 
   [1]: https://nwjs.io/
 
@@ -41,33 +41,33 @@ NOTE: By default, Mac apps will refuse to run, displaying a Gatekeeper warning. 
 
 1. Get a copy of node-webkit (build or extract the prebuilt binary)
 
-2. Rename it to `Pokemon Showdown.app`
+2. Rename it to `Kaskade Showdown.app`
 
-3. Update `Pokemon Showdown.app/Contents/Info.plist`, changing:
+3. Update `Kaskade Showdown.app/Contents/Info.plist`, changing:
 
    - `CFBundleIdentifier` to `com.pokemonshowdown.pokemonshowdown`
-   - `CFBundleName` to `Pokemon Showdown`
-   - `CFBundleDisplayName` to `Pokemon Showdown`
+   - `CFBundleName` to `Kaskade Showdown`
+   - `CFBundleDisplayName` to `Kaskade Showdown`
    - `CFBundleShortVersionString` to the current version, e.g. `0.11`
    - `CFBundleVersion` to the some sort of version code, I just used the git commit hash
    - empty the arrays of `CFBundleDocumentTypes`, `CFBundleURLTypes`, `NSUserActivityTypes`, and `UTExportedTypeDeclarations` so they look like `<array></array>`
      - (these register the app as able to open these files/URLs, which we _definitely_ do not want to do)
 
-4. Update `Pokemon Showdown.app/Contents/Resources/en.lproj/InfoPlist.strings`,
+4. Update `Kaskade Showdown.app/Contents/Resources/en.lproj/InfoPlist.strings`,
    changing:
 
-   - `CFBundleName` to `"Pokemon Showdown"`
-   - `CFBundleDisplayName` to `"Pokemon Showdown"`
-   - `CFBundleGetInfoString` to something like `"Pokemon Showdown 0.11, Copyright 2011-2020 Guangcong Luo and contributors."`
+   - `CFBundleName` to `"Kaskade Showdown"`
+   - `CFBundleDisplayName` to `"Kaskade Showdown"`
+   - `CFBundleGetInfoString` to something like `"Kaskade Showdown 0.11, Copyright 2011-2020 Guangcong Luo and contributors."`
    - `NSHumanReadableCopyright` to something like `"Copyright 2011-2020 Guangcong Luo and contributors."`
 
-5. Delete all the other `*.lproj` folders (other than `en.lproj`) in `Pokemon Showdown.app/Contents/Resources`
+5. Delete all the other `*.lproj` folders (other than `en.lproj`) in `Kaskade Showdown.app/Contents/Resources`
 
-   - (our app is named "Pokemon Showdown" in all languages, we definitely don't want it to be called "nwjs" in other languages)
+   - (our app is named "Kaskade Showdown" in all languages, we definitely don't want it to be called "nwjs" in other languages)
 
-6. Replace `Pokemon Showdown.app/Contents/Resources/app.icns` and `Pokemon Showdown.app/Contents/Resources/document.icns` with the icns file in `graphics-src`.
+6. Replace `Kaskade Showdown.app/Contents/Resources/app.icns` and `Kaskade Showdown.app/Contents/Resources/document.icns` with the icns file in `graphics-src`.
 
-7. Create a folder `Pokemon Showdown.app/Contents/Resources/app.nw` and put `index.html` and `package.json` in it.
+7. Create a folder `Kaskade Showdown.app/Contents/Resources/app.nw` and put `index.html` and `package.json` in it.
 
 8. Grab a developer ID certificate (this requires an Apple Developer account costing $99)
 
@@ -85,9 +85,9 @@ NOTE: By default, Mac apps will refuse to run, displaying a Gatekeeper warning. 
 
 11. Verify the signature
 
-  - `codesign --verify -vvvv "Pokemon Showdown.app"`
+  - `codesign --verify -vvvv "Kaskade Showdown.app"`
 
-12. Zip up the app into `Pokemon Showdown.zip`
+12. Zip up the app into `Kaskade Showdown.zip`
 
   - right-click, Compress, rename to remove the `.app` part
 
@@ -96,7 +96,7 @@ NOTE: By default, Mac apps will refuse to run, displaying a Gatekeeper warning. 
   - `[USERNAME]` is your Apple Developer account username (should be an email address)
   - `[PASSWORD]` is an app-specific password for your Apple Developer account
   - get an app-specific password here: https://support.apple.com/en-us/HT204397
-  - `xcrun altool --notarize-app --primary-bundle-id "com.pokemonshowdown.pokemonshowdown" --username "[USERNAME]" --password "[PASSWORD]" --file "Pokemon Showdown.zip"`
+  - `xcrun altool --notarize-app --primary-bundle-id "com.pokemonshowdown.pokemonshowdown" --username "[USERNAME]" --password "[PASSWORD]" --file "Kaskade Showdown.zip"`
   - this will show a `RequestUUID`, which you'll need
 
 14. Wait for the app to notarize (this takes around 10 minutes in my experience)
@@ -113,11 +113,11 @@ NOTE: By default, Mac apps will refuse to run, displaying a Gatekeeper warning. 
 
 16. Staple the notarization
 
-  - `xcrun stapler staple "Pokemon Showdown.app"`
+  - `xcrun stapler staple "Kaskade Showdown.app"`
 
 17. Validate the notarization
 
-  - `spctl -a -vvvv "Pokemon Showdown.app"`
+  - `spctl -a -vvvv "Kaskade Showdown.app"`
 
 18. Delete the un-stapled zip, and create a new zip
 

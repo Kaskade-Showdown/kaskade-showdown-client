@@ -1,6 +1,6 @@
 # Zasady
 
-# Pokémon Showdown Zasady
+# Kaskade Showdown Zasady
 
 ## Zasady globalne
 

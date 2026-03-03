@@ -1,6 +1,6 @@
 # Rules
 
-# Pokémon Showdown rules
+# Kaskade Showdown rules
 
 PS rules! Rah rah rah!
 

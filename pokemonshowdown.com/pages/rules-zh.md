@@ -1,6 +1,6 @@
 # 规则
 
-# Pokémon Showdown 规则
+# Kaskade Showdown 规则
 
 ## 主要规则
 

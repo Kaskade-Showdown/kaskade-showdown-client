@@ -13,7 +13,7 @@ includeHeader();
 		<div class="main" style="max-width:8in;">
 
 			<p>
-				Pok&eacute;mon Showdown 0.9 has been released!
+				Kaskade Showdown 0.9 has been released!
 			</p>
 
 			<p>

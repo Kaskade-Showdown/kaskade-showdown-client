@@ -19,7 +19,7 @@ function ThemeHeaderTemplate() {
 
 	<meta charset="utf-8" />
 
-	<title><?php if ($panels->pagetitle) echo htmlspecialchars($panels->pagetitle).' - '; ?>Pok&eacute;mon Showdown</title>
+	<title><?php if ($panels->pagetitle) echo htmlspecialchars($panels->pagetitle).' - '; ?>Kaskade Showdown</title>
 
 <?php if ($panels->pagedescription) { ?>
 	<meta name="description" content="<?php echo htmlspecialchars($panels->pagedescription); ?>" />

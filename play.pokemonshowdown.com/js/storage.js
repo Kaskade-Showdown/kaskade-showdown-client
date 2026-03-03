@@ -108,7 +108,7 @@ Storage.bg = {
 				break;
 			case 'psday':
 				hues = ["24.705882352941174,25.37313432835821%", "260.4651162790697,59.44700460829492%", "165.3191489361702,46.07843137254901%", "16.363636363636367,42.63565891472869%", "259.04761904761904,34.05405405405405%", "24.705882352941174,25.37313432835821%"];
-				attrib = 'Pok&eacute;mon Showdown Day background <small>by LifeisDANK</small>';
+				attrib = 'Kaskade Showdown Day background <small>by LifeisDANK</small>';
 				break;
 			case 'digimon':
 				hues = ["170.45454545454544,27.500000000000004%", "84.70588235294119,13.821138211382115%", "112.50000000000001,7.8431372549019605%", "217.82608695652175,54.761904761904766%", "0,1.6949152542372816%", ""];
@@ -1541,11 +1541,11 @@ Storage.initDirectory = function () {
 Storage.initDirectory2 = function () {
 	var self = this;
 	fs.mkdir(self.documentsDir + 'My Games', function () {
-		fs.mkdir(self.documentsDir + 'My Games/Pokemon Showdown', function () {
-			fs.stat(self.documentsDir + 'My Games/Pokemon Showdown', function (err, stats) {
+		fs.mkdir(self.documentsDir + 'My Games/Kaskade Showdown', function () {
+			fs.stat(self.documentsDir + 'My Games/Kaskade Showdown', function (err, stats) {
 				if (err) return;
 				if (stats.isDirectory()) {
-					self.dir = self.documentsDir + 'My Games/Pokemon Showdown/';
+					self.dir = self.documentsDir + 'My Games/Kaskade Showdown/';
 					fs.mkdir(self.dir + 'Logs', function () {});
 					fs.mkdir(self.dir + 'Teams', function () {});
 

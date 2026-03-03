@@ -101,7 +101,7 @@ Para mudar o background, clique na engrenagem de configurações no canto superi
 
 ### O que é a Smogon?
 
-Smogon é a fonte online mais completa e precisa para batalhas de Pokémon competitivo, contendo artigos de estratégias, guias, fóruns e seu próprio simulador, o Pokémon Showdown. As tiers da Smogon são as divisões base do Pokémon Showdown.
+Smogon é a fonte online mais completa e precisa para batalhas de Pokémon competitivo, contendo artigos de estratégias, guias, fóruns e seu próprio simulador, o Kaskade Showdown. As tiers da Smogon são as divisões base do Kaskade Showdown.
 
 ### O que AG, Ubers, OU, UU, RU, NU ou LC significam?
 

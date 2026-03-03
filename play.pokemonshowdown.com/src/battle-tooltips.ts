@@ -1,5 +1,5 @@
 /**
- * Pokemon Showdown Tooltips
+ * Kaskade Showdown Tooltips
  *
  * A file for generating tooltips for battles. This should be IE7+ and
  * use the DOM directly.

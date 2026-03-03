@@ -2,7 +2,7 @@
 
 ### Wer gehört zum Staff?
 
-Staff-Mitglieder sind an den Symbolen erkennbar, welche vor ihren Namen stehen. Außerdem stehen sie in der Nutzerliste ganz oben. Sie sind langjährige Nutzer auf Pokémon Showdown und verantwortlich für den reibungslosen Ablauf verschiedener Dinge auf dem Simulator. Eine Liste mit sämtlichen Staff-Mitgliedern findet sich unten.
+Staff-Mitglieder sind an den Symbolen erkennbar, welche vor ihren Namen stehen. Außerdem stehen sie in der Nutzerliste ganz oben. Sie sind langjährige Nutzer auf Kaskade Showdown und verantwortlich für den reibungslosen Ablauf verschiedener Dinge auf dem Simulator. Eine Liste mit sämtlichen Staff-Mitgliedern findet sich unten.
 
 ### Was ist der Unterschied zwischen Raum-Staff und Global-Staff?
 
@@ -38,9 +38,9 @@ Mitglieder des Raumstaffs besitzen Berechtigungen, welche sich ausschließlich a
 
 Um Driver zu werden, musst du zunächst den Voice-Rang erhalten. Mit dem Voice-Rang (`+`) wirst du als ein außergewöhnlich guter Nutzer angesehen, wobei es sich hierbei um keinen Staff-Rang handelt. Dieser Rang ermöglicht es dir, ganz oben in der Nutzerliste zu stehen, im moderierten Chat zu schreiben und zeigt generell auf, dass du ein respektierter und hilfreicher Nutzer im Chat bist. Auch wenn die nachfolgenden Eigenschaften keinen Voice-Rang garantieren, sind sie dennoch gute Anhaltspunkte und werden dein Ansehen innerhalb des Staffs erhöhen.
 
-- Helfe anderen Nutzern. Nicht jeder auf Pokémon Showdown ist ein erfahrener Spieler. Indem du ihre Fragen beantwortest oder anderweitig hilfst, erlangst du den Respekt von anderen Nutzern. 
+- Helfe anderen Nutzern. Nicht jeder auf Kaskade Showdown ist ein erfahrener Spieler. Indem du ihre Fragen beantwortest oder anderweitig hilfst, erlangst du den Respekt von anderen Nutzern. 
 
-- Erleichtere neuen Nutzern den Einstieg zu Smogon und CP-Pokémon. Ein Großteil der neuen Nutzer hat vorher noch nie CP-Pokémon gespielt. Einige neue Nutzer sind auch das erste mal in einem Chatraum im Internet. Behandle sie deswegen mit Respekt und hilf ihnen, falls nötig. Mache Pokémon Showdown für diese Nutzer zu einem besseren Ort.
+- Erleichtere neuen Nutzern den Einstieg zu Smogon und CP-Pokémon. Ein Großteil der neuen Nutzer hat vorher noch nie CP-Pokémon gespielt. Einige neue Nutzer sind auch das erste mal in einem Chatraum im Internet. Behandle sie deswegen mit Respekt und hilf ihnen, falls nötig. Mache Kaskade Showdown für diese Nutzer zu einem besseren Ort.
 
 - Respektiere Autorität. Auch wenn du manchmal nicht der gleichen Meinung wie der Staff bist, stelle bitte ihre Entscheidungen nicht in Frage. Wenn du denkst, dass ein Staffmitglied dich ungerecht behandelt oder seine Machtposition ausgenutzt hat, kontaktiere bitte ein höheres Staffmitglied und sei dabei stets höflich.
 

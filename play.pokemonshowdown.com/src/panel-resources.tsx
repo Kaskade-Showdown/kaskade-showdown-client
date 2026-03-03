@@ -41,7 +41,7 @@ class ResourcePanel extends PSRoomPanel<ResourceRoom> {
 				</p>
 				<ul>
 					<li>
-						<a href="https://www.smogon.com/forums/threads/3676132/">Beginner's Guide to Pokémon Showdown</a>
+						<a href="https://www.smogon.com/forums/threads/3676132/">Beginner's Guide to Kaskade Showdown</a>
 					</li>
 					<li>
 						<a href="https://www.smogon.com/dp/articles/intro_comp_pokemon">An introduction to competitive Pokémon</a>
@@ -80,7 +80,7 @@ class ResourcePanel extends PSRoomPanel<ResourceRoom> {
 				</p>
 
 				<details className="readmore">
-					<summary>Here's a list of the most useful commands for the average Pokémon Showdown experience:</summary>
+					<summary>Here's a list of the most useful commands for the average Kaskade Showdown experience:</summary>
 					<p>
 						COMMANDS: /report, /msg, /reply, /logout,{' '}
 						/challenge, /search, /rating, /whois, /user, /join, /leave, /userauth, /roomauth

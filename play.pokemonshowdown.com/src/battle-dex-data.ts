@@ -1,5 +1,5 @@
 /**
- * Pokemon Showdown Dex Data
+ * Kaskade Showdown Dex Data
  *
  * A collection of data and definitions for src/battle-dex.ts.
  *

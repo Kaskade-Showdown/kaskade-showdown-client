@@ -91,7 +91,7 @@ includeHeaderBottom();
 
 <div class="main">
 
-<p>This page indexes versions of Pok&eacute;mon Showdown by the output of the <code>/version</code> command.</p>
+<p>This page indexes versions of Kaskade Showdown by the output of the <code>/version</code> command.</p>
 
 <p>You can use <code>/version</code> on a server to find out what version it is running.</p>
 

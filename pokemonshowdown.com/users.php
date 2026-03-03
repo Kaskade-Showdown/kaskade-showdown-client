@@ -173,7 +173,7 @@ if (isset($_REQUEST['json'])) {
 
 if (!$user) {
 	$panels->setPageTitle('Users');
-	$panels->setPageDescription('Pokémon Showdown users');
+	$panels->setPageDescription('Kaskade Showdown users');
 } else {
 	$panels->setPageTitle(''.$user['username'].' - Users');
 	$panels->setPageDescription(''.$user['username'].'\'s user profile');

@@ -1,5 +1,5 @@
 /**
- * Pokemon Showdown Log Misc
+ * Kaskade Showdown Log Misc
  *
  * Some miscellaneous helper functions for battle-log.ts, namely:
  *

@@ -2088,7 +2088,7 @@
 			buf += '<h2>PS! Informational Resources</h2><hr />';
 			buf += 'PS! is a wide and varied site, with more facets than can be covered here easily.<br />';
 			buf += 'While this page chiefly documents the ever-shifting set of commands available to PS! users, here are some useful resources for newcomers:<br />';
-			buf += '- <a href="https://www.smogon.com/forums/threads/3676132/">Beginner\'s Guide to Pok&eacute;mon Showdown</a><br />';
+			buf += '- <a href="https://www.smogon.com/forums/threads/3676132/">Beginner\'s Guide to Kaskade Showdown</a><br />';
 			buf += '- <a href="https://www.smogon.com/dp/articles/intro_comp_pokemon">An introduction to competitive Pok&eacute;mon</a><br />';
 			buf += '- <a href="https://www.smogon.com/sm/articles/sm_tiers">What do \'OU\', \'UU\', etc mean?</a><br />';
 			buf += '- <a href="https://www.smogon.com/dex/ss/formats/">What are the rules for each format?</a><br />';
@@ -2103,7 +2103,7 @@
 			buf += 'For more information on ranks, type <code>/groups</code> in any chat. You can also use the "chat self" button on your username in the top right if you need a place to send these commands ';
 			buf += 'without joining a room.<br /><br />';
 
-			buf += '<details class="readmore"><summary>Here\'s a list of the most useful commands for the average Pokemon Showdown experience:</summary>';
+			buf += '<details class="readmore"><summary>Here\'s a list of the most useful commands for the average Kaskade Showdown experience:</summary>';
 			buf += '<p>COMMANDS: /report, /msg, /reply, /logout, /challenge, /search, /rating, /whois, /user, /join, /leave, /userauth, /roomauth</p>';
 			buf += '<p>BATTLE ROOM COMMANDS: /savereplay, /hideroom, /inviteonly, /invite, /timer, /forfeit</p>';
 			buf += '<p>OPTION COMMANDS: /nick, /avatar, /ignore, /status, /away, /busy, /back, /timestamps, /highlight, /showjoins, /hidejoins, /blockchallenges, /blockpms</p>';

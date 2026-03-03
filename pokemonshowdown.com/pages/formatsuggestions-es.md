@@ -1,6 +1,6 @@
 # Sugerencias de formatos
 
-La lista de formatos de Pokémon Showdown (modos jugables) proviene de estos 4 sitios:
+La lista de formatos de Kaskade Showdown (modos jugables) proviene de estos 4 sitios:
 
 - Reglas oficiales de VGC de Nintendo
     - Ejemplos: VGC 2020

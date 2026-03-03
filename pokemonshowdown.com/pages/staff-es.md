@@ -1,7 +1,7 @@
 # Staff FAQ
 ### ¿Quién es el staff?
 
-El Staff está representado por los símbolos al lado de su nombre y aparecen al comienzo de la lista de usuarios. Son los usuarios más importantes de Pokémon Showdown y se responsabilizan del correcto funcionamiento del simulador. Más abajo se puede encontrar una lista con todo el Staff.
+El Staff está representado por los símbolos al lado de su nombre y aparecen al comienzo de la lista de usuarios. Son los usuarios más importantes de Kaskade Showdown y se responsabilizan del correcto funcionamiento del simulador. Más abajo se puede encontrar una lista con todo el Staff.
 
 ### ¿Cuál es la diferencia entre room staff y global staff?
 
@@ -38,9 +38,9 @@ Si estás decidido a ser ascendido, hay maneras de mostrar tus capacidades:
 
 Para llegar a ser Driver primero debes ser Voice. Ser Voice (`+`) te marca como un usuario particularmente bueno, aunque no es un rango de staff. Te garantiza una posición al comienzo de la lista de usuarios, la capacidad de hablar en chat moderado y muestra que eres un miembro del chat respetable y dispuesto a ayudar. Aunque siguiendo lo anterior no te asegura el rango de Voice, es un buen comienzo y siempre mejorará tu imagen a ojos del equipo del staff:
 
-- Ayuda a los demás. No todo el que usa Pokémon Showdown es un jugador experimentado, y responder sus preguntas o ayudarlos te hará ganar el respeto de los usuarios.
+- Ayuda a los demás. No todo el que usa Kaskade Showdown es un jugador experimentado, y responder sus preguntas o ayudarlos te hará ganar el respeto de los usuarios.
 
-- Anima a los nuevos en Smogon y Pokémon competitivo. La mayoría de los usuarios nuevos nunca han jugado Pokémon competitivo antes e incluso puede que estén en un chat de internet por primera vez. Por tanto, trátalos con respeto, ayúdalos si fuera necesario y haz de Pokémon Showdown un mejor lugar para ellos.
+- Anima a los nuevos en Smogon y Pokémon competitivo. La mayoría de los usuarios nuevos nunca han jugado Pokémon competitivo antes e incluso puede que estén en un chat de internet por primera vez. Por tanto, trátalos con respeto, ayúdalos si fuera necesario y haz de Kaskade Showdown un mejor lugar para ellos.
 
 - Respeta a la autoridad. Aunque a veces no estés de acuerdo con las decisiones de algún miembro del staff, por favor no las cuestiones. Si piensas que un miembro del staff ha tomado una decisión equivocada o ha abusado de su poder, por favor contacta educadamente por mensajes privados a otro miembro del staff de mayor rango.
 

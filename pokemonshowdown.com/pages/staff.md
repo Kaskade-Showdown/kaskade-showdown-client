@@ -2,7 +2,7 @@
 
 ### Who are the staff?
 
-Staff are represented by the symbols next to their names and appear at the top of the userlist. They are the senior users of Pokémon Showdown and are responsible for the smooth daily running of the simulator. A full staff list can be found below.
+Staff are represented by the symbols next to their names and appear at the top of the userlist. They are the senior users of Kaskade Showdown and are responsible for the smooth daily running of the simulator. A full staff list can be found below.
 
 ### What's the difference between room staff and global staff?
 
@@ -39,9 +39,9 @@ If you are determined to be promoted, there are ways to display your aptitude:
 
 In order to become a Driver you must first become a Voice. Being a Voice (`+`) marks you as a particularly good user, although it is not a staff rank. It grants you a position at the top of the userlist, the ability to talk in moderated chat, and shows that you are a respected and helpful chat member. While obeying the following will not guarantee you voice status, it's a good start and will certainly improve your image in the staff team's eyes:
 
-- Be helpful to others. Not everyone who uses Pokémon Showdown is an experienced battler, and answering their questions or otherwise helping them will gain respect from other users.
+- Be helpful to others. Not everyone who uses Kaskade Showdown is an experienced battler, and answering their questions or otherwise helping them will gain respect from other users.
 
-- Encourage newcomers to Smogon and competitive Pokémon. The majority of new users have not played competitive Pokémon before and may even be in an internet chat room for the first time. As such, treat them with respect, help them if needed, and make Pokémon Showdown a better place for them.
+- Encourage newcomers to Smogon and competitive Pokémon. The majority of new users have not played competitive Pokémon before and may even be in an internet chat room for the first time. As such, treat them with respect, help them if needed, and make Kaskade Showdown a better place for them.
 
 - Respect authority. While you might not agree with the decisions of staff members at times, please do not question or otherwise call out their decisions. If you feel that a staff member has made a wrong decision or abused their power, please PM a higher ranked staff member in a polite manner.
 

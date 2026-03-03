@@ -238,7 +238,7 @@
 					buf += '<p><button class="button" name="insecureUse">Use teambuilder insecurely</button></p></div>';
 				} else if (Storage.whenTeamsLoaded.error) {
 					buf = '<div class="pad"><p class="message-error">We got an error trying to load teams: ' + Storage.whenTeamsLoaded.error.message + '.</p>';
-					buf += '<p>This might be because you didn\'t give us permission to load teams: on macOS, this is in System Preferences → Security &amp; Privacy → Privacy → Files and Folders → Pokemon Showdown</p></div>';
+					buf += '<p>This might be because you didn\'t give us permission to load teams: on macOS, this is in System Preferences → Security &amp; Privacy → Privacy → Files and Folders → Kaskade Showdown</p></div>';
 				} else {
 					buf = '<div class="pad"><p>lol zarel this is a horrible teambuilder</p>';
 					buf += '<p>that\'s because we\'re not done loading it...</p></div>';
@@ -563,7 +563,7 @@
 		greeting: function (answer, button) {
 			var buf = '<p><strong>' + $(button).html() + '</p></strong>';
 			if (answer === 'N') {
-				buf += '<p>Aww, that\'s too bad. :( I hope playing on Pok&eacute;mon Showdown today can help cheer you up!</p>';
+				buf += '<p>Aww, that\'s too bad. :( I hope playing on Kaskade Showdown today can help cheer you up!</p>';
 			} else if (answer === 'Y') {
 				buf += '<p>Cool! I just added some pretty cool teambuilder features, so I\'m pretty happy, too. Did you know you can drag and drop teams to different format-folders? You can also drag and drop them to and from your computer (works best in Chrome).</p>';
 				buf += '<p><button class="button" name="greeting" value="W"><i class="fa fa-question-circle"></i> Wait, who are you? Talking to a teambuilder is weird.</button></p>';

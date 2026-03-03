@@ -101,7 +101,7 @@ To change the background, click on the settings cog in the top right corner, the
 
 ### What is Smogon?
 
-Smogon is the most comprehensive and accurate online resource for competitive Pokemon battling, comprising strategy articles, guides, forums and its own simulator, Pokémon Showdown. Smogon's tiering is the basis for Pokémon Showdown.
+Smogon is the most comprehensive and accurate online resource for competitive Pokemon battling, comprising strategy articles, guides, forums and its own simulator, Kaskade Showdown. Smogon's tiering is the basis for Kaskade Showdown.
 
 ### What does AG, Ubers, OU, UU, RU, NU or LC stand for?
 

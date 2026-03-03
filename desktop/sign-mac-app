@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const APP = "path/to/Pokemon Showdown.app";
+const APP = "path/to/Kaskade Showdown.app";
 const IDENTITY = "identity of Developer ID cert";
 
 /****************************************************************************/

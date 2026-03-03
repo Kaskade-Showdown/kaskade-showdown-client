@@ -2,7 +2,7 @@
   "name": "cms",
   "private": true,
   "version": "0.0.1",
-  "description": "CMS for Pokemon Showdown pages",
+  "description": "CMS for Kaskade Showdown pages",
   "dependencies": {
     "showdown": "^1.9.1"
   }

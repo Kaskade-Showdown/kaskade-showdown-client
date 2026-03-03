@@ -1,6 +1,6 @@
 # नियम
 
-# Pokémon Showdown के सामान्य नियम
+# Kaskade Showdown के सामान्य नियम
 
 ## मुख्य नियम
 

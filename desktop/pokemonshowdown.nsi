@@ -1,5 +1,5 @@
 ;NSIS Modern User Interface
-;Installer builder for Pokemon Showdown
+;Installer builder for Kaskade Showdown
 
 ;--------------------------------
 ;Include Modern UI
@@ -12,17 +12,17 @@
 # MUI Symbol Definitions
 !define MUI_ICON "icons\pokemonshowdown.ico"
 
-!define APPNAME "Pokemon Showdown"
-!define COMPANYNAME "Pokemon Showdown"
+!define APPNAME "Kaskade Showdown"
+!define COMPANYNAME "Kaskade Showdown"
 !define ABOUTURL "http://pokemonshowdown.com/" # "Publisher" link
 !define INSTALLSIZE 48000
 
   ;Name and file
-  Name "Pokemon Showdown"
+  Name "Kaskade Showdown"
   OutFile "setup.exe"
 
   ;Default installation folder
-  InstallDir "$PROGRAMFILES\Pokemon Showdown"
+  InstallDir "$PROGRAMFILES\Kaskade Showdown"
 CRCCheck on
 XPStyle on
 ShowInstDetails show
@@ -50,7 +50,7 @@ RequestExecutionLevel admin
 
 !define MUI_FINISHPAGE_NOAUTOCLOSE
 !define MUI_FINISHPAGE_RUN
-!define MUI_FINISHPAGE_RUN_TEXT "Play Pokemon Showdown"
+!define MUI_FINISHPAGE_RUN_TEXT "Play Kaskade Showdown"
 !define MUI_FINISHPAGE_RUN_FUNCTION "LaunchLink"
 
   !insertmacro MUI_PAGE_FINISH

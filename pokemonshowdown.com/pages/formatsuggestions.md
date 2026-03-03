@@ -1,6 +1,6 @@
 # Format suggestions
 
-Pokémon Showdown's list of formats (playable game types) comes from these four places:
+Kaskade Showdown's list of formats (playable game types) comes from these four places:
 
 - Nintendo's official VGC rules
     - Examples: VGC 2020

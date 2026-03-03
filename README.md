@@ -1,4 +1,4 @@
-Pokémon Showdown Client
+Kaskade Showdown Client
 ========================================================================
 
 Navigation: [Website][1] | [Server repository][2] | **Client repository** | [Dex repository][3]
@@ -10,11 +10,11 @@ Navigation: [Website][1] | [Server repository][2] | **Client repository** | [Dex
 Introduction
 ------------------------------------------------------------------------
 
-This is a repository for most of the client code for Pokémon Showdown.
+This is a repository for most of the client code for Kaskade Showdown.
 
 This is what runs `play.pokemonshowdown.com`.
 
-**WARNING: You probably want the [Pokémon Showdown server][4]**, if you're
+**WARNING: You probably want the [Kaskade Showdown server][4]**, if you're
 setting up a server.
 
   [4]: https://github.com/Zarel/Pokemon-Showdown
@@ -22,7 +22,7 @@ setting up a server.
 Browser support
 ------------------------------------------------------------------------
 
-Pokémon Showdown currently supports, in order of preference:
+Kaskade Showdown currently supports, in order of preference:
 
  - Chrome
  - Chromium browsers (Edge, Vivaldi, Brave, Opera...)
@@ -32,12 +32,12 @@ Pokémon Showdown currently supports, in order of preference:
  - Chrome/Firefox/Safari for various mobile devices
  - any remotely modern browser
 
-Pokémon Showdown is usable, but expect degraded performance and certain features not to work in extremely legacy browsers like:
+Kaskade Showdown is usable, but expect degraded performance and certain features not to work in extremely legacy browsers like:
 
  - Safari 4
  - IE9-10
 
-Pokémon Showdown is mostly developed on Chrome, and Chrome or the desktop client is required for certain features like dragging-and-dropping teams from PS to your computer. However, bugs reported on any supported browser will usually be fixed pretty quickly.
+Kaskade Showdown is mostly developed on Chrome, and Chrome or the desktop client is required for certain features like dragging-and-dropping teams from PS to your computer. However, bugs reported on any supported browser will usually be fixed pretty quickly.
 
 New client
 ------------------------------------------------------------------------
@@ -108,7 +108,7 @@ Warning
 ------------------------------------------------------------------------
 
 This repository is not "batteries included". It does NOT include instructions
-to run a full Pokémon Showdown login server, and we will not provide them.
+to run a full Kaskade Showdown login server, and we will not provide them.
 Please do not ask for help on this; you will be turned away.
 
 If you make a mistake hosting a login server, your users' passwords can get
@@ -125,7 +125,7 @@ just see the "Testing" section above.
 License
 ------------------------------------------------------------------------
 
-Pokémon Showdown's client is distributed under the terms of the [AGPLv3][6].
+Kaskade Showdown's client is distributed under the terms of the [AGPLv3][6].
 
 The reason is mostly because I don't want low-effort proprietary forks that add bad code that steals everyone's passwords, or something like that.
 
@@ -133,4 +133,4 @@ If you're doing _anything_ else other than forking, _especially_ if you want to 
 
   [6]: http://www.gnu.org/licenses/agpl-3.0.html
 
-**WARNING:** This is **NOT** the same license as Pokémon Showdown's server.
+**WARNING:** This is **NOT** the same license as Kaskade Showdown's server.

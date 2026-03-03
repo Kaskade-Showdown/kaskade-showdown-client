@@ -1,5 +1,5 @@
 /**
- * Pokemon Showdown Battle Animations
+ * Kaskade Showdown Battle Animations
  *
  * There are the specific resource files and scripts for misc animations
  *
@@ -3292,7 +3292,7 @@ const BattleEffects: { [k: string]: SpriteData } = {
 		w: 80, h: 60,
 	},
 	lightning: {
-		url: 'lightning.png', // by Pokemon Showdown user SailorCosmos
+		url: 'lightning.png', // by Kaskade Showdown user SailorCosmos
 		w: 41, h: 229,
 	},
 	rocks: {
@@ -3308,7 +3308,7 @@ const BattleEffects: { [k: string]: SpriteData } = {
 		w: 66, h: 72,
 	},
 	rock3: {
-		url: 'rock3.png', // by Pokemon Showdown user SailorCosmos
+		url: 'rock3.png', // by Kaskade Showdown user SailorCosmos
 		w: 66, h: 72,
 	},
 	leaf1: {
@@ -3324,19 +3324,19 @@ const BattleEffects: { [k: string]: SpriteData } = {
 		w: 29, h: 29,
 	},
 	caltrop: {
-		url: 'caltrop.png', // by Pokemon Showdown user SailorCosmos
+		url: 'caltrop.png', // by Kaskade Showdown user SailorCosmos
 		w: 80, h: 80,
 	},
 	greenmetal1: {
-		url: 'greenmetal1.png', // by Pokemon Showdown user Kalalokki
+		url: 'greenmetal1.png', // by Kaskade Showdown user Kalalokki
 		w: 45, h: 45,
 	},
 	greenmetal2: {
-		url: 'greenmetal2.png', // by Pokemon Showdown user Kalalokki
+		url: 'greenmetal2.png', // by Kaskade Showdown user Kalalokki
 		w: 45, h: 45,
 	},
 	poisoncaltrop: {
-		url: 'poisoncaltrop.png', // by Pokemon Showdown user SailorCosmos
+		url: 'poisoncaltrop.png', // by Kaskade Showdown user SailorCosmos
 		w: 80, h: 80,
 	},
 	shadowball: {
@@ -3372,7 +3372,7 @@ const BattleEffects: { [k: string]: SpriteData } = {
 		w: 24, h: 24,
 	},
 	fist: {
-		url: 'fist.png', // by Pokemon Showdown user SailorCosmos
+		url: 'fist.png', // by Kaskade Showdown user SailorCosmos
 		w: 55, h: 49,
 	},
 	fist1: {
@@ -3380,7 +3380,7 @@ const BattleEffects: { [k: string]: SpriteData } = {
 		w: 49, h: 55,
 	},
 	foot: {
-		url: 'foot.png', // by Pokemon Showdown user SailorCosmos
+		url: 'foot.png', // by Kaskade Showdown user SailorCosmos
 		w: 50, h: 75,
 	},
 	topbite: {
@@ -3392,7 +3392,7 @@ const BattleEffects: { [k: string]: SpriteData } = {
 		w: 108, h: 64,
 	},
 	web: {
-		url: 'web.png', // by Pokemon Showdown user SailorCosmos
+		url: 'web.png', // by Kaskade Showdown user SailorCosmos
 		w: 120, h: 122,
 	},
 	leftclaw: {
@@ -3404,39 +3404,39 @@ const BattleEffects: { [k: string]: SpriteData } = {
 		w: 44, h: 60,
 	},
 	leftslash: {
-		url: 'leftslash.png', // by Pokemon Showdown user Modeling Clay
+		url: 'leftslash.png', // by Kaskade Showdown user Modeling Clay
 		w: 57, h: 56,
 	},
 	rightslash: {
-		url: 'rightslash.png', // by Pokemon Showdown user Modeling Clay
+		url: 'rightslash.png', // by Kaskade Showdown user Modeling Clay
 		w: 57, h: 56,
 	},
 	leftchop: {
-		url: 'leftchop.png', // by Pokemon Showdown user SailorCosmos
+		url: 'leftchop.png', // by Kaskade Showdown user SailorCosmos
 		w: 100, h: 130,
 	},
 	rightchop: {
-		url: 'rightchop.png', // by Pokemon Showdown user SailorCosmos
+		url: 'rightchop.png', // by Kaskade Showdown user SailorCosmos
 		w: 100, h: 130,
 	},
 	angry: {
-		url: 'angry.png', // by Pokemon Showdown user SailorCosmos
+		url: 'angry.png', // by Kaskade Showdown user SailorCosmos
 		w: 30, h: 30,
 	},
 	heart: {
-		url: 'heart.png', // by Pokemon Showdown user SailorCosmos
+		url: 'heart.png', // by Kaskade Showdown user SailorCosmos
 		w: 30, h: 30,
 	},
 	pointer: {
-		url: 'pointer.png', // by Pokemon Showdown user SailorCosmos
+		url: 'pointer.png', // by Kaskade Showdown user SailorCosmos
 		w: 100, h: 100,
 	},
 	sword: {
-		url: 'sword.png', // by Pokemon Showdown user SailorCosmos
+		url: 'sword.png', // by Kaskade Showdown user SailorCosmos
 		w: 48, h: 100,
 	},
 	impact: {
-		url: 'impact.png', // by Pokemon Showdown user SailorCosmos
+		url: 'impact.png', // by Kaskade Showdown user SailorCosmos
 		w: 127, h: 119,
 	},
 	stare: {
@@ -3480,11 +3480,11 @@ const BattleEffects: { [k: string]: SpriteData } = {
 		w: 150, h: 100,
 	},
 	ultra: {
-		url: 'ultra.png', // by Pokemon Showdown user Modeling Clay
+		url: 'ultra.png', // by Kaskade Showdown user Modeling Clay
 		w: 113, h: 165,
 	},
 	hitmark: {
-		url: 'hitmarker.png', // by Pokemon Showdown user Ridaz
+		url: 'hitmarker.png', // by Kaskade Showdown user Ridaz
 		w: 100, h: 100,
 	},
 	protect: {

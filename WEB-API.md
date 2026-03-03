@@ -1,4 +1,4 @@
-Pokémon Showdown website APIs
+Kaskade Showdown website APIs
 =============================
 
 Most PS APIs that you would want to access programmatically are available by adding `.json` to the URL.

@@ -1,10 +1,10 @@
 /**
- * Pokemon Showdown Dex
+ * Kaskade Showdown Dex
  *
- * Roughly equivalent to sim/dex.js in a Pokemon Showdown server, but
+ * Roughly equivalent to sim/dex.js in a Kaskade Showdown server, but
  * designed for use in browsers rather than in Node.
  *
- * This is a generic utility library for Pokemon Showdown code: any
+ * This is a generic utility library for Kaskade Showdown code: any
  * code shared between the replay viewer and the client usually ends up
  * here.
  *

@@ -16,7 +16,7 @@ Wie bei jedem Spiel, welches Zufallselemente enthält, beschweren sich Leute üb
 Wie der Zufallszahlengenerator auf PS funktioniert
 ------------------
 
-Pokémon Showdown benutzt die gleiche Art von Zufallszahlengenerator wie in den Pokémon-Spielen auf der Switch und dem 3Ds. Hier kannst du den Quellcode sehen:
+Kaskade Showdown benutzt die gleiche Art von Zufallszahlengenerator wie in den Pokémon-Spielen auf der Switch und dem 3Ds. Hier kannst du den Quellcode sehen:
 
 https://github.com/smogon/Pokemon-Showdown/blob/master/sim/prng.ts
 

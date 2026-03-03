@@ -612,9 +612,9 @@ class MainMenuPanel extends PSRoomPanel<MainMenuRoom> {
 		if (PS.down) {
 			return <div class="menugroup" style="background: rgba(10,10,10,.6)">
 				{PS.down === 'ddos' ? (
-					<p class="error"><strong>Pok&eacute;mon Showdown is offline due to a DDoS attack!</strong></p>
+					<p class="error"><strong>Kaskade Showdown is offline due to a DDoS attack!</strong></p>
 				) : (
-					<p class="error"><strong>Pok&eacute;mon Showdown is offline due to technical difficulties!</strong></p>
+					<p class="error"><strong>Kaskade Showdown is offline due to technical difficulties!</strong></p>
 				)}
 				<p>
 					<div style={{ textAlign: 'center' }}>
