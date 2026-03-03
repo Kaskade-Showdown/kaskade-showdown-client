@@ -18,7 +18,7 @@ function includeHeaderTop() {
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width" />
 
-<title><?= $pageTitle ?> - Pok&eacute;mon Showdown!</title>
+<title><?= $pageTitle ?> - Kaskade Showdown!</title>
 
 <link rel="stylesheet" href="/style/global.css?v16" />
 

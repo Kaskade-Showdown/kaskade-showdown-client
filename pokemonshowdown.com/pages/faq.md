@@ -95,7 +95,7 @@ Groupchats on PS! are user-created chatrooms that can be used to talk with frien
 
 ### How do I change the look / background of PS?
 
-To change the background, click on the settings cog in the top right corner, then click on "Change Background". You can choose one from there, or upload your own. Alternatively, you can download the extension "Stylish" which will change the whole look of Pokemon Showdown!
+To change the background, click on the settings cog in the top right corner, then click on "Change Background". You can choose one from there, or upload your own. Alternatively, you can download the extension "Stylish" which will change the whole look of Kaskade Showdown!
 
 ## Tiering
 

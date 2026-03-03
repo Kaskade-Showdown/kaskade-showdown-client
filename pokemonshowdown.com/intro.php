@@ -176,7 +176,7 @@ includeHeader();
 			<h2>What now?</h2>
 
 			<p>
-				Well, now you have a basic idea of how competitive battling works. If you'd like to dive straight in, play Pokémon Showdown! Our Random Battle format is great for learning the basics of competitive play.
+				Well, now you have a basic idea of how competitive battling works. If you'd like to dive straight in, play Kaskade Showdown! Our Random Battle format is great for learning the basics of competitive play.
 			</p>
 			<p class="mainbutton">
 				<a class="button greenbutton" href="//<?= $psconfig['routes']['client'] ?>/">Play online</a>

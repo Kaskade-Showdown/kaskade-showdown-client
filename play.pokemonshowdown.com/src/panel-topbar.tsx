@@ -226,7 +226,7 @@ export class PSHeader extends preact.Component {
 				<img
 					class="logo"
 					src={`https://${Config.routes.client}/favicon-256.png`}
-					alt="Pokémon Showdown! (beta)"
+					alt="Kaskade Showdown!"
 					width="50" height="50"
 				/>
 				<div class="tablist" role="tablist">
@@ -267,7 +267,7 @@ export class PSHeader extends preact.Component {
 						<img
 							class="logo"
 							src={`https://${Config.routes.client}/favicon-256.png`}
-							alt="Pokémon Showdown! (beta)"
+							alt="Kaskade Showdown!"
 							width="48" height="48"
 						/>
 					</li>

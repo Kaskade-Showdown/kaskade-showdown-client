@@ -220,7 +220,7 @@ if ($sort_by === 'name' || $sort_by === 'N') {
 
 	<meta charset="UTF-8" />
 
-	<title><?= htmlentities(function_exists('dirindex_title') ? dirindex_title() : $rel_dir) ?> - Showdown!</title>
+	<title><?= htmlentities(function_exists('dirindex_title') ? dirindex_title() : $rel_dir) ?> - Kaskade Showdown!</title>
 
 	<meta name="viewport" content="width=device-width" />
 	<link rel="stylesheet" href="/dirindex/font-awesome.min.css" />

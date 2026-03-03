@@ -95,7 +95,7 @@ Groupchats no PS! são salas de bate-papo criadas por usuários, nas quais você
 
 ### Como eu mudo o visual / background do PS?
 
-Para mudar o background, clique na engrenagem de configurações no canto superior da direita, então clique em "Change Background". Você pode escolher um da lista ou fazer upload do seu. Outra opção é fazer o download da extensão "Stylish" que muda o visual todo do Pokemon Showdown!
+Para mudar o background, clique na engrenagem de configurações no canto superior da direita, então clique em "Change Background". Você pode escolher um da lista ou fazer upload do seu. Outra opção é fazer o download da extensão "Stylish" que muda o visual todo do Kaskade Showdown!
 
 ## Tiers
 

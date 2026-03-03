@@ -3,7 +3,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width" />
 
-<title>Pok&eacute;mon Showdown! battle simulator</title>
+<title>Kaskade Showdown! battle simulator</title>
 
 <link rel="stylesheet" href="/style/global.css?v16" />
 

@@ -88,7 +88,7 @@ if ($replay) {
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width" />
 
-<title><?= $title ?>Replays - Pok&eacute;mon Showdown!</title>
+<title><?= $title ?>Replays - Kaskade Showdown!</title>
 
 <?php
 if ($replay) echo '<meta name="description" content="Watch a replay of a Pok&eacute;mon battle between '.htmlspecialchars(implode(' and ', $replay['players'])).'! Format: '.htmlspecialchars($replay['format']).'; Date: '.date("M j, Y", @$replay['uploadtime']).'" />';

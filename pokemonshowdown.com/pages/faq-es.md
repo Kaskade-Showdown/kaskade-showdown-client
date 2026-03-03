@@ -94,13 +94,13 @@ Si quieres entar a un torneo, haz click en el botón "join" o escribe `/tour joi
 Los Groupchats en PS! son salas de chat creadas por usuarios que se pueden usar para hablar con sus amigos de cualquier tema permitido por las reglas globales. También se pueden hacer torneos en los groupchats. Para crear tu propio groupchat utiliza el comando `/makegroupchat [nombre]`. A diferencia de las salas típicas, al creador del groupchat se le otorga el rango de Host (★), el cual otorga menos privilegios que el Room Owner (#).
 
 ### ¿Cómo cambio el aspecto / el fondo de PS!?
-Para cambiar el fondo haz click en el engranaje en la esquina superior derecha y luego haz click en "Change Background". Puedes elegir uno de allí o subir uno propio. Alternativamente, puedes descargar la extensión "Stylish" que cambiará todo el aspecto de Pokémon Showdown!
+Para cambiar el fondo haz click en el engranaje en la esquina superior derecha y luego haz click en "Change Background". Puedes elegir uno de allí o subir uno propio. Alternativamente, puedes descargar la extensión "Stylish" que cambiará todo el aspecto de Kaskade Showdown!
 
 ## Tiering
 
 ### ¿Qué es Smogon?
 
-Smogon es el recurso en línea más completo y preciso para batallas competitivas de Pokémon, que incluye artículos de estrategias, guías, foros y su propio simulador en Pokémon Showdown!. El tiering de Smogon son las bases de Pokémon Showdown!.
+Smogon es el recurso en línea más completo y preciso para batallas competitivas de Pokémon, que incluye artículos de estrategias, guías, foros y su propio simulador en Kaskade Showdown!. El tiering de Smogon son las bases de Kaskade Showdown!.
 
 ### ¿Qué significan AG, Ubers, OU, UU, RU, NU or LC?
 

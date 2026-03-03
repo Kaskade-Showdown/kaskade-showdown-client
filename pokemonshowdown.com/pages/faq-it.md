@@ -95,7 +95,7 @@ Le groupchat su PS! sono chatroom create dagli utenti che possono essere usate p
 
 ### Come posso cambiare l'aspetto / lo sfondo di PS?
 
-Per cambiare lo sfondo, clicca sulla rotella delle impostazioni nell'angolo in alto a destra, poi clicca su "Change Background" (o cambia sfondo se l'abbiamo già tradotto). Puoi sceglierne uno di quelli offerti dal sito, oppure caricare quello che preferisci. In alternativa, puoi scaricare l'estenzione "Stlylish", che ti permetterà di cambiare l'aspetto generale di Pokémon Showdown!
+Per cambiare lo sfondo, clicca sulla rotella delle impostazioni nell'angolo in alto a destra, poi clicca su "Change Background" (o cambia sfondo se l'abbiamo già tradotto). Puoi sceglierne uno di quelli offerti dal sito, oppure caricare quello che preferisci. In alternativa, puoi scaricare l'estenzione "Stlylish", che ti permetterà di cambiare l'aspetto generale di Kaskade Showdown!
 
 ## Tiering
 
