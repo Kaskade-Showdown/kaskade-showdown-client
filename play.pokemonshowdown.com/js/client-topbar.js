@@ -837,12 +837,12 @@
 			buf += '<p><strong>Official</strong></p>';
 			buf += '<div class="bglist">';
 
-			buf += '<button name="setBg" value="charizards" class="option' + (cur === 'charizards' ? ' cur' : '') + '"><span class="bg" style="background-position:0 -' + (90 * 0) + 'px"></span>Charizards</button>';
-			buf += '<button name="setBg" value="horizon" class="option' + (cur === 'horizon' ? ' cur' : '') + '"><span class="bg" style="background-position:0 -' + (90 * 1) + 'px"></span>Horizon</button>';
-			buf += '<button name="setBg" value="ocean" class="option' + (cur === 'ocean' ? ' cur' : '') + '"><span class="bg" style="background-position:0 -' + (90 * 3) + 'px"></span>Ocean</button>';
-			buf += '<button name="setBg" value="shaymin" class="option' + (cur === 'shaymin' ? ' cur' : '') + '"><span class="bg" style="background-position:0 -' + (90 * 4) + 'px"></span>Shaymin</button>';
+			buf += '<button name="setBg" value="kaskademap" class="option' + (cur === 'kaskademap' ? ' cur' : '') + '"><span class="bg" style="background-position:0 -' + (90 * 0) + 'px"></span>Kaskade map</button>';
+			buf += '<button name="setBg" value="charizards" class="option' + (cur === 'charizards' ? ' cur' : '') + '"><span class="bg" style="background-position:0 -' + (90 * 1) + 'px"></span>Charizards</button>';
+			buf += '<button name="setBg" value="horizon" class="option' + (cur === 'horizon' ? ' cur' : '') + '"><span class="bg" style="background-position:0 -' + (90 * 2) + 'px"></span>Horizon</button>';
+			buf += '<button name="setBg" value="ocean" class="option' + (cur === 'ocean' ? ' cur' : '') + '"><span class="bg" style="background-position:0 -' + (90 * 4) + 'px"></span>Ocean</button>';
+			buf += '<button name="setBg" value="shaymin" class="option' + (cur === 'shaymin' ? ' cur' : '') + '"><span class="bg" style="background-position:0 -' + (90 * 5) + 'px"></span>Shaymin</button>';
 			buf += '<button name="setBg" value="solidblue" class="option' + (cur === 'solidblue' ? ' cur' : '') + '"><span class="bg" style="background: #344b6c"></span>Solid blue</button>';
-			buf += '<button name="setBg" value="kaskademap" class="option' + (cur === 'kaskademap' ? ' cur' : '') + '"><span class="bg" style="background-position:0 -' + (90 * 5) + 'px"></span>Kaskade map</button>';
 
 			buf += '</div><div style="clear:left"></div>';
 			buf += '<p><strong>Custom</strong></p>';
