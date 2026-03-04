@@ -754,8 +754,7 @@
 			buf += '<p>Choose an avatar or <button name="close" class="button">Cancel</button></p>';
 
 			buf += '<div class="avatarlist">';
-			for (var i = 1; i <= 293; i++) {
-				if (i === 162 || i === 168) continue;
+			for (var i = 1; i <= 5; i++) {
 				var offset = '-' + (((i - 1) % 16) * 80 + 1) + 'px -' + (Math.floor((i - 1) / 16) * 80 + 1) + 'px';
 				buf += '<button name="setAvatar" value="' + i + '" style="background-position:' + offset + '" class="option pixelated' + (i === cur ? ' cur' : '') + '" title="/avatar ' + i + '"></button>';
 			}
