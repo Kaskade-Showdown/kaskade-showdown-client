@@ -725,7 +725,7 @@ process.stdout.write("Building `data/teambuilder-tables.js`... ");
 			case 'flatunovan':
 				newItems.push(id);
 				break;
-			// popular items
+			// mainstays
 			case 'choiceband':
 			case 'choicespecs':
 			case 'eviolite':
