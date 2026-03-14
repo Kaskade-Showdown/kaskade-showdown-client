@@ -823,10 +823,14 @@ function pokeConvertInner($text) {
 			$out[] = '|-fling '.resolvePokemon($matches[1]).' '.resolveItem($matches[2]);
 		} else if (preg_match('/^([^<>]+) ate its ([^<>]+)!$/', $line, $matches)) {
 			$out[] = '|-eat '.resolvePokemon($matches[1]).' '.resolveItem($matches[2]);
+		} else if (preg_match('/^([^<>]+) drank its ([^<>]+)!$/', $line, $matches)) {
+			$out[] = '|-drink '.resolvePokemon($matches[1]).' '.resolveItem($matches[2]);
 		} else if (preg_match('/^([^<>]+)\'s ([a-zA-Z .\']+) weakened ([^<>]+)\'s power!$/', $line, $matches)) {
 			$out[] = '|-weaken '.resolvePokemon($matches[1]).' '.resolveMove($matches[3]).' '.resolveItem($matches[2]);
 		} else if (preg_match('/^\<([^<>]+) stole and ate ([^<>]+)\'s ([^<>]+)!\>$/', $line, $matches)) {
 			$out[] = '|-steal-eat '.resolvePokemon($matches[1]).' '.resolvePokemon($matches[2]).' '.resolveItem($matches[3]);
+		} else if (preg_match('/^\<([^<>]+) stole and drank ([^<>]+)\'s ([^<>]+)!\>$/', $line, $matches)) {
+			$out[] = '|-steal-drink '.resolvePokemon($matches[1]).' '.resolvePokemon($matches[2]).' '.resolveItem($matches[3]);
 		} else if (preg_match('/^\<([^<>]+)\'s Storm Drain raised its special attack!\>$/', $line, $matches)) {
 			$out[] = '|-ability-boost '.resolvePokemon($matches[1]).' spa 1 StormDrain';
 		} else if (preg_match('/^\<?([^<>]+)\'s Competitive Spirit sharply raised its Attack!\>?$/', $line, $matches)) {

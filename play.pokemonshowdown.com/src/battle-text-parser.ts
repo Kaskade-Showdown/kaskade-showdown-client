@@ -753,6 +753,10 @@ export class BattleTextParser {
 				const template = this.template('eatItem', kwArgs.from);
 				return line1 + template.replace('[POKEMON]', this.pokemon(pokemon)).replace('[ITEM]', this.effect(item));
 			}
+			if (kwArgs.drink) {
+				const template = this.template('drinkItem', kwArgs.from);
+				return line1 + template.replace('[POKEMON]', this.pokemon(pokemon)).replace('[ITEM]', this.effect(item));
+			}
 			const id = BattleTextParser.effectId(kwArgs.from);
 			if (id === 'gem') {
 				const template = this.template('useGem', item);
@@ -760,6 +764,10 @@ export class BattleTextParser {
 					.replace('[MOVE]', kwArgs.move);
 			}
 			if (id === 'stealeat') {
+				const template = this.template('removeItem', "Bug Bite");
+				return line1 + template.replace('[SOURCE]', this.pokemon(kwArgs.of)).replace('[ITEM]', this.effect(item));
+			}
+			if (id === 'stealdrink') {
 				const template = this.template('removeItem', "Bug Bite");
 				return line1 + template.replace('[SOURCE]', this.pokemon(kwArgs.of)).replace('[ITEM]', this.effect(item));
 			}
