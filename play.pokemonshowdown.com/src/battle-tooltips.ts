@@ -1010,8 +1010,10 @@ export class BattleTooltips {
 			text += `<p class="tooltip-section"><strong>Possible Illusion #${illusionIndex}</strong>${levelBuf}</p>`;
 		}
 
-		if (pokemon.fainted) {
-			text += '<p><small>HP:</small> (fainted)</p>';
+		if (pokemon.fainted && pokemon.maxhp === 100) {
+			text += `<p><small>HP:</small> (fainted)</p>`;
+		} else if (pokemon.fainted) {
+			text += `<p><small>HP:</small> <span class="gray">0/${pokemon.maxhp} (fainted)</span></p>`;
 		} else if (this.battle.hardcoreMode) {
 			if (serverPokemon) {
 				const status = pokemon.status ? ` <span class="status ${pokemon.status}">${pokemon.status.toUpperCase()}</span>` : '';
@@ -1120,6 +1122,14 @@ export class BattleTooltips {
 				text += `${moveName}<br />`;
 			}
 			text += '</p>';
+		} else if (this.battle.hardcoreMode && clientPokemon?.side.openTeamSheet && clientPokemon.moveTrack.length) {
+			// move list (open team sheet, no PP usage shown)
+			text += `<p class="tooltip-section">`;
+			for (const [moveName] of clientPokemon.moveTrack) {
+				const move = this.battle.dex.moves.get(moveName);
+				text += `&#8226; ${move.name}<br />`;
+			}
+			text += `</p>`;
 		} else if (!this.battle.hardcoreMode && clientPokemon?.moveTrack.length) {
 			// move list (guessed)
 			text += `<p class="tooltip-section">`;
@@ -3650,7 +3660,7 @@ export function BattleStatOptimizer(set: Dex.PokemonSet, formatid: ID) {
 		return ~~(val);
 	};
 
-	const origNature = BattleNatures[set.nature || 'Serious'];
+	const origNature = BattleNatures[set.nature!] ?? BattleNatures['Serious'];
 	const origStats = {
 		// no need to calculate hp
 		atk: getStat('atk', set.evs.atk || 0, origNature),
