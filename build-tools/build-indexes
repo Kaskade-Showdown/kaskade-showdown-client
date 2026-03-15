@@ -156,6 +156,7 @@ function requireNoCache(pathSpec) {
 		ubassembly: "stakataka",
 		ubadhesive: "poipole",
 		ubstinger: "naganadel",
+		// swse
 		ubspotlight: "orbtholod",
 		ubharbinger: "pestalation",
 		ubcavalry: "revylon",
