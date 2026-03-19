@@ -2229,6 +2229,7 @@
 				case 'Castform':
 				case 'Cherrim':
 				case 'Deerling':
+				case 'Eecroach':
 				case 'Flabebe':
 				case 'Floette':
 				case 'Florges':
@@ -2243,6 +2244,7 @@
 				case 'Sawsbuck':
 				case 'Shellos':
 				case 'Sinistea':
+				case 'Stackem':
 				case 'Tatsugiri':
 				case 'Vivillon':
 					break;
@@ -2929,7 +2931,7 @@
 					buf += '<option value="' + types[i].name + '"' + (teraType === types[i].name ? ' selected="selected"' : '') + '>' + types[i].name + '</option>';
 				}
 				buf += '</select></div></div>';
-			}
+			} */
 
 			buf += '</form>';
 			if (species.cosmeticFormes) {
