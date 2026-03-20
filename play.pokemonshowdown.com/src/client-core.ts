@@ -21,7 +21,7 @@ declare const ColorThief: any;
  *********************************************************************/
 // PS's model classes are defined here
 
-const PSURL = `${document.location.protocol !== 'http:' ? 'https:' : ''}//${Config.routes.client}/`;
+const PSURL = `${document.location.protocol !== 'http:' ? 'https:' : ''}//${Config.routes.client}/`; // incomplete, change this to swse later
 
 export class PSSubscription<T = any> {
 	observable: PSModel<T> | PSStreamModel<T>;
@@ -265,7 +265,7 @@ export const PSBackground = new class extends PSStreamModel<string | null> {
 			];
 			attrib = {
 				url: 'https://x.com/barbie_e4',
-				title: 'Kaskade map',
+				title: 'Kaskade region',
 				artist: 'Gianluca Barbera',
 			};
 			break;

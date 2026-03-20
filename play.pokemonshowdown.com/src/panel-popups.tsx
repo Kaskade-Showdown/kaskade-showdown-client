@@ -705,16 +705,16 @@ class OptionsPanel extends PSRoomPanel {
 					name="noanim" checked={PS.prefs.noanim || false} type="checkbox" onChange={this.handleOnChange}
 				/> Disable animations</label>
 			</p>
-			<p>
+			{/*  <p>
 				<label class="checkbox"><input
 					name="bwgfx" checked={PS.prefs.bwgfx || false} type="checkbox" onChange={this.handleOnChange}
 				/>  Use 2D sprites instead of 3D models</label>
-			</p>
-			<p>
+			</p> */}
+			{/* <p>
 				<label class="checkbox"><input
 					name="nopastgens" checked={PS.prefs.nopastgens || false} type="checkbox" onChange={this.handleOnChange}
 				/> Use modern sprites for past generations</label>
-			</p>
+			</p> */}
 			<hr />
 			<h3>Chat</h3>
 			<p>
