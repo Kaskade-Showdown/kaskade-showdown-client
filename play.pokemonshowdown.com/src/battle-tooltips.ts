@@ -1889,84 +1889,84 @@ export class BattleTooltips {
 			if (value.itemModify(0)) moveType = item.naturalGift.type;
 		}
 		// Weather and pseudo-weather type changes.
-		if (move.id === 'weatherball' && value.climateWeatherModify(0)) { // updated
-			switch (this.battle.getRecentWeather(item.id)) {
-			case 'sunnyday':
-			case 'desolateland':
+		if (move.id === 'weatherball') { // updated
+			if (value.climateWeatherModify(0)) {
+				switch (this.battle.getRecentWeather(item.id)) {
+				case 'sunnyday':
+				case 'desolateland':
+					moveType = 'Fire';
+					break;
+				case 'raindance':
+				case 'primordialsea':
+					moveType = 'Water';
+					break;
+				case 'hail':
+				case 'snowscape':
+					moveType = 'Ice';
+					break;
+				case 'bloodmoon':
+					moveType = 'Dark';
+					break;
+				case 'foghorn':
+					moveType = 'Normal';
+					break;
+				}
+			} else if (value.irritantWeatherModify(0)) {
+				switch (this.battle.getRecentWeather(item.id)) {
+				case 'sandstorm':
+					moveType = 'Rock';
+					break;
+				case 'duststorm':
+					moveType = 'Ground';
+					break;
+				case 'pollinate':
+					moveType = 'Grass';
+					break;
+				case 'swarmsignal':
+					moveType = 'Bug';
+					break;
+				case 'smogspread':
+					moveType = 'Poison';
+					break;
+				case 'sprinkle':
+					moveType = 'Fairy';
+					break;
+				}
+			} else if (value.energyWeatherModify(0)) {
+				switch (this.battle.getRecentWeather(item.id)) {
+				case 'auraprojection':
+					moveType = 'Fighting';
+					break;
+				case 'haunt':
+					moveType = 'Ghost';
+					break;
+				case 'daydream':
+					moveType = 'Psychic';
+					break;
+				case 'dragonforce':
+					moveType = 'Dragon';
+					break;
+				case 'supercell':
+					moveType = 'Electric';
+					break;
+				case 'magnetize':
+					moveType = 'Steel';
+					break;
+				}
+			} else if (value.clearingWeatherModify(0)) {
+				switch (this.battle.getRecentWeather(item.id)) {
+				case 'strongwinds':
+					moveType = 'Flying';
+					break;
+				}
+			} else if (value.cataclysmWeatherModify(0)) {
+				switch (this.battle.getRecentWeather(item.id)) {
+				case 'cataclysmiclight':
+					moveType = '???';
+					break;
+				}
+			} else if (value.abilityModify(0, 'Mega Sol')) {
 				moveType = 'Fire';
-				break;
-			case 'raindance':
-			case 'primordialsea':
-				moveType = 'Water';
-				break;
-			case 'hail':
-			case 'snowscape':
-				moveType = 'Ice';
-				break;
-			case 'bloodmoon':
-				moveType = 'Dark';
-				break;
-			case 'foghorn':
-				moveType = 'Normal';
-				break;
-			}
-		}
-		if (move.id === 'weatherball' && value.irritantWeatherModify(0)) {
-			switch (this.battle.getRecentWeather(item.id)) {
-			case 'sandstorm':
-				moveType = 'Rock';
-				break;
-			case 'duststorm':
-				moveType = 'Ground';
-				break;
-			case 'pollinate':
-				moveType = 'Grass';
-				break;
-			case 'swarmsignal':
-				moveType = 'Bug';
-				break;
-			case 'smogspread':
-				moveType = 'Poison';
-				break;
-			case 'sprinkle':
-				moveType = 'Fairy';
-				break;
-			}
-		}
-		if (move.id === 'weatherball' && value.energyWeatherModify(0)) {
-			switch (this.battle.getRecentWeather(item.id)) {
-			case 'auraprojection':
-				moveType = 'Fighting';
-				break;
-			case 'haunt':
-				moveType = 'Ghost';
-				break;
-			case 'daydream':
-				moveType = 'Psychic';
-				break;
-			case 'dragonforce':
-				moveType = 'Dragon';
-				break;
-			case 'supercell':
-				moveType = 'Electric';
-				break;
-			case 'magnetize':
-				moveType = 'Steel';
-				break;
-			}
-		}
-		if (move.id === 'weatherball' && value.clearingWeatherModify(0)) {
-			switch (this.battle.getRecentWeather(item.id)) {
-			case 'strongwinds':
-				moveType = 'Flying';
-				break;
-			}
-		}
-		if (move.id === 'weatherball' && value.cataclysmWeatherModify(0)) {
-			switch (this.battle.getRecentWeather(item.id)) {
-			case 'cataclysmiclight':
-				moveType = '???';
-				break;
 			}
 		}
 		if (move.id === 'terrainpulse' && pokemon.isGrounded(serverPokemon)) {
@@ -2048,6 +2048,7 @@ export class BattleTooltips {
 			if (category !== 'Status' && !move.isZ && !move.id.startsWith('hiddenpower')) {
 				if (moveType === 'Normal') {
 					if (value.abilityModify(0, 'Aerilate')) moveType = 'Flying';
+					if (value.abilityModify(0, 'Dragonize')) moveType = 'Dragon';
 					if (value.abilityModify(0, 'Galvanize')) moveType = 'Electric';
 					if (value.abilityModify(0, 'Pixilate')) moveType = 'Fairy';
 					if (value.abilityModify(0, 'Refrigerate')) moveType = 'Ice';
@@ -2274,6 +2275,7 @@ export class BattleTooltips {
 		value.set(move.accuracy as number);
 
 		if (move.id === 'hurricane' || move.id === 'thunder') {
+			if (value.tryAbility('Mega Sol')) value.set(50, 'Mega Sol');
 			if (value.tryClimateWeather('Sunny Day')) value.set(50, 'Sunny Day');
 			if (value.tryClimateWeather('Desolate Land')) value.set(50, 'Desolate Land');
 		}
@@ -2615,6 +2617,7 @@ export class BattleTooltips {
 		) {
 			if (move.type === 'Normal') {
 				value.abilityModify(this.battle.gen > 6 ? 1.2 : 1.3, "Aerilate");
+				value.abilityModify(this.battle.gen > 6 ? 1.2 : 1.3, "Dragonize");
 				value.abilityModify(this.battle.gen > 6 ? 1.2 : 1.3, "Galvanize");
 				value.abilityModify(this.battle.gen > 6 ? 1.2 : 1.3, "Pixilate");
 				value.abilityModify(this.battle.gen > 6 ? 1.2 : 1.3, "Refrigerate");
