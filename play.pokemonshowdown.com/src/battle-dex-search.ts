@@ -1753,6 +1753,14 @@ class BattleMoveSearch extends BattleTypedSearch<'move'> {
 		}
 		return !BattleMoveSearch.BAD_STRONG_MOVES.includes(id);
 	}
+	private moveIsWeatherSetup(id: ID): boolean {
+		return [
+			'sunnyday', 'raindance', 'hail', 'bloodmoon', 'foghorn',
+			'sandstorm', 'duststorm', 'pollinate', 'swarmsignal', 'smogspread', 'sprinkle',
+			'auraprojection', 'haunt', 'daydream', 'dragonforce', 'supercell', 'magnetize',
+			'strongwinds',
+		].includes(id);
+	}
 	static readonly GOOD_STATUS_MOVES = [
 		'acidarmor', 'agility', 'aromatherapy', 'auroraveil', 'autotomize', 'banefulbunker', 'batonpass', 'bellydrum', 'bulkup', 'burningbulwark', 'calmmind', 'chillyreception', 'clangoroussoul', 'coil', 'cottonguard', 'courtchange', 'curse', 'defog', 'destinybond', 'detect', 'disable', 'dragondance', 'encore', 'extremeevoboost', 'filletaway', 'geomancy', 'glare', 'haze', 'healbell', 'healingwish', 'healorder', 'heartswap', 'honeclaws', 'kingsshield', 'leechseed', 'lightscreen', 'lovelykiss', 'lunardance', 'magiccoat', 'maxguard', 'memento', 'milkdrink', 'moonlight', 'morningsun', 'nastyplot', 'naturesmadness', 'noretreat', 'obstruct', 'painsplit', 'partingshot', 'perishsong', 'protect', 'quiverdance', 'recover', 'reflect', 'reflecttype', 'rest', 'revivalblessing', 'roar', 'rockpolish', 'roost', 'shedtail', 'shellsmash', 'shiftgear', 'shoreup', 'silktrap', 'slackoff', 'sleeppowder', 'sleeptalk', 'softboiled', 'spikes', 'spikyshield', 'spore', 'stealthrock', 'stickyweb', 'strengthsap', 'substitute', 'switcheroo', 'swordsdance', 'synthesis', 'tailglow', 'tailwind', 'taunt', 'thunderwave', 'tidyup', 'toxic', 'transform', 'trick', 'victorydance', 'whirlwind', 'willowisp', 'wish', 'yawn',
 	] as ID[] as readonly ID[];
@@ -1919,12 +1927,17 @@ class BattleMoveSearch extends BattleTypedSearch<'move'> {
 		sketchMoves.sort();
 
 		let usableMoves: SearchRow[] = [];
+		let weatherMoves: SearchRow[] = [];
 		let uselessMoves: SearchRow[] = [];
 		for (const id of moves) {
 			const isUsable = this.moveIsNotUseless(id as ID, species, moves, this.set);
+			const isWeather = this.moveIsWeatherSetup(id as ID);
 			if (isUsable) {
 				if (!usableMoves.length) usableMoves.push(['header', "Moves"]);
 				usableMoves.push(['move', id as ID]);
+			} else if (isWeather) {
+				if (!weatherMoves.length) weatherMoves.push(['header', "Weather setup moves"]);
+				weatherMoves.push(['move', id as ID]);
 			} else {
 				if (!uselessMoves.length) uselessMoves.push(['header', "Usually useless moves"]);
 				uselessMoves.push(['move', id as ID]);
@@ -1932,17 +1945,21 @@ class BattleMoveSearch extends BattleTypedSearch<'move'> {
 		}
 		if (sketchMoves.length) {
 			usableMoves.push(['header', "Sketched moves"]);
+			weatherMoves.push(['header', "Sketched weather moves"]);
 			uselessMoves.push(['header', "Useless sketched moves"]);
 		}
 		for (const id of sketchMoves) {
 			const isUsable = this.moveIsNotUseless(id as ID, species, sketchMoves, this.set);
+			const isWeather = this.moveIsWeatherSetup(id as ID);
 			if (isUsable) {
 				usableMoves.push(['move', id as ID]);
+			} else if (isWeather) {
+				weatherMoves.push(['move', id as ID]);
 			} else {
 				uselessMoves.push(['move', id as ID]);
 			}
 		}
-		return [...usableMoves, ...uselessMoves];
+		return [...usableMoves, ...weatherMoves, ...uselessMoves];
 	}
 	filter(row: SearchRow, filters: string[][]) {
 		if (!filters) return true;
