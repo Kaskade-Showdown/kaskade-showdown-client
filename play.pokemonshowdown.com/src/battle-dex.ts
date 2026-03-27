@@ -800,7 +800,7 @@ export const Dex = new class implements ModdedDex {
 				'gabite', 'garchomp', 'hippopotas', 'hippowdon', 'croagunk', 'toxicroak', 'finneon', 'lumineon', 'snover',
 				'snoverlowland', 'abomasnow', 'abomasnowlowland', 'weavile', 'rhyperior', 'tangrowth', 'mamoswine', 'unfezant',
 				'frillish', 'jellicent', 'pyroar', 'meowstic',
-				'catteraxe', 'auditar', 'oxillery', 'tamroast', 'weepollen'].includes(id)) {
+				'catteraxe', 'auditaur', 'oxillery', 'tamroast', 'weepollen'].includes(id)) {
 				num = BattlePokemonIconIndexes[id + 'f'];
 			}
 		}
