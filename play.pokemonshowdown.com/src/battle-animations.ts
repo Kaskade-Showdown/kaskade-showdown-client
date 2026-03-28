@@ -1891,8 +1891,8 @@ export class BattleScene implements BattleSceneStub {
 			const url = BattleEffects[i].url;
 			if (url) this.preloadImage(url);
 		}
-		this.preloadImage(Dex.resourcePrefix + 'sprites/ani/substitute.gif');
-		this.preloadImage(Dex.resourcePrefix + 'sprites/ani-back/substitute.gif');
+		this.preloadImage(Dex.resourcePrefix + 'sprites/gen5ani/substitute.gif');
+		this.preloadImage(Dex.resourcePrefix + 'sprites/gen5ani-back/substitute.gif');
 	}
 	rollBgm() {
 		this.setBgm(1 + this.numericId % 15);
