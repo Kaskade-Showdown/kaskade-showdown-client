@@ -279,7 +279,7 @@ export const BattlePokemonIconIndexes: { [id: string]: number } = {
 	leoseace: 1026 + 122,
 	lamentu: 1026 + 123,
 	endramodai: 1026 + 124,
-	missingno: 1026 + 125,
+	// missingno: 1026 + 125,
 	kuzeed: 1026 + 126,
 	guhvine: 1026 + 127,
 	minorm: 1026 + 128,
