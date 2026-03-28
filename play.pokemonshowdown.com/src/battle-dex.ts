@@ -1137,7 +1137,7 @@ export class ModdedDex {
 			const names = Dex.types.names();
 			if (!names.length) return [];
 			const curNames = [...names];
-			if (this.gen < 9) curNames.splice(curNames.indexOf('Stellar'), 1);
+			// if (this.gen < 9) curNames.splice(curNames.indexOf('Stellar'), 1);
 			if (this.gen < 6) curNames.splice(curNames.indexOf('Fairy'), 1);
 			if (this.gen < 2) curNames.splice(curNames.indexOf('Dark'), 1);
 			if (this.gen < 2) curNames.splice(curNames.indexOf('Steel'), 1);
