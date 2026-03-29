@@ -748,9 +748,12 @@ process.stdout.write("Building `data/teambuilder-tables.js`... ");
 			case 'loadeddice':
 			case 'heavydutyboots':
 			case 'expertbelt':
-			case 'salacberry':
 				if (isDoubles || isMetBattle) goodItems.push(id);
 				else popularItems.push(id);
+				break;
+			case 'salacberry':
+				if (isDoubles || isMetBattle) goodItems.push(id);
+				else statBerryItems.push(id);
 				break;
 			// just doubles
 			case 'safetygoggles':
@@ -812,25 +815,33 @@ process.stdout.write("Building `data/teambuilder-tables.js`... ");
 				else goodItems.push(id);
 				break;
 			// Type boosting
-			case 'Black Belt':
-			case 'Black Glasses':
-			case 'Charcoal':
-			case 'Dragon Fang':
-			case 'Fairy Feather':
-			case 'Hard Stone':
-			case 'Magnet':
-			case 'Metal Coat':
-			case 'Miracle Seed':
-			case 'Mystic Water':
-			case 'Never-Melt Ice':
-			case 'Poison Barb':
-			case 'Sharp Beak':
-			case 'Silk Scarf':
-			case 'Silver Powder':
-			case 'Soft Sand':
-			case 'Spell Tag':
-			case 'Twisted Spoon':
+			case 'blackbelt':
+			case 'blackglasses':
+			case 'charcoal':
+			case 'fairyfeather':
+			case 'hardstone':
+			case 'magnet':
+			case 'metalcoat':
+			case 'miracleseed':
+			case 'mysticwater':
+			case 'nevermeltice':
+			case 'poisonbarb':
+			case 'sharpbeak':
+			case 'silkscarf':
+			case 'silverpowder':
+			case 'softsand':
+			case 'spelltag':
+			case 'twistedspoon':
 				typeBoostItems.push(id);
+				break;
+			case 'apicotberry':
+			case 'ganlonberry':
+			case 'keeberry':
+			case 'liechiberry':
+			case 'marangaberry':
+			case 'petayaberry':
+			case 'starfberry':
+				statBerryItems.push(id);
 				break;
 			// Legendaries
 			case 'adamantorb':
