@@ -1761,6 +1761,7 @@ class BattleMoveSearch extends BattleTypedSearch<'move'> {
 			'sandstorm', 'duststorm', 'pollinate', 'swarmsignal', 'smogspread', 'sprinkle',
 			'auraprojection', 'haunt', 'daydream', 'dragonforce', 'supercell', 'magnetize',
 			'strongwinds',
+			'brainstorm',
 		].includes(id);
 	}
 	static readonly GOOD_STATUS_MOVES = [
