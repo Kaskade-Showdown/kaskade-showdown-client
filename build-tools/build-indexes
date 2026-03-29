@@ -713,11 +713,7 @@ process.stdout.write("Building `data/teambuilder-tables.js`... ");
 			case 'energychannelizer':
 			case 'portableturbine':
 			case 'energynullifier':
-				// type boost items
-			case 'charmingtalisman':
-				// poor items
 			case 'frostorb':
-				// undecided
 			case 'pikaspresso':
 			case 'worcanecoldbrew':
 			case 'sandygastmocha':
@@ -811,7 +807,28 @@ process.stdout.write("Building `data/teambuilder-tables.js`... ");
 				if (genNum >= 6) unreleasedItems.push(id);
 				else goodItems.push(id);
 				break;
-				// Legendaries
+			// Type boosting
+			case 'Black Belt':
+			case 'Black Glasses':
+			case 'Charcoal':
+			case 'Dragon Fang':
+			case 'Fairy Feather':
+			case 'Hard Stone':
+			case 'Magnet':
+			case 'Metal Coat':
+			case 'Miracle Seed':
+			case 'Mystic Water':
+			case 'Never-Melt Ice':
+			case 'Poison Barb':
+			case 'Sharp Beak':
+			case 'Silk Scarf':
+			case 'Silver Powder':
+			case 'Soft Sand':
+			case 'Spell Tag':
+			case 'Twisted Spoon':
+				typeBoostItems.push(id);
+				break;
+			// Legendaries
 			case 'adamantorb':
 			case 'griseousorb':
 			case 'lustrousorb':

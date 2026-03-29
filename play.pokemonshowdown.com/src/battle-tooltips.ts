@@ -2827,7 +2827,6 @@ export class BattleTooltips {
 		'Black Belt': 'Fighting',
 		'Black Glasses': 'Dark',
 		'Charcoal': 'Fire',
-		'Charming Talisman': 'Fairy',
 		'Dragon Fang': 'Dragon',
 		'Fairy Feather': 'Fairy',
 		'Hard Stone': 'Rock',
@@ -3170,7 +3169,8 @@ export class BattleStatGuesser {
 		let physicalBulk = (stats.hp + 75) * (stats.def + 87);
 		let specialBulk = (stats.hp + 75) * (stats.spd + 87);
 
-		if (hasMove['willowisp'] || hasMove['acidarmor'] || hasMove['irondefense'] || hasMove['cottonguard']) {
+		if (hasMove['willowisp'] || hasMove['acidarmor'] || hasMove['irondefense'] ||
+			hasMove['cottonguard'] || hasMove['shelter']) {
 			physicalBulk *= 1.6;
 			moveCount['PhysicalStall']++;
 		} else if (hasMove['scald'] || hasMove['bulkup'] || hasMove['coil'] || hasMove['cosmicpower']) {
