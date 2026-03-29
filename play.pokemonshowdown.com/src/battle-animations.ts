@@ -1579,6 +1579,7 @@ export class BattleScene implements BattleSceneStub {
 			this.sideConditions[siden][id] = [rock1, rock2, rock3, rock4];
 			break;
 		case 'gmaxsteelsurge':
+		case 'steelbarbs':
 			const surge1 = new Sprite(BattleEffects.greenmetal1, {
 				display: 'block',
 				x: x + side.leftof(-30),
