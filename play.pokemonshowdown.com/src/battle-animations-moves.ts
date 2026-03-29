@@ -666,10 +666,10 @@ export const BattleMoveAnims: AnimTable = {
 			}, 'ballistic2Under', 'fade');
 		},
 	},
-	raindance: {
+	sunnyday: {
 		anim: BattleOtherAnims.dance.anim,
 	},
-	sunnyday: {
+	raindance: {
 		anim: BattleOtherAnims.dance.anim,
 	},
 	hail: {
@@ -715,7 +715,69 @@ export const BattleMoveAnims: AnimTable = {
 			scene.backgroundEffect(`url('https://${Config.routes.client}/fx/weather-hail.png')`, 750, 1, 800);
 		},
 	},
+	bloodmoon: {
+		anim(scene, [attacker, defender]) {
+			BattleOtherAnims.dance.anim(scene, [attacker, defender]);
+
+			scene.backgroundEffect('#000000', 1700, 0.8);
+
+			scene.showEffect('moon', {
+				x: attacker.x,
+				y: attacker.y,
+				z: attacker.z,
+				scale: 1,
+				opacity: 0,
+				time: 0,
+			}, {
+				x: attacker.x,
+				y: attacker.y + 100,
+				z: attacker.z,
+				scale: 1,
+				opacity: 0.9,
+				time: 0,
+			}, 'decel');
+		},
+	},
+	foghorn: {
+		anim: BattleOtherAnims.dance.anim,
+	},
 	sandstorm: {
+		anim: BattleOtherAnims.dance.anim,
+	},
+	duststorm: {
+		anim: BattleOtherAnims.dance.anim,
+	},
+	pollinate: {
+		anim: BattleOtherAnims.dance.anim,
+	},
+	swarmsignal: {
+		anim: BattleOtherAnims.dance.anim,
+	},
+	smogspread: {
+		anim: BattleOtherAnims.dance.anim,
+	},
+	sprinkle: {
+		anim: BattleOtherAnims.dance.anim,
+	},
+	auraprojection: {
+		anim: BattleOtherAnims.dance.anim,
+	},
+	haunt: {
+		anim: BattleOtherAnims.dance.anim,
+	},
+	daydream: {
+		anim: BattleOtherAnims.dance.anim,
+	},
+	dragonforce: {
+		anim: BattleOtherAnims.dance.anim,
+	},
+	supercell: {
+		anim: BattleOtherAnims.dance.anim,
+	},
+	magnetize: {
+		anim: BattleOtherAnims.dance.anim,
+	},
+	strongwinds: {
 		anim: BattleOtherAnims.dance.anim,
 	},
 	gravity: {
@@ -6619,7 +6681,7 @@ export const BattleMoveAnims: AnimTable = {
 			}, 'swing');
 		},
 	},
-	bloodmoon: {
+	bloodmoonblast: {
 		anim(scene, [attacker, defender]) {
 			let xstep = (defender.x - attacker.x) / 5;
 			let ystep = (defender.x - 100 - attacker.x) / 5;
