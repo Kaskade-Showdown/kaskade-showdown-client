@@ -2216,11 +2216,7 @@ export class PokemonSprite extends Sprite {
 		lightscreen: ['Light Screen', 'good'],
 		reflect: ['Reflect', 'good'],
 		// swse
-		warpmistatk: ['Warp Mist: Atk', 'good'],
-		warpmistdef: ['Warp Mist: Def', 'good'],
-		warpmistspa: ['Warp Mist: SpA', 'good'],
-		warpmistspd: ['Warp Mist: SpD', 'good'],
-		warpmistspe: ['Warp Mist: Spe', 'good'],
+		whirlduel: ['Whirlduel', 'bad'],
 		sunscreen: ['Sunscreen', 'good'],
 		resilientoil: ['Resilient Oil', 'good'],
 		caffeinecrash: ['Caffeine Crash', 'bad'],
