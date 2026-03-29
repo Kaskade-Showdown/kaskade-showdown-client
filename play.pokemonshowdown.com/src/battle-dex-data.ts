@@ -1625,6 +1625,8 @@ export interface MoveFlags {
 	bypasssub?: 1 | 0;
 	/** The user is unable to make a move between turns. */
 	charge?: 1 | 0;
+	/** Boosted by Enjoin. */
+	commanding?: 1 | 0;
 	/** Makes contact. */
 	contact?: 1 | 0;
 	/** When used by a Pokemon, other Pokemon with the Dancer Ability can attempt to execute the same move. */

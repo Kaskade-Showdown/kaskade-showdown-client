@@ -922,6 +922,9 @@ export class BattleTooltips {
 			if (move.flags.wind) {
 				text += `<p class="movetag">&#x2713; Wind <small>(activates Wind Power and Wind Rider)</small></p>`;
 			}
+			if (move.flags.commanding) {
+				text += `<p class="movetag">&#x2713; Commanding <small>(booasted by Enjoin)</small></p>`;
+			}
 			// RBY healing move glitch
 			if (this.battle.gen === 1 && !toID(this.battle.tier).includes('stadium') &&
 				['recover', 'softboiled', 'rest'].includes(move.id)) {
@@ -2590,6 +2593,9 @@ export class BattleTooltips {
 			}
 			if (['Rock', 'Ground', 'Steel'].includes(moveType) && this.battle.irritantWeather === 'duststorm') {
 				if (value.tryAbility("Earth Force")) value.irritantWeatherModify(1.3, "Dust Storm", "Earth Force");
+			}
+			if ('Poison'.includes(moveType) && this.battle.irritantWeather === 'smogspread') {
+				if (value.tryAbility("Carbon Capture")) value.irritantWeatherModify(1.3, "Smog", "Carbon Capture");
 			}
 			if (['Fairy', 'Grass', 'Fire', 'Water'].includes(moveType) && (this.battle.irritantWeather === 'sprinkle')) {
 				if (value.tryAbility("Power Above")) value.irritantWeatherModify(1.3, "Fairy Dust", "Power Above");
