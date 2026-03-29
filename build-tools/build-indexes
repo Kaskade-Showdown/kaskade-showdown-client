@@ -729,9 +729,13 @@ process.stdout.write("Building `data/teambuilder-tables.js`... ");
 				popularItems.push(id);
 				break;
 			// great everywhere but metronome
+			case 'choicescarf':
+				if (!isMetBattle) goodItems.push(id);
+				else popularItems.push(id);
+				break;
+			// great everywhere but metronome
 			case 'leftovers':
 			case 'lifeorb':
-			case 'choicescarf':
 			case 'assaultvest':
 			case 'focussash':
 			case 'powerherb':
@@ -906,6 +910,7 @@ process.stdout.write("Building `data/teambuilder-tables.js`... ");
 			case 'peatblock':
 			case 'keybone':
 			case 'amazedrive':
+			case 'iridescentscale':
 				uselessItems.push(id);
 				break;
 			// outclassed items
