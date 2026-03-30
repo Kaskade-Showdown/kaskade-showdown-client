@@ -38106,6 +38106,115 @@ export const BattleMoveAnims: AnimTable = {
 			}, 'accel', 'fade', { filter: 'brightness(5)' });
 		},
 	},
+	// swse
+	steelbarbs: {
+		anim(scene, [attacker, defender]) {
+			scene.showEffect('greenmetal1', {
+				x: attacker.x,
+				y: attacker.y,
+				z: attacker.z,
+				scale: 0.1,
+				opacity: 0.5,
+			}, {
+				x: defender.leftof(-40),
+				y: defender.y - 10,
+				z: defender.z,
+				scale: 0.2,
+				opacity: 1,
+			}, 'ballistic');
+			scene.showEffect('greenmetal2', {
+				x: attacker.x,
+				y: attacker.y,
+				z: attacker.z,
+				scale: 0.1,
+				opacity: 0.5,
+				time: 75,
+			}, {
+				x: defender.leftof(-20),
+				y: defender.y - 40,
+				z: defender.z,
+				scale: 0.2,
+				opacity: 1,
+			}, 'ballistic');
+			scene.showEffect('greenmetal1', {
+				x: attacker.x,
+				y: attacker.y,
+				z: attacker.z,
+				scale: 0.1,
+				opacity: 0.5,
+				time: 150,
+			}, {
+				x: defender.leftof(30),
+				y: defender.y - 20,
+				z: defender.z,
+				scale: 0.2,
+				opacity: 1,
+			}, 'ballistic');
+			scene.showEffect('greenmetal2', {
+				x: attacker.x,
+				y: attacker.y,
+				z: attacker.z,
+				scale: 0.1,
+				opacity: 0.5,
+				time: 225,
+			}, {
+				x: defender.leftof(10),
+				y: defender.y - 30,
+				z: defender.z,
+				scale: 0.2,
+				opacity: 1,
+			}, 'ballistic');
+		},
+	},
+	whitewand: {
+		anim(scene, [attacker, defender]) {
+			scene.showEffect('lightbluefireball', {
+				x: attacker.x,
+				y: attacker.y,
+				z: attacker.z,
+				scale: 0.4,
+				opacity: 0,
+			}, {
+				x: defender.leftof(40),
+				y: defender.y + 15,
+				z: defender.z,
+				scale: 0.8,
+				opacity: 0.7,
+				time: 500,
+			}, 'decel', 'fade');
+			if (defender.isMissedPokemon) return;
+			scene.showEffect('lightbluefireball', {
+				x: defender.leftof(40),
+				y: defender.y + 15,
+				z: defender.z,
+				scale: 0.8,
+				opacity: 0.7,
+				time: 500,
+			}, {
+				x: defender.leftof(-40),
+				y: defender.y,
+				z: defender.z,
+				scale: 0.7,
+				opacity: 1,
+				time: 700,
+			}, 'swing', 'fade');
+			scene.showEffect('lightbluefireball', {
+				x: defender.leftof(-40),
+				y: defender.y,
+				z: defender.z,
+				scale: 0.1,
+				opacity: 0,
+				time: 700,
+			}, {
+				x: defender.leftof(10),
+				y: defender.y - 15,
+				z: defender.z,
+				scale: 0.7,
+				opacity: 1,
+				time: 900,
+			}, 'swing', 'explode');
+		},
+	},
 };
 
 // placeholder animations
@@ -38505,6 +38614,41 @@ BattleMoveAnims['hydrosteam'] = { anim: BattleMoveAnims['steameruption'].anim };
 BattleMoveAnims['psyblade'] = { anim: BattleMoveAnims['psychocut'].anim };
 BattleMoveAnims['polarflare'] = { anim: BattleMoveAnims['torchsong'].anim };
 // swse
+BattleMoveAnims['snooze'] = { anim: BattleMoveAnims['yawn'].anim };
+BattleMoveAnims['windrage'] = { anim: BattleMoveAnims['bravebird'].anim };
+BattleMoveAnims['whipup'] = { anim: BattleMoveAnims['gust'].anim };
+BattleMoveAnims['muckvolley'] = { anim: BattleMoveAnims['sludgebomb'].anim };
+BattleMoveAnims['viralblast'] = { anim: BattleMoveAnims['sludgebomb'].anim };
+BattleMoveAnims['crystalforce'] = { anim: BattleMoveAnims['diamondstorm'].anim };
+BattleMoveAnims['ectoplasma'] = { anim: BattleMoveAnims['moongeistbeam'].anim };
+BattleMoveAnims['ignition'] = { anim: BattleMoveAnims['flareblitz'].anim };
+BattleMoveAnims['emberplume'] = { anim: BattleMoveAnims['incinerate'].anim };
+BattleMoveAnims['sunscreen'] = { anim: BattleMoveAnims['sunnyday'].anim };
+BattleMoveAnims['osmosis'] = { anim: BattleMoveAnims['gigadrain'].anim };
+BattleMoveAnims['thunderhammer'] = { anim: BattleMoveAnims['supercellslam'].anim };
+BattleMoveAnims['mindmeld'] = { anim: BattleMoveAnims['psystrike'].anim };
+BattleMoveAnims['permafrost'] = { anim: BattleMoveAnims['glaiverush'].anim };
+BattleMoveAnims['slushball'] = { anim: BattleMoveAnims['iceball'].anim };
+BattleMoveAnims['draconicroar'] = { anim: BattleMoveAnims['boomburst'].anim };
+BattleMoveAnims['mockery'] = { anim: BattleMoveAnims['hypervoice'].anim };
+BattleMoveAnims['blackhole'] = { anim: BattleMoveAnims['darkvoid'].anim };
+BattleMoveAnims['pixiepunch'] = { anim: BattleMoveAnims['machpunch'].anim };
+BattleMoveAnims['excalibur'] = { anim: BattleMoveAnims['solarblade'].anim };
+BattleMoveAnims['lunarsurge'] = { anim: BattleMoveAnims['bloodmoonblast'].anim };
+BattleMoveAnims['lovespray'] = { anim: BattleMoveAnims['poisongas'].anim };
+BattleMoveAnims['fluffbuff'] = { anim: BattleMoveAnims['cottonguard'].anim };
+BattleMoveAnims['thermalvortex'] = { anim: BattleMoveAnims['gmaxcentiferno'].anim };
 BattleMoveAnims['whirlduel'] = { anim: BattleMoveAnims['watersport'].anim };
+BattleMoveAnims['brainstorm'] = {
+	anim(scene, [attacker]) {
+		BattleMoveAnims['calmmind'].anim(scene, [attacker]);
+		BattleMoveAnims['raindance'].anim(scene, [attacker]);
+	},
+};
+BattleMoveAnims['possess'] = { anim: BattleMoveAnims['nightshade'].anim };
+BattleMoveAnims['evoboost'] = { anim: BattleMoveAnims['extremeevoboost'].anim };
 BattleMoveAnims['pricklypear'] = { anim: BattleMoveAnims['leechseed'].anim };
 BattleMoveAnims['resilientoil'] = { anim: BattleMoveAnims['mist'].anim };
+
+BattleMoveAnims['dragonsdice'] = { anim: BattleMoveAnims['dragonpulse'].anim };
+BattleMoveAnims['deviledyolk'] = { anim: BattleMoveAnims['bulletseed'].anim };

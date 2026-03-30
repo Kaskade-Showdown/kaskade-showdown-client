@@ -1579,7 +1579,6 @@ export class BattleScene implements BattleSceneStub {
 			this.sideConditions[siden][id] = [rock1, rock2, rock3, rock4];
 			break;
 		case 'gmaxsteelsurge':
-		case 'steelbarbs':
 			const surge1 = new Sprite(BattleEffects.greenmetal1, {
 				display: 'block',
 				x: x + side.leftof(-30),
@@ -1692,6 +1691,37 @@ export class BattleScene implements BattleSceneStub {
 			}, this);
 			this.$spritesFront[spriteIndex].append(web.$el);
 			this.sideConditions[siden][id] = [web];
+			break;
+		case 'steelbarbs':
+			const barb1 = new Sprite(BattleEffects.greenmetal1, {
+				display: 'block',
+				x: x + side.leftof(-30),
+				y: y - 20,
+				z: side.z,
+				opacity: 0.5,
+				scale: 0.8,
+			}, this);
+			const barb2 = new Sprite(BattleEffects.greenmetal2, {
+				display: 'block',
+				x: x + side.leftof(35),
+				y: y - 15,
+				z: side.z,
+				opacity: 0.5,
+				scale: 0.8,
+			}, this);
+			const barb3 = new Sprite(BattleEffects.greenmetal1, {
+				display: 'block',
+				x: x + side.leftof(50),
+				y: y - 10,
+				z: side.z,
+				opacity: 0.5,
+				scale: 0.8,
+			}, this);
+
+			this.$spritesFront[spriteIndex].append(barb1.$el);
+			this.$spritesFront[spriteIndex].append(barb2.$el);
+			this.$spritesFront[spriteIndex].append(barb3.$el);
+			this.sideConditions[siden][id] = [barb1, barb2, barb3];
 			break;
 		}
 	}
@@ -3521,9 +3551,9 @@ const BattleEffects: { [k: string]: SpriteData } = {
 	},
 
 	// swse
-	greenwisp: {
-		url: 'greenwisp.png',
-		w: 100, h: 100,
+	lightbluefireball: {
+		url: 'lightbluefireball.png',
+		w: 64, h: 64,
 	},
 };
 (() => {
@@ -6172,197 +6202,6 @@ export const BattleOtherAnims: AnimTable = {
 			}, 'linear');
 		},
 	},
-	swarmingin: { // swse
-		anim(scene, [attacker]) {
-			scene.backgroundEffect('#0000DD', 600, 0.2);
-			scene.showEffect('wisp', {
-				x: attacker.x,
-				y: attacker.y,
-				z: attacker.z,
-				scale: 2.5,
-				opacity: 1,
-			}, {
-				scale: 3,
-				time: 600,
-			}, 'linear', 'explode');
-			scene.showEffect('greenwisp', {
-				x: attacker.x,
-				y: attacker.y,
-				z: attacker.z,
-				scale: 3,
-				opacity: 0.3,
-			}, {
-				scale: 3.25,
-				time: 600,
-			}, 'linear', 'explode');
-
-			scene.showEffect('energyball', {
-				x: attacker.leftof(200),
-				y: attacker.y + 40,
-				z: attacker.z,
-				scale: 0.5,
-				opacity: 0.5,
-			}, {
-				x: attacker.x,
-				y: attacker.y,
-				z: attacker.z,
-				opacity: 0,
-				time: 200,
-			}, 'ballistic', 'fade');
-			scene.showEffect('energyball', {
-				x: attacker.leftof(-140),
-				y: attacker.y - 60,
-				z: attacker.z,
-				scale: 0.5,
-				opacity: 0.5,
-				time: 100,
-			}, {
-				x: attacker.x,
-				y: attacker.y,
-				z: attacker.z,
-				opacity: 0,
-				time: 300,
-			}, 'ballistic2Under', 'fade');
-			scene.showEffect('energyball', {
-				x: attacker.leftof(-140),
-				y: attacker.y + 50,
-				z: attacker.behind(170),
-				scale: 0.5,
-				opacity: 0.5,
-				time: 200,
-			}, {
-				x: attacker.x,
-				y: attacker.y,
-				z: attacker.z,
-				opacity: 0,
-				time: 400,
-			}, 'ballistic2', 'fade');
-			scene.showEffect('energyball', {
-				x: attacker.x,
-				y: attacker.y + 30,
-				z: attacker.behind(-250),
-				scale: 0.5,
-				opacity: 0.5,
-				time: 200,
-			}, {
-				x: attacker.x,
-				y: attacker.y,
-				z: attacker.z,
-				opacity: 0,
-				time: 500,
-			}, 'ballistic', 'fade');
-			scene.showEffect('energyball', {
-				x: attacker.leftof(240),
-				y: attacker.y - 80,
-				z: attacker.z,
-				scale: 0.5,
-				opacity: 0.5,
-				time: 300,
-			}, {
-				x: attacker.x,
-				y: attacker.y,
-				z: attacker.z,
-				opacity: 0,
-				time: 600,
-			}, 'ballistic2Under');
-		},
-	},
-	swarmingout: {
-		anim(scene, [attacker]) {
-			scene.backgroundEffect('#0000DD', 600, 0.2);
-			scene.showEffect('wisp', {
-				x: attacker.x,
-				y: attacker.y,
-				z: attacker.z,
-				scale: 3,
-				opacity: 1,
-			}, {
-				scale: 2,
-				time: 600,
-			}, 'linear', 'explode');
-			scene.showEffect('greenwisp', {
-				x: attacker.x,
-				y: attacker.y,
-				z: attacker.z,
-				scale: 3.25,
-				opacity: 0.3,
-			}, {
-				scale: 2.5,
-				time: 600,
-			}, 'linear', 'explode');
-
-			scene.showEffect('energyball', {
-				x: attacker.x,
-				y: attacker.y,
-				z: attacker.z,
-				scale: 0.5,
-				opacity: 0,
-			}, {
-				x: attacker.leftof(200),
-				y: attacker.y + 40,
-				z: attacker.z,
-				scale: 0.5,
-				opacity: 0.5,
-				time: 200,
-			}, 'ballistic', 'fade');
-			scene.showEffect('energyball', {
-				x: attacker.x,
-				y: attacker.y,
-				z: attacker.z,
-				scale: 0.5,
-				opacity: 0,
-				time: 100,
-			}, {
-				x: attacker.leftof(-140),
-				y: attacker.y - 60,
-				z: attacker.z,
-				opacity: 0.5,
-				time: 300,
-			}, 'ballistic2Under', 'fade');
-			scene.showEffect('energyball', {
-				x: attacker.x,
-				y: attacker.y,
-				z: attacker.z,
-				scale: 0.5,
-				opacity: 0,
-				time: 200,
-			}, {
-				x: attacker.leftof(-140),
-				y: attacker.y + 50,
-				z: attacker.behind(170),
-				opacity: 0.5,
-				time: 400,
-			}, 'ballistic2', 'fade');
-			scene.showEffect('energyball', {
-				x: attacker.x,
-				y: attacker.y,
-				z: attacker.z,
-				scale: 0.5,
-				opacity: 0,
-				time: 200,
-			}, {
-				x: attacker.x,
-				y: attacker.y + 30,
-				z: attacker.behind(-250),
-				opacity: 0.5,
-				time: 500,
-			}, 'ballistic', 'fade');
-			scene.showEffect('energyball', {
-				x: attacker.x,
-				y: attacker.y,
-				z: attacker.z,
-				scale: 0.5,
-				opacity: 0,
-				time: 300,
-			}, {
-				x: attacker.leftof(240),
-				y: attacker.y - 80,
-				z: attacker.z,
-				opacity: 0.5,
-				time: 600,
-			}, 'ballistic2Under');
-		},
-	},
 };
 export const BattleStatusAnims: AnimTable = {
 	brn: {
@@ -6552,7 +6391,7 @@ export const BattleStatusAnims: AnimTable = {
 	},
 	fst: {
 		anim(scene, [attacker]) {
-			scene.showEffect('bluefireball', {
+			scene.showEffect('lightbluefireball', {
 				x: attacker.x - 20,
 				y: attacker.y - 15,
 				z: attacker.z,
@@ -6728,3 +6567,6 @@ export const BattleStatusAnims: AnimTable = {
 	},
 };
 BattleStatusAnims['focuspunch'] = { anim: BattleStatusAnims['flinch'].anim };
+// swse
+BattleOtherAnims['swarmingin'] = { anim: BattleOtherAnims['schoolingin'].anim };
+BattleOtherAnims['swarmingout'] = { anim: BattleOtherAnims['schoolingout'].anim };

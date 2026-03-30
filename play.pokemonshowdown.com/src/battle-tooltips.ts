@@ -3139,7 +3139,7 @@ export class BattleStatGuesser {
 					if (move.id === 'substitute') moveCount['Stall']++;
 					moveCount['Setup']++;
 				} else {
-					if (['toxic', 'leechseed', 'willowisp'].includes(move.id)) {
+					if (['toxic', 'leechseed', 'willowisp', 'whitewand'].includes(move.id)) {
 						moveCount['Stall']++;
 					}
 					moveCount['Support']++;
