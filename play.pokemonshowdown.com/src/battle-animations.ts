@@ -2910,7 +2910,7 @@ export class PokemonSprite extends Sprite {
 				BattleOtherAnims.schoolingin.anim(scene, [this]);
 			} else if (speciesid === 'wishiwashi') {
 				BattleOtherAnims.schoolingout.anim(scene, [this]);
-			} else if (speciesid === 'eecroachswarm') {
+			} else if (speciesid === 'eecroachswarm') { // swse
 				BattleOtherAnims.swarmingin.anim(scene, [this]);
 			} else if (speciesid === 'eecroach') {
 				BattleOtherAnims.swarmingout.anim(scene, [this]);
