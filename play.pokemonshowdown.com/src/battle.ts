@@ -727,6 +727,7 @@ export class Side {
 		case 'lightscreen':
 			this.sideConditions[condition] = [effect.name, 1, 5, this.battle.gen >= 4 ? 8 : 0];
 			break;
+		case 'resilientoil':
 		case 'mist':
 			this.sideConditions[condition] = [effect.name, 1, 5, 0];
 			break;
@@ -1714,7 +1715,7 @@ export class Battle {
 	swapSideConditions() {
 		const sideConditions = [
 			'mist', 'lightscreen', 'reflect', 'spikes', 'safeguard', 'tailwind', 'toxicspikes', 'stealthrock', 'waterpledge', 'firepledge', 'grasspledge', 'stickyweb', 'auroraveil', 'gmaxsteelsurge', 'gmaxcannonade', 'gmaxvinelash', 'gmaxwildfire',
-			'steelbarbs',
+			'steelbarbs', 'resilientoil',
 		];
 		if (this.gameType === 'freeforall') {
 			// Court Change rotates side conditions clockwise in a free-for-all
@@ -3060,6 +3061,10 @@ export class Battle {
 				poke.side.addSideCondition(effect, false);
 				this.scene.updateWeather();
 				break;
+			// swse
+			case 'resilientoil':
+				this.scene.resultAnim(poke, 'Resilient Oil', 'good');
+				break;
 			}
 			if (!(effect.id === 'typechange' && poke.terastallized) &&
 				effect.id !== 'futuresight' && effect.id !== 'doomdesire') {
@@ -3404,6 +3409,7 @@ export class Battle {
 			case 'grasspledge':
 			case 'firepledge':
 			case 'waterpledge':
+			case 'resilientoil':
 				this.scene.updateWeather();
 				break;
 			}

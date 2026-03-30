@@ -38504,3 +38504,7 @@ BattleMoveAnims['tripledive'] = { anim: BattleMoveAnims['dive'].anim };
 BattleMoveAnims['hydrosteam'] = { anim: BattleMoveAnims['steameruption'].anim };
 BattleMoveAnims['psyblade'] = { anim: BattleMoveAnims['psychocut'].anim };
 BattleMoveAnims['polarflare'] = { anim: BattleMoveAnims['torchsong'].anim };
+// swse
+BattleMoveAnims['whirlduel'] = { anim: BattleMoveAnims['watersport'].anim };
+BattleMoveAnims['pricklypear'] = { anim: BattleMoveAnims['leechseed'].anim };
+BattleMoveAnims['resilientoil'] = { anim: BattleMoveAnims['mist'].anim };

@@ -2216,11 +2216,15 @@ export class PokemonSprite extends Sprite {
 		lightscreen: ['Light Screen', 'good'],
 		reflect: ['Reflect', 'good'],
 		// swse
-		whirlduel: ['Whirlduel', 'bad'],
 		sunscreen: ['Sunscreen', 'good'],
-		resilientoil: ['Resilient Oil', 'good'],
-		caffeinecrash: ['Caffeine Crash', 'bad'],
+		bearhug: ['Bear Hug', 'bad'],
+		whirlduel: ['Whirlduel', 'bad'],
 		possess: ['Possess', 'bad'],
+		wrangle: ['Wrangle', 'bad'],
+		pricklypear: ['Prickly Pear', 'bad'],
+		resilientoil: ['Resilient Oil', 'good'],
+
+		caffeinecrash: ['Caffeine Crash', 'bad'],
 	};
 	forme = '';
 	cryurl: string | undefined = undefined;
@@ -2956,7 +2960,7 @@ export class PokemonSprite extends Sprite {
 		const spriten = +this.isFrontSprite;
 		if (id === 'substitute' || id === 'shedtail') {
 			this.animSub(instant);
-		} else if (id === 'leechseed') {
+		} else if (id === 'leechseed' || id === 'pricklypear') {
 			const pos1 = {
 				display: 'block',
 				x: this.x - 30,
@@ -2989,6 +2993,13 @@ export class PokemonSprite extends Sprite {
 			this.scene.$spritesFront[spriten].append(leechseed2.$el);
 			this.scene.$spritesFront[spriten].append(leechseed3.$el);
 			this.effects['leechseed'] = [leechseed1, leechseed2, leechseed3];
+			const pricklypear1 = new Sprite(BattleEffects.energyball, pos1, this.scene);
+			const pricklypear2 = new Sprite(BattleEffects.energyball, pos2, this.scene);
+			const pricklypear3 = new Sprite(BattleEffects.energyball, pos3, this.scene);
+			this.scene.$spritesFront[spriten].append(pricklypear1.$el);
+			this.scene.$spritesFront[spriten].append(pricklypear2.$el);
+			this.scene.$spritesFront[spriten].append(pricklypear3.$el);
+			this.effects['pricklypear'] = [pricklypear1, pricklypear2, pricklypear3];
 		} else if (id === 'protect' || id === 'magiccoat') {
 			const protect = new Sprite(BattleEffects.protect, {
 				display: 'block',
