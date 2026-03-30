@@ -3232,7 +3232,7 @@ export class BattleStatGuesser {
 			physicalBulk *= 1 + 0.1 * (1 + moveCount['Stall'] / 1.5);
 			specialBulk *= 1 + 0.1 * (1 + moveCount['Stall'] / 1.5);
 		}
-		if ((itemid === 'flameorb' || itemid === 'toxicorb') && abilityid !== 'magicguard') {
+		if ((itemid === 'flameorb' || itemid === 'toxicorb' || itemid === 'frostorb') && abilityid !== 'magicguard') {
 			if (itemid === 'toxicorb' && abilityid === 'poisonheal') {
 				physicalBulk *= 1 + 0.1 * (2 + moveCount['Stall']);
 				specialBulk *= 1 + 0.1 * (2 + moveCount['Stall']);

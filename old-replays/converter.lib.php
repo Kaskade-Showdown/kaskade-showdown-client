@@ -920,6 +920,10 @@ function pokeConvertInner($text)
 		{
 			$out[] = 'residual '.resolvePokemon($line).' item-activate FlameOrb';
 		}
+		else if (endsRemove($line, "'s Frost Orb activated!"))
+		{
+			$out[] = 'residual '.resolvePokemon($line).' item-activate FrostOrb';
+		}
 		else if (endsRemove($line, ' was dragged out!>'))
 		{
 			$prevline = count($out)-1;

@@ -599,6 +599,8 @@ function pokeConvertInner($text) {
 			$lastmove = 'Toxic';
 		} else if (endsRemove($line, "'s Flame Orb activated!")) {
 			$out[] = '|-activate|'.resolvePokemon($line).'|item: Flame Orb';
+		} else if (endsRemove($line, "'s Frost Orb activated!")) {
+			$out[] = '|-activate|'.resolvePokemon($line).'|item: Frost Orb';
 		} else if (endsRemove($line, ' was dragged out!')) {
 			$prevline = count($out)-1;
 			if ($out[$prevline] === '|faint|'.resolvePokemon($line)) {
