@@ -430,9 +430,9 @@ process.stdout.write("Building `data/teambuilder-tables.js`... ");
 					[
 						'Aegislash', 'Cherrim', 'Cramorant', 'Eiscue', 'Meloetta', 'Mimikyu', 'Minior', 'Morpeko', 'Ramnarok', 'Wishiwashi',
 						'Bearvoyance', 'Blurrun', 'Eecroach', 'Stackem',
-					].includes(species.baseSpecies) || species.forme.includes('Totem') || species.forme.includes('Zen') ||
-					(species.baseSpecies === 'Ogerpon' && species.forme.includes('Tera')) || species.isCosmeticForme ||
-					(species.baseSpecies === 'Castform' && !(species.forme.includes('Whirly')))
+					].includes(species.baseSpecies) || (species.baseSpecies === 'Castform' && !(species.forme.includes('Whirly'))) ||
+					species.forme.includes('Totem') || species.forme.includes('Zen') ||
+					(species.baseSpecies === 'Ogerpon' && species.forme.includes('Tera')) || species.isCosmeticForme
 				) {
 					continue;
 				}
