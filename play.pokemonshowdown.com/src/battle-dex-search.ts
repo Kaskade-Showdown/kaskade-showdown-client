@@ -1565,6 +1565,8 @@ class BattleMoveSearch extends BattleTypedSearch<'move'> {
 			return species.weightkg >= (species.evos ? 75 : 130);
 		case 'aerialace':
 			return ['technician', 'toughclaws'].includes(abilityid) && !moves.includes('bravebird');
+		case 'airslash':
+			return !moves.includes('whipup');
 		case 'ancientpower':
 			return ['serenegrace', 'technician'].includes(abilityid) || !moves.includes('powergem');
 		case 'aquajet':
