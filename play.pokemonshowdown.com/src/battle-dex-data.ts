@@ -1518,6 +1518,7 @@ export type NatureName = 'Adamant' | 'Bashful' | 'Bold' | 'Brave' | 'Calm' | 'Ca
 export type StatNameExceptHP = 'atk' | 'def' | 'spa' | 'spd' | 'spe';
 export type TypeName = 'Normal' | 'Fighting' | 'Flying' | 'Poison' | 'Ground' | 'Rock' | 'Bug' | 'Ghost' | 'Steel' |
 	'Fire' | 'Water' | 'Grass' | 'Electric' | 'Psychic' | 'Ice' | 'Dragon' | 'Dark' | 'Fairy' | 'Stellar' | '???';
+export type CategoryName = 'Physical' | 'Special' | 'Status';
 export type StatusName = 'par' | 'psn' | 'frz' | 'slp' | 'brn' | 'fst';
 export type BoostStatName = 'atk' | 'def' | 'spa' | 'spd' | 'spe' | 'evasion' | 'accuracy' | 'spc';
 export type GenderName = 'M' | 'F' | 'N';
@@ -1684,7 +1685,7 @@ export class Move implements Effect {
 	readonly accuracy: number | true;
 	readonly pp: number;
 	readonly type: TypeName;
-	readonly category: 'Physical' | 'Special' | 'Status';
+	readonly category: CategoryName;
 	readonly priority: number;
 	readonly target: MoveTarget;
 	readonly pressureTarget: MoveTarget;
@@ -2058,7 +2059,7 @@ export class Species implements Effect {
 }
 
 export interface Type extends Effect {
-	damageTaken?: Record<Dex.TypeName, Dex.WeaknessType>;
+	damageTaken?: Record<Dex.TypeName | 'powder' | 'prankster' | 'trapped', Dex.WeaknessType>;
 	HPivs?: Partial<Dex.StatsTable>;
 	HPdvs?: Partial<Dex.StatsTable>;
 }
