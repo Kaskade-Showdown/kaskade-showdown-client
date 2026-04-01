@@ -554,6 +554,10 @@ function pokeConvertInner($text) {
 			$out[] = '|-fieldstart|Trick Room|[of]'.resolvePokemon($line);
 		} else if ($line === '<The twisted dimensions returned to normal!') {
 			$out[] = '|-fieldend|Trick Room';
+		} else if (endsRemove($line, " spread over the battlefield!")) {
+			$out[] = '|-fieldstart|Pearl Drop|[of]'.resolvePokemon($line);
+		} else if (endsRemove($line, " gathered up all of its pearls!")) {
+			$out[] = '|-fieldend|Pearl Drop';
 		} else if (endsRemove($line, " swapped the Sp. Def. and the Defense of all the pokemon!")) {
 			$out[] = '|-fieldstart|Wonder Room|[of]'.resolvePokemon($line);
 		} else if ($line === '<The Sp. Def and Defense of the pokemon went back to normal!') {

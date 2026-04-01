@@ -829,6 +829,14 @@ function pokeConvertInner($text)
 		{
 			$out[] = 'pseudo-weather-end TrickRoom';
 		}
+		else if (endsRemove($line, " spread over the battlefield!>"))
+		{
+			$out[] = '  r-pseudo-weather '.resolvePokemon(substr($line, 1)).' PearlDrop';
+		}
+		else if (endsRemove($line, " gathered up all of its pearls!"))
+		{
+			$out[] = 'pseudo-weather-end PearlDrop';
+		}
 		else if (endsRemove($line, " swapped the Sp. Def. and the Defense of all the pokemon!>"))
 		{
 			$out[] = '  r-pseudo-weather '.resolvePokemon(substr($line, 1)).' WonderRoom';
