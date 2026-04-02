@@ -687,17 +687,17 @@ process.stdout.write("Building `data/teambuilder-tables.js`... ");
 
 		const newItems = [['header', "New items"]];
 		const popularItems = [['header', "Popular items"]];
-		const healingBerryItems = [['header', " Healing Berries"]];
-		// const plateItems = [['header', " Arceus Plates"]];
 		const goodItems = [['header', "Good Items"]];
+		// const plateItems = [['header', " Arceus Plates"]];
 		const typeBoostItems = [['header', " Type boosting items"]];
 		const nicheItems = [['header', "Niche Items"]];
+		const healingBerryItems = [['header', " Healing Berries"]];
 		const statBerryItems = [['header', " Stat Raising Berries"]];
 		const nicheBerryItems = [['header', " Niche Berries"]];
 		const poorItems = [['header', "Usually useless items"]];
 		const specificItems = [['header', "Pok\u00e9mon-specific items"]];
 		const uselessItems = [['header', "Useless items"]];
-		const futureItems = [['header', "Future items"]];
+		// const futureItems = [['header', "Future items"]];
 		const unreleasedItems = [];
 		if (genNum === 6) unreleasedItems.push(['header', "Unreleased"]);
 		for (const id of itemList) {
@@ -741,23 +741,18 @@ process.stdout.write("Building `data/teambuilder-tables.js`... ");
 			// mainstays
 			case 'choiceband':
 			case 'choicespecs':
-			case 'eviolite':
 				popularItems.push(id);
-				break;
-			// great everywhere but metronome
-			case 'choicescarf':
-				if (!isMetBattle) goodItems.push(id);
-				else popularItems.push(id);
 				break;
 			// great everywhere but metronome
 			case 'leftovers':
 			case 'lifeorb':
+			case 'choicescarf':
 			case 'assaultvest':
 			case 'focussash':
 			case 'powerherb':
 			case 'rockyhelmet':
-				if (!isMetBattle) goodItems.push(id);
-				else popularItems.push(id);
+				if (!isMetBattle) popularItems.push(id);
+				else goodItems.push(id);
 				break;
 			// just singles
 			case 'airballoon':
@@ -784,6 +779,11 @@ process.stdout.write("Building `data/teambuilder-tables.js`... ");
 			case 'weaknesspolicy':
 				if (isDoubles || isMetBattle) popularItems.push(id);
 				else goodItems.push(id);
+				break;
+			// LC only
+			case 'eviolite':
+				if (isLC) popularItems.push(id);
+				else nicheItems.push(id);
 				break;
 			// metronome only
 			case 'mirrorherb':
@@ -991,7 +991,7 @@ process.stdout.write("Building `data/teambuilder-tables.js`... ");
 					nicheBerryItems.push(id);
 				} else if (item.name.endsWith(" Plate")) {
 					// plateItems.push(id);
-					futureItems.push(id);
+					// futureItems.push(id);
 				} else if (item.name.endsWith(" Drive")) {
 					specificItems.push(id);
 				} else if (item.name.endsWith(" Memory")) {
@@ -1009,17 +1009,17 @@ process.stdout.write("Building `data/teambuilder-tables.js`... ");
 		}
 		items.push(...newItems);
 		items.push(...popularItems);
-		items.push(...healingBerryItems);
-		// items.push(...plateItems);
 		items.push(...goodItems);
+		// items.push(...plateItems);
 		items.push(...typeBoostItems);
 		items.push(...nicheItems);
+		items.push(...healingBerryItems);
 		items.push(...statBerryItems);
 		items.push(...nicheBerryItems);
 		items.push(...poorItems);
 		items.push(...specificItems);
 		items.push(...uselessItems);
-		items.push(...futureItems);
+		// items.push(...futureItems);
 		items.push(...unreleasedItems);
 	}
 
