@@ -2252,19 +2252,20 @@ export class BattleTooltips {
 
 			// regular type effectiveness
 			if (tType.damageTaken?.[attackType] === Dex.IMMUNE) {
-				if (targetAbility !== "Warp Mist") continue;
-				if (target.item === 'Ring Target') continue;
-				if (targetType === 'Ghost' && (sourceAbility === "Scrappy" || sourceAbility === "Mind's Eye")) continue;
-				if (targetType === 'Ghost' && (target.volatiles['foresight'] || target.volatiles['odorsleuth'])) continue;
-				if (targetType === 'Dark' && (target.volatiles['miracleeye'])) continue;
-				if (targetType === 'Flying' && target.isGrounded()) continue;
-				if (targetType === 'Flying' && move.id === 'thousandarrows' && !target.isGrounded()) {
-					factor = 1;
-					break;
+				if (targetAbility !== "Warp Mist") {
+					if (target.item === 'Ring Target') continue;
+					if (targetType === 'Ghost' && (sourceAbility === "Scrappy" || sourceAbility === "Mind's Eye")) continue;
+					if (targetType === 'Ghost' && (target.volatiles['foresight'] || target.volatiles['odorsleuth'])) continue;
+					if (targetType === 'Dark' && (target.volatiles['miracleeye'])) continue;
+					if (targetType === 'Flying' && target.isGrounded()) continue;
+					if (targetType === 'Flying' && move.id === 'thousandarrows' && !target.isGrounded()) {
+						factor = 1;
+						break;
+					}
+					// incomplete, strong winds dust, strong winds magnet, strong winds p.Ac display. does sunscreen display work?
+					if (targetType === 'Ghost' && this.battle.climateWeather === 'foghorn') continue;
+					if (attackType === 'Fire' && (target.volatiles['sunscreen'])) continue;
 				}
-				// incomplete, strong winds dust, strong winds magent, strong winds p.Ac display. does sunscreen display work?
-				if (targetType === 'Ghost' && this.battle.climateWeather === 'foghorn') continue;
-				if (attackType === 'Fire' && (target.volatiles['sunscreen'])) continue;
 				factor = 0;
 			} else if (move.id === 'freezedry' && targetType === 'Water') {
 				factor *= 2;
