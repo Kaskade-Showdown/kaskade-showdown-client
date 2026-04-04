@@ -1809,6 +1809,8 @@ class BattleMoveSearch extends BattleTypedSearch<'move'> {
 		let sketch = false;
 		let gen = `${dex.gen}`;
 		let lsetTable = BattleTeambuilderTable;
+		const primaryLearnsetid = this.firstLearnsetid(species.id);
+		const primaryLearnset = lsetTable.learnsets[primaryLearnsetid];
 		if (this.formatType?.startsWith('bdsp')) lsetTable = lsetTable['gen8bdsp'];
 		if (this.formatType === 'letsgo') lsetTable = lsetTable['gen7letsgo'];
 		if (this.formatType === 'bw1') lsetTable = lsetTable['gen5bw1'];
@@ -1823,6 +1825,7 @@ class BattleMoveSearch extends BattleTypedSearch<'move'> {
 			if (learnset) {
 				for (let moveid in learnset) {
 					let learnsetEntry = learnset[moveid];
+					if (primaryLearnset[moveid] === '') continue;
 					const move = dex.moves.get(moveid);
 					const minGenCode: { [gen: number]: string } = { 6: 'p', 7: 'q', 8: 'g', 9: 'a' };
 					if (regionBornLegality && !learnsetEntry.includes(minGenCode[dex.gen])) {
