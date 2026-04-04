@@ -11,7 +11,7 @@ const SPECIES = JSON.parse(arr);
 
 const GENS = Object.keys(PokemonSprites.GENS);
 const MISSING = {};
-const LENGTH = 'https://play.pokemonshowdown.com/sprites/'.length;
+const LENGTH = 'https://kaskadeshowdown.dynv6.net/sprites/'.length;
 
 function sprites(gen, namestar) {
   const name = namestar.endsWith('*') ? namestar.slice(0, -1) : namestar;
