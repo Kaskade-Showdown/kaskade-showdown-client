@@ -956,7 +956,7 @@ export class BattleTooltips {
 			if (effectiveness === null) {
 				// do nothing
 			} else if (effectiveness === 0) {
-				text += `<p><span class="effectiveness-icon">&times;</span> <strong>No effect</strong> vs. ${BattleLog.escapeHTML(this.getNickname(possibleTarget))}</p>`;
+				text += `<p><span class="effectiveness-icon">&times;</span> <strong>Has no effect</strong> vs. ${BattleLog.escapeHTML(this.getNickname(possibleTarget))}</p>`;
 			} else if (effectiveness < 0.5) {
 				const effectivenessText = effectiveness === 0.25 ? '&#x00BC;' : effectiveness;
 				text += `<p><span class="effectiveness-icon">&#x25BC;</span> <strong>Mostly ineffective</strong> vs. ${BattleLog.escapeHTML(this.getNickname(possibleTarget))} <small>(${effectivenessText}&times;)</small></p>`;
@@ -967,6 +967,8 @@ export class BattleTooltips {
 				text += `<p><span class="effectiveness-icon">&#x2605;</span> <strong>Extremely effective</strong> vs. ${BattleLog.escapeHTML(this.getNickname(possibleTarget))} <small>(${effectiveness}&times;)</small></p>`;
 			} else if (effectiveness > 1) {
 				text += `<p><span class="effectiveness-icon">&#x29BF;</span> <strong>Super effective</strong> vs. ${BattleLog.escapeHTML(this.getNickname(possibleTarget))} <small>(${effectiveness}&times;)</small></p>`;
+			} else if (effectiveness === 1 && move.category !== 'Status') {
+				text += `<p><span class="effectiveness-icon">&#x25CB;</span> <strong>Effective</strong> vs. ${BattleLog.escapeHTML(this.getNickname(possibleTarget))}</p>`;
 			}
 		}
 
@@ -2360,7 +2362,7 @@ export class BattleTooltips {
 			foeActive = [...foeActive, ...pokemon.side.active].filter(active => active !== pokemon);
 		}
 
-		if (this.battle.hardcoreMode) {
+		if (!this.battle.hardcoreMode) {
 			let tags = '';
 			for (const possibleTarget of foeActive) {
 				if (!possibleTarget) continue;
@@ -2378,7 +2380,7 @@ export class BattleTooltips {
 					tags += `\u2605`;
 				} else if (effectiveness > 1) {
 					tags += `\u29BF`;
-				} else {
+				} else if (effectiveness === 1 && move.category !== 'Status') {
 					tags += `\u25CB`;
 				}
 			}
@@ -2386,17 +2388,7 @@ export class BattleTooltips {
 			return [moveType, tags] as const;
 		}
 
-		let tags = '\u00D7';
-		for (const possibleTarget of foeActive) {
-			if (!possibleTarget) continue;
-			const effectiveness = this.getMoveEffectiveness(pokemon, move, moveType, category, possibleTarget);
-			if (effectiveness !== 0) {
-				tags = '';
-				break;
-			}
-		}
-
-		return [moveType, tags] as const;
+		return [moveType, ''] as const;
 	}
 
 	// Gets the current accuracy for a move.

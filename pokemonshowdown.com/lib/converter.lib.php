@@ -420,29 +420,17 @@ function pokeConvertInner($text) {
 		} else if (endsRemove($line, ' was poisoned!')) {
 			if ($lastmove === 'Toxic') {
 				$out[] = '|-status|'.resolvePokemon($line).'|tox';
-			} else if ($lastmove === 'Blight Spore') {
-				$out[] = '|-status|'.resolvePokemon($line).'|blt';
-			}
-			else {
+			} else {
 				$out[] = '|-status|'.resolvePokemon($line).'|psn';
 			}
 		} else if (endsRemove($line, ' was badly poisoned!')) {
 			$out[] = '|-status|'.resolvePokemon($line).'|tox';
-		} else if (endsRemove($line, ' was horribly poisoned!')) {
-			$out[] = '|-status|'.resolvePokemon($line).'|blt';
 		} else if (endsRemove($line, ' is already poisoned.')) {
 			$out[] = '|-fail|'.resolvePokemon($line).'|psn';
 		} else if (endsRemove($line, ' is already burnt.')) {
 			$out[] = '|-fail|'.resolvePokemon($line).'|brn';
 		} else if (endsRemove($line, ' is already paralyzed.')) {
 			$out[] = '|-fail|'.resolvePokemon($line).'|par';
-		} else if (endsRemove($line, ' is already frostbitten.')) {
-			$out[] = '|-fail|'.resolvePokemon($line).'|fst';
-		} else if (endsRemove($line, ' is hurt by its frostbite!')) {
-			$out[] = '|-damage|'.resolvePokemon($line).'|??|[from]psn';
-			markLastDamage($out);
-		} else if (endsRemove($line, ' got frostbite!')) {
-			$out[] = '|-status|'.resolvePokemon($line).'|fst';
 		} else if (endsRemove($line, ' calmed down!')) {
 			$out[] = '|-activate|'.resolvePokemon($line).'|calm';
 		} else if (endsRemove($line, ' is confused!')) {
@@ -554,10 +542,6 @@ function pokeConvertInner($text) {
 			$out[] = '|-fieldstart|Trick Room|[of]'.resolvePokemon($line);
 		} else if ($line === '<The twisted dimensions returned to normal!') {
 			$out[] = '|-fieldend|Trick Room';
-		} else if (endsRemove($line, " spread over the battlefield!")) {
-			$out[] = '|-fieldstart|Pearl Drop|[of]'.resolvePokemon($line);
-		} else if (endsRemove($line, " gathered up all of its pearls!")) {
-			$out[] = '|-fieldend|Pearl Drop';
 		} else if (endsRemove($line, " swapped the Sp. Def. and the Defense of all the pokemon!")) {
 			$out[] = '|-fieldstart|Wonder Room|[of]'.resolvePokemon($line);
 		} else if ($line === '<The Sp. Def and Defense of the pokemon went back to normal!') {
@@ -603,8 +587,6 @@ function pokeConvertInner($text) {
 			$lastmove = 'Toxic';
 		} else if (endsRemove($line, "'s Flame Orb activated!")) {
 			$out[] = '|-activate|'.resolvePokemon($line).'|item: Flame Orb';
-		} else if (endsRemove($line, "'s Frost Orb activated!")) {
-			$out[] = '|-activate|'.resolvePokemon($line).'|item: Frost Orb';
 		} else if (endsRemove($line, ' was dragged out!')) {
 			$prevline = count($out)-1;
 			if ($out[$prevline] === '|faint|'.resolvePokemon($line)) {
@@ -666,8 +648,6 @@ function pokeConvertInner($text) {
 			$out[] = '|-blow-away '.resolvePokemon($line).' Spikes';
 		} else if (endsRemove($line, ' blew away Toxic Spikes!')) {
 			$out[] = '|-blow-away '.resolvePokemon($line).' ToxicSpikes';
-		} else if (endsRemove($line, ' blew away Steel Barbs!')) {
-			$out[] = '|-blow-away '.resolvePokemon($line).' SteelBarbs';
 		} else if (endsRemove($line, ' fell for the taunt!')) {
 			$out[] = '|-start|'.resolvePokemon($line).' taunt';
 		} else if (endsRemove($line, '\'s Flash Fire raised the power of its Fire-type moves!')) {
@@ -729,9 +709,6 @@ function pokeConvertInner($text) {
 		} else if (preg_match('/^\<Poison spikes were scattered all around the feet of ([^<>]+)\'s team!\>?$/', $line, $matches)) {
 			$side = (isFoe($matches[1])?'foe':'ally');
 			$out[] = '|-side-condition '.$side.' ToxicSpikes';
-		} else if (preg_match('/^\<Sharp-pointed pieces of steel started floating around ([^<>]+)\'s team!\>?$/', $line, $matches)) {
-			$side = (isFoe($matches[1])?'foe':'ally');
-			$out[] = '|-side-condition '.$side.' SteelBarbs';
 		} else if (preg_match('/^\<A tailwind started blowing behind ([^<>]+)\'s team!\>?$/', $line, $matches)) {
 			$side = (isFoe($matches[1])?'foe':'ally');
 			$out[] = '|-side-condition '.$side.' Tailwind';
@@ -829,14 +806,10 @@ function pokeConvertInner($text) {
 			$out[] = '|-fling '.resolvePokemon($matches[1]).' '.resolveItem($matches[2]);
 		} else if (preg_match('/^([^<>]+) ate its ([^<>]+)!$/', $line, $matches)) {
 			$out[] = '|-eat '.resolvePokemon($matches[1]).' '.resolveItem($matches[2]);
-		} else if (preg_match('/^([^<>]+) drank its ([^<>]+)!$/', $line, $matches)) {
-			$out[] = '|-drink '.resolvePokemon($matches[1]).' '.resolveItem($matches[2]);
 		} else if (preg_match('/^([^<>]+)\'s ([a-zA-Z .\']+) weakened ([^<>]+)\'s power!$/', $line, $matches)) {
 			$out[] = '|-weaken '.resolvePokemon($matches[1]).' '.resolveMove($matches[3]).' '.resolveItem($matches[2]);
 		} else if (preg_match('/^\<([^<>]+) stole and ate ([^<>]+)\'s ([^<>]+)!\>$/', $line, $matches)) {
 			$out[] = '|-steal-eat '.resolvePokemon($matches[1]).' '.resolvePokemon($matches[2]).' '.resolveItem($matches[3]);
-		} else if (preg_match('/^\<([^<>]+) stole and drank ([^<>]+)\'s ([^<>]+)!\>$/', $line, $matches)) {
-			$out[] = '|-steal-drink '.resolvePokemon($matches[1]).' '.resolvePokemon($matches[2]).' '.resolveItem($matches[3]);
 		} else if (preg_match('/^\<([^<>]+)\'s Storm Drain raised its special attack!\>$/', $line, $matches)) {
 			$out[] = '|-ability-boost '.resolvePokemon($matches[1]).' spa 1 StormDrain';
 		} else if (preg_match('/^\<?([^<>]+)\'s Competitive Spirit sharply raised its Attack!\>?$/', $line, $matches)) {

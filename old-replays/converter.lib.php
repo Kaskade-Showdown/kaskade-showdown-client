@@ -829,14 +829,6 @@ function pokeConvertInner($text)
 		{
 			$out[] = 'pseudo-weather-end TrickRoom';
 		}
-		else if (endsRemove($line, " spread over the battlefield!>"))
-		{
-			$out[] = '  r-pseudo-weather '.resolvePokemon(substr($line, 1)).' PearlDrop';
-		}
-		else if (endsRemove($line, " gathered up all of its pearls!"))
-		{
-			$out[] = 'pseudo-weather-end PearlDrop';
-		}
 		else if (endsRemove($line, " swapped the Sp. Def. and the Defense of all the pokemon!>"))
 		{
 			$out[] = '  r-pseudo-weather '.resolvePokemon(substr($line, 1)).' WonderRoom';
@@ -927,10 +919,6 @@ function pokeConvertInner($text)
 		else if (endsRemove($line, "'s Flame Orb activated!"))
 		{
 			$out[] = 'residual '.resolvePokemon($line).' item-activate FlameOrb';
-		}
-		else if (endsRemove($line, "'s Frost Orb activated!"))
-		{
-			$out[] = 'residual '.resolvePokemon($line).' item-activate FrostOrb';
 		}
 		else if (endsRemove($line, ' was dragged out!>'))
 		{
@@ -1044,10 +1032,6 @@ function pokeConvertInner($text)
 		{
 			$out[] = '  r-blow-away '.resolvePokemon(substr($line, 1)).' ToxicSpikes';
 		}
-		else if (endsRemove($line, ' blew away Steel Barbs!>'))
-		{
-			$out[] = '  r-blow-away '.resolvePokemon(substr($line, 1)).' SteelBarbs';
-		}
 		else if (endsRemove($line, ' fell for the taunt!>'))
 		{
 			$out[] = '  r-volatile '.resolvePokemon(substr($line, 1)).' taunt';
@@ -1150,11 +1134,6 @@ function pokeConvertInner($text)
 		{
 			$side = (isFoe($matches[1])?'foe':'ally');
 			$out[] = '  r-side-condition '.$side.' ToxicSpikes';
-		}
-		else if (preg_match('/^\<Sharp-pointed pieces of steel started floating around ([^<>]+)\'s team!\>?$/', $line, $matches))
-		{
-			$side = (isFoe($matches[1])?'foe':'ally');
-			$out[] = '  r-side-condition '.$side.' SteelBarbs';
 		}
 		else if (preg_match('/^\<A tailwind started blowing behind ([^<>]+)\'s team!\>?$/', $line, $matches))
 		{
