@@ -2447,7 +2447,7 @@ export class BattleTooltips {
 		if (!(move.type === 'Normal' || value.tryAbility('Droughtproof'))) {
 			if (value.tryClimateWeather('Foghorn')) {
 				accuracyModifiers.push(3686);
-				value.modify(9 / 10, 'Fog');
+				value.modify(0.9, 'Fog');
 			}
 		}
 		if ((this.pokemonHasType(pokemon, 'Bug') || this.pokemonHasType(pokemon, 'Poison')) &&
@@ -2457,10 +2457,17 @@ export class BattleTooltips {
 				value.modify(4 / 3, 'Pheromones');
 			}
 		}
-		if (value.tryAbility('Master Instinct')) {
+		if (move.type === 'Fighting') {
 			if (value.tryEnergyWeather('Aura Projection')) {
 				accuracyModifiers.push(4915);
-				value.modify(6 / 5, 'Battle Aura');
+				value.modify(6 / 5, 'Aura Projection');
+			}
+		}
+		if (value.tryAbility('Master Instinct') &&
+			!value.tryItem('Energy Nullifier')) {
+			if (value.tryEnergyWeather('Aura Projection')) {
+				accuracyModifiers.push(5325);
+				value.modify(1.3, 'Battle Aura');
 			}
 		}
 
@@ -2470,7 +2477,7 @@ export class BattleTooltips {
 		}
 		if (this.battle.hasPseudoWeather('Pearl Drop')) {
 			accuracyModifiers.push(3686);
-			value.modify(9 / 10, "Pearl Drop");
+			value.modify(0.9, "Pearl Drop");
 		}
 
 		for (const active of pokemon.side.active) {
