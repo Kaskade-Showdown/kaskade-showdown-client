@@ -2450,7 +2450,7 @@ export class BattleTooltips {
 				value.modify(9 / 10, 'Fog');
 			}
 		}
-		if ((this.pokemonHasType(pokemon, 'Bug') || this.pokemonHasType(pokemon, 'Bug')) &&
+		if ((this.pokemonHasType(pokemon, 'Bug') || this.pokemonHasType(pokemon, 'Poison')) &&
 			!value.tryItem('Safety Goggles')) {
 			if (value.tryIrritantWeather('Swarm Signal')) {
 				accuracyModifiers.push(5461);
