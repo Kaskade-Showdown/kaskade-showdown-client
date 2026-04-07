@@ -2864,7 +2864,7 @@ export class BattleTooltips {
 			if (['Rock', 'Ground', 'Steel'].includes(moveType) && this.battle.irritantWeather === 'duststorm') {
 				if (value.tryAbility("Earth Force")) value.irritantWeatherModify(1.3, "Dust Storm", "Earth Force");
 			}
-			if (['Poison'].includes(moveType) && this.battle.irritantWeather === 'smogspread') {
+			if ('Poison'.includes(moveType) && this.battle.irritantWeather === 'smogspread') {
 				if (value.tryAbility("Carbon Capture")) value.irritantWeatherModify(1.5, "Smog", "Carbon Capture");
 			}
 			if (['Fairy', 'Grass', 'Fire', 'Water'].includes(moveType) && (this.battle.irritantWeather === 'sprinkle')) {
