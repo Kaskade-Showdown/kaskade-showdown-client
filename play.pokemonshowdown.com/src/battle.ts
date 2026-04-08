@@ -477,6 +477,7 @@ export class Pokemon implements PokemonDetails, PokemonHealth {
 			for (const statName of Dex.statNamesExceptHP) {
 				volatilesToRemove.push('protosynthesis' + statName);
 				volatilesToRemove.push('quarkdrive' + statName);
+				volatilesToRemove.push('warpmist' + statName);
 			}
 			for (const volatile of volatilesToRemove) {
 				delete this.volatiles[volatile];
@@ -536,7 +537,7 @@ export class Pokemon implements PokemonDetails, PokemonHealth {
 		if (item === 'ironball') {
 			return true;
 		}
-		if (ability === 'levitate') {
+		if (ability === 'levitate' || ability === 'surgesurfer' || ability === 'relicsoul') {
 			return false;
 		}
 		if (this.volatiles['magnetrise'] || this.volatiles['telekinesis']) {
@@ -3080,7 +3081,7 @@ export class Battle {
 			let fromeffect = Dex.getEffect(kwArgs.from);
 			poke.removeVolatile(effect.id);
 
-			if (kwArgs.silent && !(effect.id === 'protosynthesis' || effect.id === 'quarkdrive')) {
+			if (kwArgs.silent && !(effect.id === 'protosynthesis' || effect.id === 'quarkdrive' || effect.id === 'warpmist')) {
 				// do nothing
 			} else {
 				switch (effect.id) {
@@ -3161,6 +3162,13 @@ export class Battle {
 					poke.removeVolatile('quarkdrivespa' as ID);
 					poke.removeVolatile('quarkdrivespd' as ID);
 					poke.removeVolatile('quarkdrivespe' as ID);
+					break;
+				case 'warpmist':
+					poke.removeVolatile('warpmistatk' as ID);
+					poke.removeVolatile('warpmistdef' as ID);
+					poke.removeVolatile('warpmistspa' as ID);
+					poke.removeVolatile('warpmistspd' as ID);
+					poke.removeVolatile('warpmistspe' as ID);
 					break;
 				default:
 					if (effect.effectType === 'Move') {

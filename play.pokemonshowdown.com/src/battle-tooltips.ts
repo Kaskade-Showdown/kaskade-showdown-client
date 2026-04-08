@@ -1539,6 +1539,9 @@ export class BattleTooltips {
 						stats[statName] = Math.floor(stats[statName] * 1.3);
 					}
 				}
+				if (clientPokemon.volatiles['warpmist' + statName]) {
+					stats[statName] = Math.floor(stats[statName] * 1.3);
+				}
 			}
 		}
 		if (pokemon.status) {
@@ -2173,6 +2176,7 @@ export class BattleTooltips {
 		if (attackType === 'Fire' && abilityid === 'primordialsea' && !strict) return 0;
 		if (attackType === 'Water' && abilityid === 'desolateland' && !strict) return 0;
 
+		if (attackType === 'Ground' && abilityid === 'surgesurfer') return 0;
 		if (attackType === 'Electric' && abilityid === 'powerplumage') return 0;
 		if (attackType === 'Bug' && abilityid === 'flytrap') return 0;
 		if (attackType === 'Ground' && abilityid === 'relicsoul') return 0;
@@ -2232,7 +2236,8 @@ export class BattleTooltips {
 		if (category === 'Status' && dex.gen <= 3) otherFactor = 1;
 
 		let factor = 1;
-		if (!otherFactor && targetAbility === "Levitate") {
+		if (!otherFactor && (targetAbility === "Levitate" || targetAbility === "Surge Surfer" ||
+			targetAbility === "Relic Soul")) {
 			otherFactor = 1;
 			if (!target.isGrounded() && move.id !== 'thousandarrows' && !hardcoreMode) {
 				factor = 0; // Levitate acts as a type-based immunity (doesn't affect most status moves)
@@ -2464,13 +2469,6 @@ export class BattleTooltips {
 			if (value.tryEnergyWeather('Aura Projection')) {
 				accuracyModifiers.push(4915);
 				value.modify(6 / 5, 'Aura Projection');
-			}
-		}
-		if (value.tryAbility('Master Instinct') &&
-			!value.tryItem('Energy Nullifier')) {
-			if (value.tryEnergyWeather('Aura Projection')) {
-				accuracyModifiers.push(5325);
-				value.modify(1.3, 'Battle Aura');
 			}
 		}
 
@@ -2844,6 +2842,10 @@ export class BattleTooltips {
 				value.abilityModify(1.25, "Rivalry");
 			}
 		}
+		if (move.id === 'wildmagic') {
+			value.abilityModify(2, "Power Above");
+			value.abilityModify(2, "Power Within");
+		}
 		if (moveType === 'Fairy') {
 			value.abilityModify(1.3, "Chakra");
 		}
@@ -2865,7 +2867,7 @@ export class BattleTooltips {
 				if (value.tryAbility("Earth Force")) value.irritantWeatherModify(1.3, "Dust Storm", "Earth Force");
 			}
 			if ('Poison'.includes(moveType) && this.battle.irritantWeather === 'smogspread') {
-				if (value.tryAbility("Carbon Capture")) value.irritantWeatherModify(1.5, "Smog", "Carbon Capture");
+				if (value.tryAbility("Carbon Capture")) value.irritantWeatherModify(2, "Smog", "Carbon Capture");
 			}
 			if (['Fairy', 'Grass', 'Fire', 'Water'].includes(moveType) && (this.battle.irritantWeather === 'sprinkle')) {
 				if (value.tryAbility("Power Above")) value.irritantWeatherModify(1.3, "Fairy Dust", "Power Above");
@@ -2955,31 +2957,32 @@ export class BattleTooltips {
 		if ((this.battle.hasPseudoWeather('Electric Terrain') && moveType === 'Electric') ||
 			(this.battle.hasPseudoWeather('Grassy Terrain') && moveType === 'Grass') ||
 			(this.battle.hasPseudoWeather('Psychic Terrain') && moveType === 'Psychic')) {
-			if (pokemon.isGrounded(serverPokemon)) {
+			if (pokemon.isGrounded(serverPokemon) || value.tryAbility("Surge Surfer")) {
 				value.modify(this.battle.gen > 7 ? 1.3 : 1.5, 'Terrain boost');
 			}
 		} else if (this.battle.hasPseudoWeather('Misty Terrain') && moveType === 'Dragon') {
-			if (target ? target.isGrounded() : true) {
+			if (target ? (target.isGrounded() || target.ability === 'Surge Surfer') : true) {
 				value.modify(0.5, 'Misty Terrain + grounded target');
 			}
 		} else if (
 			this.battle.hasPseudoWeather('Grassy Terrain') && ['earthquake', 'bulldoze', 'magnitude'].includes(move.id)
 		) {
-			if (target ? target.isGrounded() : true) {
+			if (target ? (target.isGrounded() || target.ability === 'Surge Surfer') : true) {
 				value.modify(0.5, 'Grassy Terrain + grounded target');
 			}
 		}
 		if (
 			move.id === 'expandingforce' &&
 			this.battle.hasPseudoWeather('Psychic Terrain') &&
-			pokemon.isGrounded(serverPokemon)
+			(pokemon.isGrounded(serverPokemon) || value.tryAbility("Surge Surfer"))
 		) {
 			value.modify(1.5, 'Expanding Force + Psychic Terrain boost');
 		}
 		if (move.id === 'mistyexplosion' && this.battle.hasPseudoWeather('Misty Terrain')) {
 			value.modify(1.5, 'Misty Explosion + Misty Terrain boost');
 		}
-		if (move.id === 'risingvoltage' && this.battle.hasPseudoWeather('Electric Terrain') && target?.isGrounded()) {
+		if (move.id === 'risingvoltage' && this.battle.hasPseudoWeather('Electric Terrain') &&
+			(target?.isGrounded() || target?.ability === 'Surge Surfer')) {
 			value.modify(2, 'Rising Voltage + Electric Terrain boost');
 		}
 
