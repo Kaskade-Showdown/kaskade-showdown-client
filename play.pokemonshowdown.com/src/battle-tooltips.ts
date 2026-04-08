@@ -2479,7 +2479,7 @@ export class BattleTooltips {
 			accuracyModifiers.push(6840);
 			value.modify(5 / 3, "Gravity");
 		}
-		if (this.battle.hasPseudoWeather('Pearl Drop')) {
+		if (this.battle.hasPseudoWeather('Pearl Drop') && pokemon.getSpeciesForme() !== 'Clamtrip') {
 			accuracyModifiers.push(3686);
 			value.modify(0.9, "Pearl Drop");
 		}
