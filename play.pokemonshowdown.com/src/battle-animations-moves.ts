@@ -38633,7 +38633,6 @@ BattleMoveAnims['sunscreen'] = { anim: BattleMoveAnims['sunnyday'].anim };
 BattleMoveAnims['osmosis'] = { anim: BattleMoveAnims['gigadrain'].anim };
 BattleMoveAnims['escaperoot'] = { anim: BattleMoveAnims['ingrain'].anim };
 BattleMoveAnims['voltkick'] = { anim: BattleMoveAnims['blazekick'].anim };
-BattleMoveAnims['thunderhammer'] = { anim: BattleMoveAnims['supercellslam'].anim };
 BattleMoveAnims['psionrush'] = { anim: BattleMoveAnims['gigaimpact'].anim };
 BattleMoveAnims['mindmeld'] = { anim: BattleMoveAnims['psystrike'].anim };
 BattleMoveAnims['psychocannon'] = { anim: BattleMoveAnims['psystrike'].anim };

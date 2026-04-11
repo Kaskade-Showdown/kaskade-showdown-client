@@ -3551,7 +3551,8 @@ export class BattleStatGuesser {
 
 		if (
 			hasMove['agility'] || hasMove['dragondance'] || hasMove['quiverdance'] ||
-			hasMove['rockpolish'] || hasMove['shellsmash'] || hasMove['flamecharge']
+			hasMove['rockpolish'] || hasMove['shellsmash'] || hasMove['flamecharge'] ||
+			hasMove['earthrush']
 		) {
 			isFast = true;
 		} else if (abilityid === 'unburden' || abilityid === 'speedboost' || abilityid === 'motordrive') {
