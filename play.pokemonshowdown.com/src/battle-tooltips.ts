@@ -2283,7 +2283,7 @@ export class BattleTooltips {
 						break;
 					}
 					// incomplete, strong winds dust, strong winds magnet, strong winds p.Ac display. does sunscreen display work?
-					if (targetType === 'Ghost' && this.battle.climateWeather === 'foghorn') continue;
+					if (move.type === 'Normal' && targetType === 'Ghost' && this.battle.climateWeather === 'foghorn') continue;
 					if (attackType === 'Fire' && (target.volatiles['sunscreen'])) continue;
 				}
 				factor = 0;
