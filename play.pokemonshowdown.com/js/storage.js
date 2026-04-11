@@ -1368,7 +1368,7 @@ Storage.exportAllTeams = function () {
 	for (var i = 0, len = Storage.teams.length; i < len; i++) {
 		var team = Storage.teams[i];
 		buf += '=== ' + (team.format ? '[' + team.format + (team.capacity === 24 ? '-box] ' : '] ') : '') + (team.folder ? '' + team.folder + '/' : '') + team.name + ' ===\n\n';
-		buf += Storage.exportTeam(team.team, team.gen);
+		buf += Storage.exportTeam(team.team);
 		buf += '\n';
 	}
 	return buf;
@@ -1379,13 +1379,13 @@ Storage.exportFolder = function (folder) {
 		var team = Storage.teams[i];
 		if (team.folder + "/" === folder || team.format === folder) {
 			buf += '=== ' + (team.format ? '[' + team.format + (team.capacity === 24 ? '-box] ' : '] ') : '') + (team.folder ? '' + team.folder + '/' : '') + team.name + ' ===\n\n';
-			buf += Storage.exportTeam(team.team, team.gen);
+			buf += Storage.exportTeam(team.team);
 			buf += '\n';
 		}
 	}
 	return buf;
 };
-Storage.exportTeam = function (team, gen, hidestats) {
+Storage.exportTeam = function (team, hidestats) {
 	if (!team) return "";
 	if (typeof team === 'string') {
 		if (team.indexOf('\n') >= 0) return team;
@@ -1429,10 +1429,9 @@ Storage.exportTeam = function (team, gen, hidestats) {
 		if (curSet.gigantamax) {
 			text += 'Gigantamax: Yes  \n';
 		}
-		/* if (gen === 9) {
-			var species = Dex.species.get(curSet.species);
-			text += 'Tera Type: ' + (curSet.teraType || species.requiredTeraType || species.types[0]) + "  \n";
-		} */
+		if (curSet.teraType) {
+			text += 'Tera Type: ' + curSet.teraType + '  \n';
+		}
 		if (!hidestats) {
 			var first = true;
 			if (curSet.evs) {
@@ -1775,7 +1774,7 @@ Storage.nwSaveTeam = function (team) {
 		this.nwDeleteTeam(team);
 	}
 	team.filename = filename;
-	fs.writeFile(this.dir + 'Teams/' + filename, Storage.exportTeam(team.team, team.gen).replace(/\n/g, '\r\n'), function () {});
+	fs.writeFile(this.dir + 'Teams/' + filename, Storage.exportTeam(team.team).replace(/\n/g, '\r\n'), function () {});
 };
 
 Storage.nwSaveTeams = function () {
@@ -1811,7 +1810,7 @@ Storage.nwDoSaveAllTeams = function () {
 		filename = $.trim(filename).replace(/[\\\/]+/g, '');
 
 		team.filename = filename;
-		fs.writeFile(this.dir + 'Teams/' + filename, Storage.exportTeam(team.team, team.gen).replace(/\n/g, '\r\n'), function () {});
+		fs.writeFile(this.dir + 'Teams/' + filename, Storage.exportTeam(team.team).replace(/\n/g, '\r\n'), function () {});
 	}
 };
 
