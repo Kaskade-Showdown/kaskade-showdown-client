@@ -1933,7 +1933,9 @@ export class BattleTooltips {
 		}
 		// Weather and pseudo-weather type changes.
 		if (move.id === 'weatherball') { // updated
-			if (value.climateWeatherModify(0)) {
+			if (value.abilityModify(0, 'Mega Sol')) {
+				moveType = 'Fire';
+			} else if (value.climateWeatherModify(0)) {
 				switch (this.battle.getRecentWeather(item.id)) {
 				case 'sunnyday':
 				case 'desolateland':
@@ -2008,8 +2010,6 @@ export class BattleTooltips {
 					moveType = '???';
 					break;
 				}
-			} else if (value.abilityModify(0, 'Mega Sol')) {
-				moveType = 'Fire';
 			}
 		}
 		if (move.id === 'terrainpulse' && pokemon.isGrounded(serverPokemon)) {
@@ -2557,7 +2557,7 @@ export class BattleTooltips {
 		value.set(move.accuracy as number);
 
 		if (move.id === 'hurricane' || move.id === 'thunder') {
-			if (value.tryAbility('Mega Sol')) value.set(50, 'Mega Sol');
+			if (value.tryAbility('Mega Sol')) value.set(50, 'Mega Sol'); // TODO check implementation
 			if (value.tryClimateWeather('Sunny Day')) value.set(50, 'Sunny Day');
 			if (value.tryClimateWeather('Desolate Land')) value.set(50, 'Desolate Land');
 		}
@@ -2690,23 +2690,24 @@ export class BattleTooltips {
 			}
 		}
 		if (move.id === 'weatherball') { // updated
-			value.abilityModify(2, "Mega Sol");
-			switch (this.battle.getRecentWeather()) {
-			case this.battle.climateWeather:
-				if (serverPokemon.item !== 'utilityumbrella') value.climateWeatherModify(2);
-				break;
-			case this.battle.irritantWeather:
-				if (serverPokemon.item !== 'safetygoggles') value.irritantWeatherModify(2);
-				break;
-			case this.battle.energyWeather:
-				if (serverPokemon.item !== 'energynullifier') value.energyWeatherModify(2);
-				break;
-			case this.battle.clearingWeather:
-				value.clearingWeatherModify(2);
-				break;
-			case this.battle.cataclysmWeather:
-				value.cataclysmWeatherModify(2);
-				break;
+			if (!value.abilityModify(2, "Mega Sol") && this.battle.climateWeather !== 'deltastream') {
+				switch (this.battle.getRecentWeather()) {
+				case this.battle.climateWeather:
+					if (serverPokemon.item !== 'utilityumbrella') value.climateWeatherModify(2);
+					break;
+				case this.battle.irritantWeather:
+					if (serverPokemon.item !== 'safetygoggles') value.irritantWeatherModify(2);
+					break;
+				case this.battle.energyWeather:
+					if (serverPokemon.item !== 'energynullifier') value.energyWeatherModify(2);
+					break;
+				case this.battle.clearingWeather:
+					value.clearingWeatherModify(2);
+					break;
+				case this.battle.cataclysmWeather:
+					value.cataclysmWeatherModify(2);
+					break;
+				}
 			}
 		}
 		if (move.id === 'hydrosteam') {
