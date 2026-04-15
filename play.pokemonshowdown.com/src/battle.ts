@@ -1681,7 +1681,7 @@ export class Battle {
 		this.scene.updateWeather();
 	}
 	getRecentWeather(pokemon: Pokemon) {
-		const item = pokemon.item;
+		const item = toID(pokemon.item);
 		const ability = toID(pokemon.effectiveAbility());
 		const suppressed = this.hasPseudoWeather('Magic Room') || pokemon.volatiles['embargo'] || ability === 'klutz';
 
