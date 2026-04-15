@@ -1680,7 +1680,11 @@ export class Battle {
 		this.cataclysmWeather = weather;
 		this.scene.updateWeather();
 	}
-	getRecentWeather(item: string | null = null) {
+	getRecentWeather(pokemon: Pokemon) {
+		const item = pokemon.item;
+		const ability = toID(pokemon.effectiveAbility());
+		const suppressed = this.hasPseudoWeather('Magic Room') || pokemon.volatiles['embargo'] || ability === 'klutz';
+
 		for (let i = this.activeWeathers.length - 1; i >= 0; i--) {
 			const recentWeather = this.activeWeathers[i];
 			switch (recentWeather) {
@@ -1692,30 +1696,30 @@ export class Battle {
 			case 'snowscape':
 			case 'bloodmoon':
 			case 'foghorn':
-				if (item !== 'utilityumbrella') return recentWeather;
-				break;
+				if (item === 'utilityumbrella' && !suppressed) break;
+				return recentWeather;
 			case 'sandstorm':
 			case 'duststorm':
 			case 'pollinate':
 			case 'swarmsignal':
 			case 'smogspread':
 			case 'sprinkle':
-				if (item !== 'safetygoggles') return recentWeather;
-				break;
+				if (item === 'safetygoggles' && !suppressed) break;
+				return recentWeather;
 			case 'auraprojection':
 			case 'haunt':
 			case 'daydream':
 			case 'dragonforce':
 			case 'supercell':
 			case 'magnetize':
-				if (item !== 'energynullifier') return recentWeather;
-				break;
+				if (item === 'energynullifier' && !suppressed) break;
+				return recentWeather;
 			case 'strongwinds':
 			case 'cataclysmiclight':
 				return recentWeather;
 			}
 		}
-		return "bozo";
+		return null;
 	}
 	swapSideConditions() {
 		const sideConditions = [

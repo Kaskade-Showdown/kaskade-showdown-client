@@ -1936,7 +1936,7 @@ export class BattleTooltips {
 			if (value.abilityModify(0, 'Mega Sol')) {
 				moveType = 'Fire';
 			} else if (value.climateWeatherModify(0)) {
-				switch (this.battle.getRecentWeather(item.id)) {
+				switch (this.battle.getRecentWeather(pokemon)) {
 				case 'sunnyday':
 				case 'desolateland':
 					moveType = 'Fire';
@@ -1957,7 +1957,7 @@ export class BattleTooltips {
 					break;
 				}
 			} else if (value.irritantWeatherModify(0)) {
-				switch (this.battle.getRecentWeather(item.id)) {
+				switch (this.battle.getRecentWeather(pokemon)) {
 				case 'sandstorm':
 					moveType = 'Rock';
 					break;
@@ -1978,7 +1978,7 @@ export class BattleTooltips {
 					break;
 				}
 			} else if (value.energyWeatherModify(0)) {
-				switch (this.battle.getRecentWeather(item.id)) {
+				switch (this.battle.getRecentWeather(pokemon)) {
 				case 'auraprojection':
 					moveType = 'Fighting';
 					break;
@@ -1999,13 +1999,13 @@ export class BattleTooltips {
 					break;
 				}
 			} else if (value.clearingWeatherModify(0)) {
-				switch (this.battle.getRecentWeather(item.id)) {
+				switch (this.battle.getRecentWeather(pokemon)) {
 				case 'strongwinds':
 					moveType = 'Flying';
 					break;
 				}
 			} else if (value.cataclysmWeatherModify(0)) {
-				switch (this.battle.getRecentWeather(item.id)) {
+				switch (this.battle.getRecentWeather(pokemon)) {
 				case 'cataclysmiclight':
 					moveType = '???';
 					break;
@@ -2691,15 +2691,15 @@ export class BattleTooltips {
 		}
 		if (move.id === 'weatherball') { // updated
 			if (!value.abilityModify(2, "Mega Sol") && this.battle.climateWeather !== 'deltastream') {
-				switch (this.battle.getRecentWeather()) {
+				switch (this.battle.getRecentWeather(pokemon)) {
 				case this.battle.climateWeather:
-					if (serverPokemon.item !== 'utilityumbrella') value.climateWeatherModify(2);
+					value.climateWeatherModify(2);
 					break;
 				case this.battle.irritantWeather:
-					if (serverPokemon.item !== 'safetygoggles') value.irritantWeatherModify(2);
+					value.irritantWeatherModify(2);
 					break;
 				case this.battle.energyWeather:
-					if (serverPokemon.item !== 'energynullifier') value.energyWeatherModify(2);
+					value.energyWeatherModify(2);
 					break;
 				case this.battle.clearingWeather:
 					value.clearingWeatherModify(2);
