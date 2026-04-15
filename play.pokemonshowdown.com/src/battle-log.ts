@@ -56,6 +56,7 @@ export class BattleLog {
 	 */
 	perspective: -1 | 0 | 1 = -1;
 	getHighlight: ((line: Args) => boolean) | null = null;
+	pendingWeatherUpkeep = [] as { args: Args, kwArgs: KWArgs, preempt?: boolean }[];
 	constructor(elem: HTMLDivElement, scene?: BattleScene | null, innerElem?: HTMLDivElement) {
 		this.elem = elem;
 
@@ -124,6 +125,11 @@ export class BattleLog {
 	}
 	add(args: Args, kwArgs?: KWArgs, preempt?: boolean, showTimestamps?: 'minutes' | 'seconds') {
 		if (kwArgs?.silent) return;
+		if (this.isWeatherUpkeep(args, kwArgs)) {
+			this.pendingWeatherUpkeep.push({ args, kwArgs: kwArgs || {}, preempt });
+			return;
+		}
+		this.flushWeatherUpkeep();
 		const battle = this.scene?.battle;
 		if (battle?.seeking) {
 			if (battle.stepQueue.length > 2000) {
@@ -330,7 +336,7 @@ export class BattleLog {
 			return;
 
 		default:
-			this.addBattleMessage(args, kwArgs);
+			this.addBattleMessage(args, kwArgs, preempt);
 			this.joinLeave = null;
 			return;
 		}
@@ -339,7 +345,7 @@ export class BattleLog {
 			this.joinLeave = null;
 		}
 	}
-	addBattleMessage(args: Args, kwArgs?: KWArgs) {
+	addBattleMessage(args: Args, kwArgs?: KWArgs, preempt?: boolean) {
 		switch (args[0]) {
 		case 'warning':
 			this.message('<strong>Warning:</strong> ' + BattleLog.escapeHTML(args[1]));
@@ -385,14 +391,40 @@ export class BattleLog {
 
 		default:
 			if (this.addAFDMessage(args, kwArgs)) return;
-			const line = this.battleParser?.parseArgs(args, kwArgs || {}, true) ?? null;
-			if (line === null) {
-				this.addDiv('chat message-error', 'Unrecognized: |' + BattleLog.escapeHTML(args.join('|')));
-				return;
-			}
-			if (line) this.messageFromLog(line);
+			this.addParsedBattleLine(args, kwArgs || {}, preempt);
 			break;
 		}
+	}
+	isWeatherUpkeep(args: Args, kwArgs?: KWArgs) {
+		return !!(
+			kwArgs?.upkeep &&
+			[
+				'-climateWeather', '-irritantWeather', '-energyWeather',
+				'-clearingWeather', '-cataclysmWeather',
+			].includes(args[0])
+		);
+	}
+	flushWeatherUpkeep() {
+		if (!this.pendingWeatherUpkeep.length) return;
+		const weatherOrder = this.scene?.battle.activeWeathers || [];
+		const getWeatherOrder = (args: Args) => weatherOrder.indexOf(toID(args[1]));
+		this.pendingWeatherUpkeep.sort((a, b) => {
+			const aIndex = getWeatherOrder(a.args);
+			const bIndex = getWeatherOrder(b.args);
+			return bIndex - aIndex;
+		});
+		for (const { args, kwArgs, preempt } of this.pendingWeatherUpkeep) {
+			this.addParsedBattleLine(args, kwArgs, preempt);
+		}
+		this.pendingWeatherUpkeep = [];
+	}
+	addParsedBattleLine(args: Args, kwArgs: KWArgs, preempt?: boolean) {
+		const line = this.battleParser?.parseArgs(args, kwArgs, true) ?? null;
+		if (line === null) {
+			this.addDiv('chat message-error', 'Unrecognized: |' + BattleLog.escapeHTML(args.join('|')), preempt);
+			return;
+		}
+		if (line) this.messageFromLog(line, preempt);
 	}
 	addAFDMessage(args: Args, kwArgs: KWArgs = {}) {
 		if (!Dex.afdMode) return;
@@ -906,8 +938,9 @@ export class BattleLog {
 		}
 		return false;
 	}
-	messageFromLog(line: string) {
-		this.message(...this.parseLogMessage(line));
+	messageFromLog(line: string, preempt?: boolean) {
+		const [message, sceneMessage] = this.parseLogMessage(line);
+		this.message(message, sceneMessage, preempt);
 	}
 	textList(list: string[]) {
 		let message = '';
@@ -944,9 +977,9 @@ export class BattleLog {
 			messages.filter(line => !line.startsWith('<small>[')).join('<br />'),
 		];
 	}
-	message(message: string, sceneMessage = message) {
+	message(message: string, sceneMessage = message, preempt?: boolean) {
 		this.scene?.message(sceneMessage);
-		this.addDiv('battle-history', message);
+		this.addDiv('battle-history', message, preempt);
 	}
 	addNode(node: HTMLElement, preempt?: boolean) {
 		(preempt ? this.preemptElem : this.innerElem).appendChild(node);
