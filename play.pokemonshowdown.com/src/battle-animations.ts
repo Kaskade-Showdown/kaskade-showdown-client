@@ -1003,7 +1003,7 @@ export class BattleScene implements BattleSceneStub {
 				snowscape: 'Snow',
 				bloodmoon: 'Blood Moon',
 				foghorn: 'Fog',
-				deltastream: 'Delta Stream',
+				sandstorm: 'Sandstorm',
 			};
 			weatherhtml = `${weatherNameTable[this.battle.climateWeather] || this.battle.climateWeather}`;
 			if (this.battle.climateWeatherMinTimeLeft !== 0) {
@@ -1086,6 +1086,7 @@ export class BattleScene implements BattleSceneStub {
 		if (this.battle.clearingWeather) {
 			const weatherNameTable: { [id: string]: string } = {
 				strongwinds: 'Strong Winds',
+				deltastream: 'Delta Stream',
 			};
 			weatherhtml = `${weatherNameTable[this.battle.clearingWeather] || this.battle.clearingWeather}`;
 			if (this.battle.clearingWeatherMinTimeLeft !== 0) {
@@ -1169,7 +1170,7 @@ export class BattleScene implements BattleSceneStub {
 		return buf;
 	}
 	upkeepClimateWeather() {
-		const isIntense = ['desolateland', 'primordialsea', 'deltastream'].includes(this.curClimateWeather);
+		const isIntense = ['desolateland', 'primordialsea'].includes(this.curClimateWeather);
 		this.$climateWeather.animate({
 			opacity: 1.0,
 		}, 300).animate({
@@ -1225,7 +1226,7 @@ export class BattleScene implements BattleSceneStub {
 		for (const pseudoWeatherData of this.battle.pseudoWeather) {
 			terrain = toID(pseudoWeatherData[0]);
 		}
-		if (climateWeather === 'desolateland' || climateWeather === 'primordialsea' || climateWeather === 'deltastream') {
+		if (climateWeather === 'desolateland' || climateWeather === 'primordialsea') {
 			isIntense = true;
 		}
 

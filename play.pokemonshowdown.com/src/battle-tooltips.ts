@@ -696,6 +696,9 @@ export class BattleTooltips {
 					case 'foghorn':
 						zMove = this.battle.dex.moves.get(BattleTooltips.zMoveTable['Normal']);
 						break;
+					case 'sandstorm':
+						zMove = this.battle.dex.moves.get(BattleTooltips.zMoveTable['Rock']);
+						break;
 					}
 					switch (this.battle.irritantWeather) {
 					case 'sandstorm':
@@ -739,6 +742,7 @@ export class BattleTooltips {
 					}
 					switch (this.battle.clearingWeather) {
 					case 'strongwinds':
+					case 'deltastream':
 						zMove = this.battle.dex.moves.get(BattleTooltips.zMoveTable['Flying']);
 						break;
 					}
@@ -1446,7 +1450,17 @@ export class BattleTooltips {
 						stats.atk = Math.floor(stats.atk * 1.2);
 					}
 				}
+				if (climateWeather === 'sandstorm') {
+					if (this.battle.gen >= 4 && this.pokemonHasType(pokemon, 'Rock')) {
+						stats.spd = Math.floor(stats.spd * 1.5);
+					}
+				}
 			}
+		}
+		if ((climateWeather === 'sandstorm' ||
+			((irritantWeather === 'sandstorm' || irritantWeather === 'duststorm') && item !== 'safetygoggles')) &&
+			ability === 'sandrush') {
+			speedModifiers.push(2);
 		}
 		if (irritantWeather) {
 			if (item !== 'safetygoggles') {
@@ -1458,11 +1472,6 @@ export class BattleTooltips {
 				if (irritantWeather === 'duststorm') {
 					if (this.pokemonHasType(pokemon, 'Ground')) {
 						stats.spe = Math.floor(stats.spe * 1.5);
-					}
-				}
-				if (irritantWeather === 'sandstorm' || irritantWeather === 'duststorm') {
-					if (ability === 'sandrush') {
-						speedModifiers.push(2);
 					}
 				}
 				if (irritantWeather === 'pollinate') {
@@ -1956,7 +1965,8 @@ export class BattleTooltips {
 					if (value.climateWeatherModify(0)) moveType = 'Normal';
 					break;
 				case 'sandstorm':
-					if (value.irritantWeatherModify(0)) moveType = 'Rock';
+					if (this.battle.climateWeather === 'sandstorm' ? value.climateWeatherModify(0) :
+						value.irritantWeatherModify(0)) moveType = 'Rock';
 					break;
 				case 'duststorm':
 					if (value.irritantWeatherModify(0)) moveType = 'Ground';
@@ -1992,6 +2002,7 @@ export class BattleTooltips {
 					if (value.energyWeatherModify(0)) moveType = 'Steel';
 					break;
 				case 'strongwinds':
+				case 'deltastream':
 					if (value.clearingWeatherModify(0)) moveType = 'Flying';
 					break;
 				case 'cataclysmiclight':
@@ -2678,7 +2689,7 @@ export class BattleTooltips {
 			}
 		}
 		if (move.id === 'weatherball') { // updated
-			if (!value.abilityModify(2, "Mega Sol") && this.battle.climateWeather !== 'deltastream') {
+			if (!value.abilityModify(2, "Mega Sol")) {
 				switch (this.battle.getRecentWeather(pokemon, serverPokemon)) {
 				case this.battle.climateWeather:
 					value.climateWeatherModify(2);

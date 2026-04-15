@@ -1486,7 +1486,7 @@ export class Battle {
 			return;
 		}
 		if (weather) {
-			let isExtremeWeather = (weather === 'deltastream' || weather === 'desolateland' || weather === 'primordialsea');
+			let isExtremeWeather = (weather === 'desolateland' || weather === 'primordialsea');
 			if (ability && ability.effectType === 'Move') {
 				if (this.climateWeather && this.climateWeatherTimeLeft) {
 					this.climateWeatherTimeLeft++;
@@ -1538,7 +1538,7 @@ export class Battle {
 			return;
 		}
 		if (weather) {
-			let isExtremeWeather = (weather === 'deltastream' || weather === 'desolateland' || weather === 'primordialsea');
+			let isExtremeWeather = false;
 			if (ability && ability.effectType === 'Move') {
 				if (this.irritantWeather && this.irritantWeatherTimeLeft) {
 					this.irritantWeatherTimeLeft++;
@@ -1590,7 +1590,7 @@ export class Battle {
 			return;
 		}
 		if (weather) {
-			let isExtremeWeather = (weather === 'deltastream' || weather === 'desolateland' || weather === 'primordialsea');
+			let isExtremeWeather = false;
 			if (ability && ability.effectType === 'Move') {
 				if (this.energyWeather && this.energyWeatherTimeLeft) {
 					this.energyWeatherTimeLeft++;
@@ -1642,7 +1642,7 @@ export class Battle {
 			return;
 		}
 		if (weather) {
-			let isExtremeWeather = (weather === 'deltastream' || weather === 'desolateland' || weather === 'primordialsea');
+			let isExtremeWeather = (weather === 'deltastream');
 			if (ability && ability.effectType === 'Move') {
 				if (this.clearingWeather && this.clearingWeatherTimeLeft) {
 					this.clearingWeatherTimeLeft++;
@@ -1739,6 +1739,10 @@ export class Battle {
 				if (item === 'utilityumbrella' && !suppressed) break;
 				return recentWeather;
 			case 'sandstorm':
+				if (this.climateWeather !== 'sandstorm' && item === 'safetygoggles' && !suppressed) {
+					break;
+				}
+				return recentWeather;
 			case 'duststorm':
 			case 'pollinate':
 			case 'swarmsignal':
@@ -1755,6 +1759,7 @@ export class Battle {
 				if (item === 'energynullifier' && !suppressed) break;
 				return recentWeather;
 			case 'strongwinds':
+			case 'deltastream':
 			case 'cataclysmiclight':
 				return recentWeather;
 			}
