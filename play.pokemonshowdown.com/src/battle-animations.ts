@@ -1192,10 +1192,11 @@ export class BattleScene implements BattleSceneStub {
 		}, 300);
 	}
 	upkeepClearingWeather() {
+		const isClearingIntense = ['deltastream'].includes(this.curClearingWeather);
 		this.$clearingWeather.animate({
 			opacity: 1.0,
 		}, 300).animate({
-			opacity: 0.5,
+			opacity: isClearingIntense ? 0.9 : 0.5,
 		}, 300);
 	}
 	upkeepCataclysmWeather() {
@@ -1207,7 +1208,8 @@ export class BattleScene implements BattleSceneStub {
 	}
 	updateWeather(instant?: boolean) {
 		if (!this.animating) return;
-		let isIntense = false;
+		let isClimateIntense = false;
+		let isClearingIntense = false;
 		let climateWeather = this.battle.climateWeather;
 		let irritantWeather = this.battle.irritantWeather;
 		let energyWeather = this.battle.energyWeather;
@@ -1227,7 +1229,10 @@ export class BattleScene implements BattleSceneStub {
 			terrain = toID(pseudoWeatherData[0]);
 		}
 		if (climateWeather === 'desolateland' || climateWeather === 'primordialsea') {
-			isIntense = true;
+			isClimateIntense = true;
+		}
+		if (clearingWeather === 'deltastream') {
+			isClearingIntense = true;
 		}
 
 		let climateWeatherhtml = this.climateWeatherLeft();
@@ -1267,10 +1272,10 @@ export class BattleScene implements BattleSceneStub {
 			this.$clearingWeather.attr('class', clearingWeather ? 'weather ' + clearingWeather + 'weather' : 'weather');
 			this.$cataclysmWeather.attr('class', cataclysmWeather ? 'weather ' + cataclysmWeather + 'weather' : 'weather');
 			this.$weatherText.attr('class', 'weather weatherText');
-			this.$climateWeather.css('opacity', isIntense || !climateWeather ? 0.9 : 0.5);
+			this.$climateWeather.css('opacity', isClimateIntense || !climateWeather ? 0.9 : 0.5);
 			this.$irritantWeather.css('opacity', !irritantWeather ? 0.9 : 0.5);
 			this.$energyWeather.css('opacity', !energyWeather ? 0.9 : 0.5);
-			this.$clearingWeather.css('opacity', !clearingWeather ? 0.9 : 0.5);
+			this.$clearingWeather.css('opacity', isClearingIntense || !clearingWeather ? 0.9 : 0.5);
 			this.$cataclysmWeather.css('opacity', !cataclysmWeather ? 0.9 : 0.5);
 			this.$weatherText.css('opacity', 0.9);
 			this.curClimateWeather = climateWeather;
@@ -1287,7 +1292,7 @@ export class BattleScene implements BattleSceneStub {
 			}, this.curClimateWeather ? 300 : 100, () => {
 				// this.$climateWeather.html('<em>' + climateWeatherhtml + '</em>');
 				this.$climateWeather.attr('class', climateWeather ? 'weather ' + climateWeather + 'weather' : 'weather');
-				this.$climateWeather.animate({ opacity: isIntense || !climateWeather ? 0.9 : 0.5 }, 300);
+				this.$climateWeather.animate({ opacity: isClimateIntense || !climateWeather ? 0.9 : 0.5 }, 300);
 			});
 			this.curClimateWeather = climateWeather;
 		} /* else {
@@ -1326,7 +1331,7 @@ export class BattleScene implements BattleSceneStub {
 			}, this.curClearingWeather ? 300 : 100, () => {
 				// this.$clearingWeather.html('<em>' + clearingWeatherhtml + '</em>');
 				this.$clearingWeather.attr('class', clearingWeather ? 'weather ' + clearingWeather + 'weather' : 'weather');
-				this.$clearingWeather.animate({ opacity: !clearingWeather ? 0.9 : 0.5 }, 300);
+				this.$clearingWeather.animate({ opacity: isClearingIntense || !clearingWeather ? 0.9 : 0.5 }, 300);
 			});
 			this.curClearingWeather = clearingWeather;
 		} /* else {
