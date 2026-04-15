@@ -1467,8 +1467,9 @@ export class Battle {
 	}
 	changeClimateWeather(weatherName: string, poke?: Pokemon, isUpkeep?: boolean, ability?: Dex.Effect) {
 		let weather = toID(weatherName);
+		const previousWeather = this.climateWeather;
 		if (!weather || weather === 'none') {
-			const indexToRemove = this.activeWeathers.indexOf(weather);
+			const indexToRemove = this.activeWeathers.indexOf(previousWeather);
 			if (indexToRemove !== -1) {
 				this.activeWeathers.splice(indexToRemove, 1);
 			}
@@ -1505,14 +1506,22 @@ export class Battle {
 				this.climateWeatherTimeLeft = (this.gen <= 3 ? 5 : 8);
 				this.climateWeatherMinTimeLeft = (this.gen <= 3 ? 0 : 5);
 			}
+			if (previousWeather && previousWeather !== weather) {
+				const indexToRemove = this.activeWeathers.indexOf(previousWeather);
+				if (indexToRemove !== -1) this.activeWeathers.splice(indexToRemove, 1);
+			}
+			const existingIndex = this.activeWeathers.indexOf(weather);
+			if (existingIndex !== -1) this.activeWeathers.splice(existingIndex, 1);
+			this.activeWeathers.push(weather);
 		}
 		this.climateWeather = weather;
 		this.scene.updateWeather();
 	}
 	changeIrritantWeather(weatherName: string, poke?: Pokemon, isUpkeep?: boolean, ability?: Dex.Effect) {
 		let weather = toID(weatherName);
+		const previousWeather = this.irritantWeather;
 		if (!weather || weather === 'none') {
-			const indexToRemove = this.activeWeathers.indexOf(weather);
+			const indexToRemove = this.activeWeathers.indexOf(previousWeather);
 			if (indexToRemove !== -1) {
 				this.activeWeathers.splice(indexToRemove, 1);
 			}
@@ -1549,14 +1558,22 @@ export class Battle {
 				this.irritantWeatherTimeLeft = (this.gen <= 3 ? 5 : 8);
 				this.irritantWeatherMinTimeLeft = (this.gen <= 3 ? 0 : 5);
 			}
+			if (previousWeather && previousWeather !== weather) {
+				const indexToRemove = this.activeWeathers.indexOf(previousWeather);
+				if (indexToRemove !== -1) this.activeWeathers.splice(indexToRemove, 1);
+			}
+			const existingIndex = this.activeWeathers.indexOf(weather);
+			if (existingIndex !== -1) this.activeWeathers.splice(existingIndex, 1);
+			this.activeWeathers.push(weather);
 		}
 		this.irritantWeather = weather;
 		this.scene.updateWeather();
 	}
 	changeEnergyWeather(weatherName: string, poke?: Pokemon, isUpkeep?: boolean, ability?: Dex.Effect) {
 		let weather = toID(weatherName);
+		const previousWeather = this.energyWeather;
 		if (!weather || weather === 'none') {
-			const indexToRemove = this.activeWeathers.indexOf(weather);
+			const indexToRemove = this.activeWeathers.indexOf(previousWeather);
 			if (indexToRemove !== -1) {
 				this.activeWeathers.splice(indexToRemove, 1);
 			}
@@ -1593,14 +1610,22 @@ export class Battle {
 				this.energyWeatherTimeLeft = (this.gen <= 3 ? 5 : 8);
 				this.energyWeatherMinTimeLeft = (this.gen <= 3 ? 0 : 5);
 			}
+			if (previousWeather && previousWeather !== weather) {
+				const indexToRemove = this.activeWeathers.indexOf(previousWeather);
+				if (indexToRemove !== -1) this.activeWeathers.splice(indexToRemove, 1);
+			}
+			const existingIndex = this.activeWeathers.indexOf(weather);
+			if (existingIndex !== -1) this.activeWeathers.splice(existingIndex, 1);
+			this.activeWeathers.push(weather);
 		}
 		this.energyWeather = weather;
 		this.scene.updateWeather();
 	}
 	changeClearingWeather(weatherName: string, poke?: Pokemon, isUpkeep?: boolean, ability?: Dex.Effect) {
 		let weather = toID(weatherName);
+		const previousWeather = this.clearingWeather;
 		if (!weather || weather === 'none') {
-			const indexToRemove = this.activeWeathers.indexOf(weather);
+			const indexToRemove = this.activeWeathers.indexOf(previousWeather);
 			if (indexToRemove !== -1) {
 				this.activeWeathers.splice(indexToRemove, 1);
 			}
@@ -1637,14 +1662,22 @@ export class Battle {
 				this.clearingWeatherTimeLeft = (this.gen <= 3 ? 5 : 8);
 				this.clearingWeatherMinTimeLeft = (this.gen <= 3 ? 0 : 5);
 			}
+			if (previousWeather && previousWeather !== weather) {
+				const indexToRemove = this.activeWeathers.indexOf(previousWeather);
+				if (indexToRemove !== -1) this.activeWeathers.splice(indexToRemove, 1);
+			}
+			const existingIndex = this.activeWeathers.indexOf(weather);
+			if (existingIndex !== -1) this.activeWeathers.splice(existingIndex, 1);
+			this.activeWeathers.push(weather);
 		}
 		this.clearingWeather = weather;
 		this.scene.updateWeather();
 	}
 	changeCataclysmWeather(weatherName: string, poke?: Pokemon, isUpkeep?: boolean, ability?: Dex.Effect) {
 		let weather = toID(weatherName);
+		const previousWeather = this.cataclysmWeather;
 		if (!weather || weather === 'none') {
-			const indexToRemove = this.activeWeathers.indexOf(weather);
+			const indexToRemove = this.activeWeathers.indexOf(previousWeather);
 			if (indexToRemove !== -1) {
 				this.activeWeathers.splice(indexToRemove, 1);
 			}
@@ -1676,13 +1709,20 @@ export class Battle {
 				this.cataclysmWeatherTimeLeft = (this.gen <= 3 ? 5 : 8);
 				this.cataclysmWeatherMinTimeLeft = (this.gen <= 3 ? 0 : 5);
 			}
+			if (previousWeather && previousWeather !== weather) {
+				const indexToRemove = this.activeWeathers.indexOf(previousWeather);
+				if (indexToRemove !== -1) this.activeWeathers.splice(indexToRemove, 1);
+			}
+			const existingIndex = this.activeWeathers.indexOf(weather);
+			if (existingIndex !== -1) this.activeWeathers.splice(existingIndex, 1);
+			this.activeWeathers.push(weather);
 		}
 		this.cataclysmWeather = weather;
 		this.scene.updateWeather();
 	}
-	getRecentWeather(pokemon: Pokemon) {
-		const item = toID(pokemon.item);
-		const ability = toID(pokemon.effectiveAbility());
+	getRecentWeather(pokemon: Pokemon, serverPokemon?: ServerPokemon) {
+		const item = toID(serverPokemon?.item || pokemon.item);
+		const ability = toID(pokemon.effectiveAbility(serverPokemon));
 		const suppressed = this.hasPseudoWeather('Magic Room') || pokemon.volatiles['embargo'] || ability === 'klutz';
 
 		for (let i = this.activeWeathers.length - 1; i >= 0; i--) {

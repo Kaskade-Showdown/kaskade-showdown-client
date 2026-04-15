@@ -1935,79 +1935,67 @@ export class BattleTooltips {
 		if (move.id === 'weatherball') { // updated
 			if (value.abilityModify(0, 'Mega Sol')) {
 				moveType = 'Fire';
-			} else if (value.climateWeatherModify(0)) {
-				switch (this.battle.getRecentWeather(pokemon)) {
+			} else {
+				switch (this.battle.getRecentWeather(pokemon, serverPokemon)) {
 				case 'sunnyday':
 				case 'desolateland':
-					moveType = 'Fire';
+					if (value.climateWeatherModify(0)) moveType = 'Fire';
 					break;
 				case 'raindance':
 				case 'primordialsea':
-					moveType = 'Water';
+					if (value.climateWeatherModify(0)) moveType = 'Water';
 					break;
 				case 'hail':
 				case 'snowscape':
-					moveType = 'Ice';
+					if (value.climateWeatherModify(0)) moveType = 'Ice';
 					break;
 				case 'bloodmoon':
-					moveType = 'Dark';
+					if (value.climateWeatherModify(0)) moveType = 'Dark';
 					break;
 				case 'foghorn':
-					moveType = 'Normal';
+					if (value.climateWeatherModify(0)) moveType = 'Normal';
 					break;
-				}
-			} else if (value.irritantWeatherModify(0)) {
-				switch (this.battle.getRecentWeather(pokemon)) {
 				case 'sandstorm':
-					moveType = 'Rock';
+					if (value.irritantWeatherModify(0)) moveType = 'Rock';
 					break;
 				case 'duststorm':
-					moveType = 'Ground';
+					if (value.irritantWeatherModify(0)) moveType = 'Ground';
 					break;
 				case 'pollinate':
-					moveType = 'Grass';
+					if (value.irritantWeatherModify(0)) moveType = 'Grass';
 					break;
 				case 'swarmsignal':
-					moveType = 'Bug';
+					if (value.irritantWeatherModify(0)) moveType = 'Bug';
 					break;
 				case 'smogspread':
-					moveType = 'Poison';
+					if (value.irritantWeatherModify(0)) moveType = 'Poison';
 					break;
 				case 'sprinkle':
-					moveType = 'Fairy';
+					if (value.irritantWeatherModify(0)) moveType = 'Fairy';
 					break;
-				}
-			} else if (value.energyWeatherModify(0)) {
-				switch (this.battle.getRecentWeather(pokemon)) {
 				case 'auraprojection':
-					moveType = 'Fighting';
+					if (value.energyWeatherModify(0)) moveType = 'Fighting';
 					break;
 				case 'haunt':
-					moveType = 'Ghost';
+					if (value.energyWeatherModify(0)) moveType = 'Ghost';
 					break;
 				case 'daydream':
-					moveType = 'Psychic';
+					if (value.energyWeatherModify(0)) moveType = 'Psychic';
 					break;
 				case 'dragonforce':
-					moveType = 'Dragon';
+					if (value.energyWeatherModify(0)) moveType = 'Dragon';
 					break;
 				case 'supercell':
-					moveType = 'Electric';
+					if (value.energyWeatherModify(0)) moveType = 'Electric';
 					break;
 				case 'magnetize':
-					moveType = 'Steel';
+					if (value.energyWeatherModify(0)) moveType = 'Steel';
 					break;
-				}
-			} else if (value.clearingWeatherModify(0)) {
-				switch (this.battle.getRecentWeather(pokemon)) {
 				case 'strongwinds':
-					moveType = 'Flying';
+					if (value.clearingWeatherModify(0)) moveType = 'Flying';
 					break;
-				}
-			} else if (value.cataclysmWeatherModify(0)) {
-				switch (this.battle.getRecentWeather(pokemon)) {
 				case 'cataclysmiclight':
-					moveType = '???';
+					if (value.cataclysmWeatherModify(0)) moveType = '???';
 					break;
 				}
 			}
@@ -2691,7 +2679,7 @@ export class BattleTooltips {
 		}
 		if (move.id === 'weatherball') { // updated
 			if (!value.abilityModify(2, "Mega Sol") && this.battle.climateWeather !== 'deltastream') {
-				switch (this.battle.getRecentWeather(pokemon)) {
+				switch (this.battle.getRecentWeather(pokemon, serverPokemon)) {
 				case this.battle.climateWeather:
 					value.climateWeatherModify(2);
 					break;
