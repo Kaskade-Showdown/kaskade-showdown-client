@@ -3167,6 +3167,7 @@ export class Battle {
 					poke.removeVolatile('quarkdrivespd' as ID);
 					poke.removeVolatile('quarkdrivespe' as ID);
 					break;
+				// swse
 				case 'warpmist':
 					poke.removeVolatile('warpmistatk' as ID);
 					poke.removeVolatile('warpmistdef' as ID);

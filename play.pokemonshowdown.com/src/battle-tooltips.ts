@@ -922,8 +922,8 @@ export class BattleTooltips {
 			if (move.flags.wind) {
 				text += `<p class="movetag">&#x2713; Wind <small>(activates Wind Power and Wind Rider)</small></p>`;
 			}
-			if (move.flags.commanding) {
-				text += `<p class="movetag">&#x2713; Commanding <small>(booasted by Enjoin)</small></p>`;
+			if (move.flags.influencing) {
+				text += `<p class="movetag">&#x2713; Influencing <small>(booasted by Enjoin)</small></p>`;
 			}
 			// RBY healing move glitch
 			if (this.battle.gen === 1 && !toID(this.battle.tier).includes('stadium') &&

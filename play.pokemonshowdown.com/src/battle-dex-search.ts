@@ -1750,6 +1750,9 @@ class BattleMoveSearch extends BattleTypedSearch<'move'> {
 			return !moves.includes('supercellslam');
 		case 'zapcannon':
 			return abilityid === 'noguard' || (dex.gen < 4 && !moves.includes('thunderwave'));
+		// swse
+		case 'stealthrock':
+			return abilityid !== 'rockybody';
 		}
 
 		if (this.isDoubles && BattleMoveSearch.GOOD_DOUBLES_MOVES.includes(id)) {

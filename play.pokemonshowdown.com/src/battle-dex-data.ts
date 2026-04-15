@@ -1626,8 +1626,6 @@ export interface MoveFlags {
 	bypasssub?: 1 | 0;
 	/** The user is unable to make a move between turns. */
 	charge?: 1 | 0;
-	/** Boosted by Enjoin. */
-	commanding?: 1 | 0;
 	/** Makes contact. */
 	contact?: 1 | 0;
 	/** When used by a Pokemon, other Pokemon with the Dancer Ability can attempt to execute the same move. */
@@ -1640,6 +1638,8 @@ export interface MoveFlags {
 	gravity?: 1 | 0;
 	/** Prevented from being executed or selected during Heal Block's effect. */
 	heal?: 1 | 0;
+	/** (SwSe) Activates Enjoin. */
+	influencing?: 1 | 0;
 	/** Can be copied by Mirror Move. */
 	mirror?: 1 | 0;
 	/** Prevented from being executed or selected in a Sky Battle. */
