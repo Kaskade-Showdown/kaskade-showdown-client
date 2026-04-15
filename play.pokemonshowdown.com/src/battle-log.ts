@@ -129,7 +129,14 @@ export class BattleLog {
 			this.pendingWeatherUpkeep.push({ args, kwArgs: kwArgs || {}, preempt });
 			return;
 		}
+		const closesWeatherMessagebar = !!(
+			this.pendingWeatherUpkeep.length &&
+			this.battleParser?.lineSection(args, kwArgs || {}) === 'break'
+		);
 		this.flushWeatherUpkeep();
+		if (closesWeatherMessagebar) {
+			this.scene?.closeMessagebar();
+		}
 		const battle = this.scene?.battle;
 		if (battle?.seeking) {
 			if (battle.stepQueue.length > 2000) {
