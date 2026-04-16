@@ -34,7 +34,7 @@ Storage.bg = {
 	changeCount: 0,
 	// futureproofing in case we ever add more?
 	// because doing this once was annoying
-	MENU_BUTTONS: 7,
+	MENU_BUTTONS: 6,
 	set: function (bgUrl, bgid, noSave) {
 		if (!this.load(bgUrl, bgid)) {
 			this.extractMenuColors(this.curUrl || bgUrl, this.curId || bgid, noSave);
@@ -111,7 +111,7 @@ Storage.bg = {
 				hues = ["170.45454545454544,27.500000000000004%", "84.70588235294119,13.821138211382115%", "112.50000000000001,7.8431372549019605%", "217.82608695652175,54.761904761904766%", "0,1.6949152542372816%", ""];
 				break;
 			case 'kaskademap':
-				hues = ["37.159090909090914,74.57627118644066%", "10.874999999999998,70.79646017699115%", "179.51612903225808,52.10084033613446%", "20.833333333333336,36.73469387755102%", "192.3076923076923,80.41237113402063%", "210,29.629629629629633%"];
+				hues = ["92.00000000000001,29.126213592233015%", "95.45454545454547,22.91666666666668%", "206.59793814432993,39.27125506072874%", "42.96296296296296,37.327188940092164%", "75,18.181818181818173%", "41.44329896907216,51.322751322751316%"];
 				attrib = '<a href="https://x.com/barbie_e4" target="_blank" class="subtle">"Kaskade region" <small>background by Gianluca Barbera</small></a>';
 				break;
 			}
