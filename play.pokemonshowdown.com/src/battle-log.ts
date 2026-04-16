@@ -127,6 +127,10 @@ export class BattleLog {
 		if (kwArgs?.silent) return;
 		if (this.isWeatherUpkeep(args, kwArgs)) {
 			this.pendingWeatherUpkeep.push({ args, kwArgs: kwArgs || {}, preempt });
+			const activeWeatherCount = this.scene?.battle.activeWeathers.length || 0;
+			if (activeWeatherCount && this.pendingWeatherUpkeep.length >= activeWeatherCount) {
+				this.flushWeatherUpkeep();
+			}
 			return;
 		}
 		const closesWeatherMessagebar = !!(

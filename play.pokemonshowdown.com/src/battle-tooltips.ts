@@ -1432,9 +1432,6 @@ export class BattleTooltips {
 					}
 				}
 				if (climateWeather === 'bloodmoon') {
-					if (ability === 'shadowstep') {
-						speedModifiers.push(2);
-					}
 					if (ability === 'malice' && serverPokemon.stats.spa >= serverPokemon.stats.atk) {
 						stats.spa = Math.floor(stats.spa * 1.5);
 					}
@@ -1496,11 +1493,8 @@ export class BattleTooltips {
 		}
 		if (energyWeather) {
 			if (item !== 'energynullifier') {
-				if (energyWeather === 'haunt') {
-					if (ability === 'shadowstep') {
-						speedModifiers.push(2);
-					}
-				}
+				/* if (energyWeather === 'haunt') {
+				} */
 				/* if (energyWeather === 'dragonforce') {
 				} */
 				if (energyWeather === 'supercell') {
@@ -1527,6 +1521,12 @@ export class BattleTooltips {
 					stats.spe = Math.floor(stats.spe * 1.25);
 				}
 			}
+		}
+		const shadowstepWeatherActive =
+			(item !== 'utilityumbrella' && climateWeather === 'bloodmoon') ||
+			(item !== 'energynullifier' && energyWeather === 'haunt');
+		if (shadowstepWeatherActive && ability === 'shadowstep') {
+			speedModifiers.push(2);
 		}
 		if (ability === 'defeatist' && serverPokemon.hp <= serverPokemon.maxhp / 2) {
 			stats.atk = Math.floor(stats.atk * 0.5);

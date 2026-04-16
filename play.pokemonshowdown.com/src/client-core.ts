@@ -255,14 +255,6 @@ export const PSBackground = new class extends PSStreamModel<string | null> {
 			];
 			break;
 		case 'kaskademap':
-			menuColors = [
-				"37.159090909090914,74.57627118644066%",
-				"10.874999999999998,70.79646017699115%",
-				"179.51612903225808,52.10084033613446%",
-				"20.833333333333336,36.73469387755102%",
-				"192.3076923076923,80.41237113402063%",
-				"210,29.629629629629633%",
-			];
 			attrib = {
 				url: 'https://x.com/barbie_e4',
 				title: 'Kaskade region',
