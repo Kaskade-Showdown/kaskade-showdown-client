@@ -29,13 +29,15 @@ Storage.safeJSON = function (callback) {
 
 Storage.bg = {
 	id: '',
+	curId: '',
+	curUrl: '',
 	changeCount: 0,
 	// futureproofing in case we ever add more?
 	// because doing this once was annoying
 	MENU_BUTTONS: 7,
 	set: function (bgUrl, bgid, noSave) {
 		if (!this.load(bgUrl, bgid)) {
-			this.extractMenuColors(bgUrl, bgid, noSave);
+			this.extractMenuColors(this.curUrl || bgUrl, this.curId || bgid, noSave);
 		} else if (bgid) {
 			try {
 				localStorage.setItem('showdown_bg', bgUrl + '\n' + bgid);
@@ -55,19 +57,14 @@ Storage.bg = {
 		if (!bgid) {
 			if (location.host === 'smogtours.psim.us') {
 				bgid = 'shaymin';
-			} else if (location.host === Config.routes.client || bgid === 'waterfall') {
+			} else {
 				var bgs = ['horizon', 'ocean', 'shaymin', 'charizards', 'psday', 'kaskademap'];
 				bgid = bgs[Math.floor(Math.random() * bgs.length)];
-			} else {
-				$(document.body).css({
-					background: '',
-					'background-size': ''
-				});
-				$('#mainmenubuttoncolors').remove();
-				return true;
 			}
 			bgUrl = Dex.resourcePrefix + 'fx/client-bg-' + bgid + '.jpg';
 		}
+		this.curId = bgid;
+		this.curUrl = bgUrl;
 
 		// April Fool's 2016 - Digimon theme
 		// bgid = 'digimon';
@@ -114,6 +111,7 @@ Storage.bg = {
 				hues = ["170.45454545454544,27.500000000000004%", "84.70588235294119,13.821138211382115%", "112.50000000000001,7.8431372549019605%", "217.82608695652175,54.761904761904766%", "0,1.6949152542372816%", ""];
 				break;
 			case 'kaskademap':
+				hues = ["37.159090909090914,74.57627118644066%", "10.874999999999998,70.79646017699115%", "179.51612903225808,52.10084033613446%", "20.833333333333336,36.73469387755102%", "192.3076923076923,80.41237113402063%", "210,29.629629629629633%"];
 				attrib = '<a href="https://x.com/barbie_e4" target="_blank" class="subtle">"Kaskade region" <small>background by Gianluca Barbera</small></a>';
 				break;
 			}
@@ -149,6 +147,9 @@ Storage.bg = {
 		var changeCount = this.changeCount;
 		// We need the image object to load it on a canvas to detect the main color.
 		var img = new Image();
+		if (bgUrl && bgUrl.slice(0, 5) !== 'data:' && bgUrl.charAt(0) !== '#') {
+			img.crossOrigin = 'anonymous';
+		}
 		img.onload = function () {
 			// in case ColorThief throws from canvas,
 			// or localStorage throws
@@ -200,13 +201,17 @@ Storage.bg = {
 try {
 	var bg = localStorage.getItem('showdown_bg').split('\n');
 	if (bg.length >= 2) {
-		Storage.bg.load(bg[0], bg[1]);
+		if (!Storage.bg.load(bg[0], bg[1]) && bg.length < 7) {
+			Storage.bg.extractMenuColors(Storage.bg.curUrl || bg[0], Storage.bg.curId || bg[1], true);
+		}
 		if (bg.length >= 7) Storage.bg.loadHues(bg.slice(2));
 	}
 } catch (e) {}
 
 if (!Storage.bg.id) {
-	Storage.bg.load();
+	if (!Storage.bg.load()) {
+		Storage.bg.extractMenuColors(Storage.bg.curUrl, Storage.bg.curId, true);
+	}
 }
 
 /*********************************************************
