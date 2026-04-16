@@ -22,6 +22,7 @@ declare const ColorThief: any;
 // PS's model classes are defined here
 
 const PSURL = `${document.location.protocol !== 'http:' ? 'https:' : ''}//${Config.routes.client}/`; // incomplete, change this to swse later
+const MAINMENU_BUTTONS = 8;
 
 export class PSSubscription<T = any> {
 	observable: PSModel<T> | PSStreamModel<T>;
@@ -134,7 +135,7 @@ export const PSBackground = new class extends PSStreamModel<string | null> {
 			} else if (bg.length === 2) {
 				// url, id
 				this.load(bg[0], bg[1]);
-			} else if (bg.length >= 7) {
+			} else if (bg.length >= 10) {
 				// url, id, menuColors
 				this.load(bg[0], bg[1], bg.slice(2));
 			}
@@ -186,12 +187,14 @@ export const PSBackground = new class extends PSStreamModel<string | null> {
 		switch (bgid) {
 		case 'horizon':
 			menuColors = [
-				"318.87640449438203,35.177865612648226%",
-				"216,46.2962962962963%",
-				"221.25,32.25806451612904%",
-				"197.8021978021978,52.60115606936417%",
+				"353.33333333333337,32.43243243243244%",
+				"319.09090909090907,34.920634920634924%",
+				"266.8085106382979,22.48803827751196%",
+				"217.05882352941174,47.22222222222222%",
+				"222.65060240963857,33.60323886639676%",
+				"197.6842105263158,54.913294797687875%",
 				"232.00000000000003,19.480519480519483%",
-				"228.38709677419354,60.7843137254902%",
+				"228,65.65656565656568%",
 			];
 			attrib = {
 				url: 'https://vtas.deviantart.com/art/Pokemon-Horizon-312267168',
@@ -201,12 +204,14 @@ export const PSBackground = new class extends PSStreamModel<string | null> {
 			break;
 		case 'ocean':
 			menuColors = [
-				"82.8169014084507,34.63414634146342%",
-				"216.16438356164383,29.55465587044534%",
-				"212.92682926829266,59.42028985507245%",
-				"209.18918918918916,57.51295336787566%",
+				"198.3206106870229,52.610441767068274%",
+				"216.9230769230769,40.94488188976379%",
+				"84.32432432432434,36.27450980392157%",
+				"228.81355932203388,35.757575757575744%",
+				"207.95454545454544,66.66666666666664%",
+				"208.141592920354,56.218905472636806%",
+				"213.38709677419357,57.4074074074074%",
 				"199.2857142857143,48.275862068965495%",
-				"213.11999999999998,55.06607929515419%",
 			];
 			attrib = {
 				url: 'https://quanyails.deviantart.com/art/Sunrise-Ocean-402667154',
@@ -216,12 +221,14 @@ export const PSBackground = new class extends PSStreamModel<string | null> {
 			break;
 		case 'shaymin':
 			menuColors = [
-				"39.000000000000064,21.7391304347826%",
-				"170.00000000000003,2.380952380952378%",
-				"157.5,11.88118811881188%",
-				"174.78260869565216,12.041884816753928%",
-				"185.00000000000003,12.76595744680851%",
-				"20,5.660377358490567%",
+				"15.000000000000016,5.660377358490567%",
+				"340.42105263157896,41.85022026431718%",
+				"33.06122448979592,26.77595628415302%",
+				"157.77777777777777,12.79620853080568%",
+				"154.2857142857143,2.766798418972328%",
+				"170.00000000000003,12.5%",
+				"175.00000000000003,13.043478260869565%",
+				"44.210526315789515,19.999999999999993%",
 			];
 			attrib = {
 				url: 'http://cargocollective.com/bluep',
@@ -231,18 +238,32 @@ export const PSBackground = new class extends PSStreamModel<string | null> {
 			break;
 		case 'charizards':
 			menuColors = [
-				"37.159090909090914,74.57627118644066%",
-				"10.874999999999998,70.79646017699115%",
-				"179.51612903225808,52.10084033613446%",
-				"20.833333333333336,36.73469387755102%",
-				"192.3076923076923,80.41237113402063%",
-				"210,29.629629629629633%",
+				"186.42857142857144,50.000000000000014%",
+				"73.58490566037737,58.241758241758255%",
+				"191.84713375796179,81.34715025906736%",
+				"11.180124223602485,71.55555555555554%",
+				"178.56,52.30125523012552%",
+				"22.191780821917806,37.43589743589743%",
+				"36.84782608695652,75.40983606557377%",
+				"211.03448275862067,28.155339805825246%",
 			];
 			attrib = {
 				url: 'https://lit.link/en/seiryuuden',
 				title: 'Charizards',
 				artist: 'Jessica Valencia',
 			};
+			break;
+		case 'psday':
+			menuColors = [
+				"344.1891891891892,61.15702479338842%",
+				"206.66666666666666,26.359832635983267%",
+				"300,18.875502008032132%",
+				"260.6106870229008,60.368663594470064%",
+				"20,20.547945205479454%",
+				"165.9574468085106,46.07843137254901%",
+				"254.02597402597405,48.42767295597485%",
+				"24.705882352941195,41.46341463414633%",
+			];
 			break;
 		case 'digimon':
 			menuColors = [
@@ -251,17 +272,21 @@ export const PSBackground = new class extends PSStreamModel<string | null> {
 				"112.50000000000001,7.8431372549019605%",
 				"217.82608695652175,54.761904761904766%",
 				"0,1.6949152542372816%",
-				"",
+				"170.45454545454544,27.500000000000004%",
+				"217.82608695652175,54.761904761904766%",
+				"84.70588235294119,13.821138211382115%",
 			];
 			break;
 		case 'kaskademap':
 			menuColors = [
-				"92.00000000000001,29.126213592233015%",
-				"95.45454545454547,22.91666666666668%",
-				"206.59793814432993,39.27125506072874%",
-				"42.96296296296296,37.327188940092164%",
-				"75,18.181818181818173%",
-				"41.44329896907216,51.322751322751316%",
+				"150,13.043478260869582%",
+				"197.99999999999997,46.05263157894737%",
+				"31.395348837209305,46.23655913978495%",
+				"68.29787234042556,48.958333333333336%",
+				"34.871794871794876,51.091703056768544%",
+				"201.99999999999997,24.590163934426222%",
+				"54.159292035398224,57.360406091370564%",
+				"61.93548387096774,35.63218390804598%",
 			];
 			attrib = {
 				url: 'https://x.com/barbie_e4',
@@ -275,7 +300,7 @@ export const PSBackground = new class extends PSStreamModel<string | null> {
 			const g = parseInt(bgUrl.slice(3, 5), 16) / 255;
 			const b = parseInt(bgUrl.slice(5, 7), 16) / 255;
 			const hs = this.getHueSat(r, g, b);
-			menuColors = [hs, hs, hs, hs, hs, hs];
+			menuColors = Array(MAINMENU_BUTTONS).fill(hs);
 		}
 		this.attrib = attrib;
 		this.menuColors = menuColors;
@@ -306,14 +331,16 @@ export const PSBackground = new class extends PSStreamModel<string | null> {
 		// or localStorage throws
 		try {
 			const colorThief = new ColorThief();
-			const colors = colorThief.getPalette(img, 5);
+			const colors = colorThief.getPalette(img, MAINMENU_BUTTONS);
+			(window as any).colors = colors;
 
 			let menuColors = [];
 			if (!colors) {
-				menuColors = ['0, 0%', '0, 0%', '0, 0%', '0, 0%', '0, 0%'];
+				menuColors = Array(MAINMENU_BUTTONS).fill('0, 0%');
 			} else {
-				for (let i = 0; i < 5; i++) {
-					const color = colors[i];
+				const extractedColors = colors.length ? colors : [[0, 0, 0]];
+				for (let i = 0; i < MAINMENU_BUTTONS; i++) {
+					const color = extractedColors[Math.min(i, extractedColors.length - 1)];
 					const hs = PSBackground.getHueSat(color[0] / 255, color[1] / 255, color[2] / 255);
 					menuColors.unshift(hs);
 				}
