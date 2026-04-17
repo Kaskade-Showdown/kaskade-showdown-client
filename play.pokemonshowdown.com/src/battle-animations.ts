@@ -1252,7 +1252,7 @@ export class BattleScene implements BattleSceneStub {
 			cataclysmWeatherhtml += this.sideConditionsLeft(side);
 		}
 		// eslint-disable-next-line @stylistic/max-len
-		let weatherTexthtml = climateWeatherhtml + irritantWeatherhtml + energyWeatherhtml + clearingWeatherhtml + cataclysmWeatherhtml;
+		let weatherTexthtml = clearingWeatherhtml + climateWeatherhtml + irritantWeatherhtml + energyWeatherhtml + cataclysmWeatherhtml;
 
 		if (instant) {
 			/* this.$climateWeather.html('<em>' + climateWeatherhtml + '</em>');
