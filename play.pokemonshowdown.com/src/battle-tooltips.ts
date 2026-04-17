@@ -1366,7 +1366,7 @@ export class BattleTooltips {
 		let energyWeather = this.battle.energyWeather;
 		let clearingWeather = this.battle.clearingWeather;
 		// let cataclysmWeather = this.battle.cataclysmWeather;
-		if (this.battle.abilityActive(['Air Lock', 'Cloud Nine'])) {
+		if (this.battle.abilityActive(['Air Lock', 'Cloud Nine', 'Nullify'])) {
 			climateWeather = '' as ID;
 		}
 
@@ -2244,11 +2244,15 @@ export class BattleTooltips {
 		// Gen 3 type-immunity abilities don't affect status moves
 		if (category === 'Status' && dex.gen <= 3) otherFactor = 1;
 
+		const targetSurgeSurferActive = targetAbility === 'Surge Surfer' &&
+			(this.battle.hasPseudoWeather('Electric Terrain') ||
+				(this.battle.energyWeather === 'supercell' && target.item !== 'energynullifier'));
 		let factor = 1;
-		if (!otherFactor && (targetAbility === "Levitate" || targetAbility === "Surge Surfer" ||
-			targetAbility === "Relic Soul")) {
+		if (!otherFactor && (targetAbility === "Levitate" || targetAbility === "Relic Soul" ||
+			targetSurgeSurferActive)) {
 			otherFactor = 1;
-			if (!target.isGrounded() && move.id !== 'thousandarrows' && !hardcoreMode) {
+			if ((!target.isGrounded() || targetSurgeSurferActive) &&
+				move.id !== 'thousandarrows' && !hardcoreMode) {
 				factor = 0; // Levitate acts as a type-based immunity (doesn't affect most status moves)
 			}
 		}
@@ -2257,7 +2261,7 @@ export class BattleTooltips {
 
 			// special type immunities
 			if (inflictsStatus && tType.damageTaken?.[(inflictsStatus || inflictsEffect) as 'trapped'] === Dex.IMMUNE) {
-				if (!(inflictsStatus === 'psn' && sourceAbility === 'Corrosion')) {
+				if (!(['psn', 'tox', 'blt'].includes(inflictsStatus) && sourceAbility === 'Corrosion')) {
 					return 0;
 				}
 			}
@@ -2281,8 +2285,15 @@ export class BattleTooltips {
 						factor = 1;
 						break;
 					}
-					// incomplete, strong winds dust, strong winds magnet, strong winds p.Ac display. does sunscreen display work?
+					if (attackType === 'Poison' && targetType === 'Steel' &&
+						sourceAbility === 'Corrosion' && this.battle.irritantWeather === 'smogspread') continue;
 					if (move.type === 'Normal' && targetType === 'Ghost' && this.battle.climateWeather === 'foghorn') continue;
+					if (attackType === 'Ground' && this.battle.clearingWeather === 'strongwinds' &&
+						this.battle.irritantWeather === 'duststorm' && !target.isGrounded()) continue;
+					if (attackType === 'Ghost' && targetType === 'Normal' &&
+						this.battle.clearingWeather === 'strongwinds' && this.battle.energyWeather === 'haunt') continue;
+					if (attackType === 'Ground' && targetType === 'Steel' &&
+						this.battle.clearingWeather === 'strongwinds' && this.battle.energyWeather === 'magnetize') continue;
 					if (attackType === 'Fire' && (target.volatiles['sunscreen'])) continue;
 				}
 				factor = 0;
@@ -2304,12 +2315,17 @@ export class BattleTooltips {
 				}
 			} else {
 				factor *= [1, 2, 0.5, 0][tType.damageTaken?.[attackType] || 0] ?? 1;
+				if (attackType === 'Ghost' && targetType === 'Normal' &&
+					this.battle.clearingWeather === 'strongwinds' && this.battle.energyWeather === 'haunt') {
+					factor *= 2;
+				}
 			}
 			if (move.id === 'sheercold' && targetType === 'Ice') otherFactor = 0;
 		}
 
 		// Air Balloon etc. Levitate is already handled but there are a few that aren't
-		if (category !== 'Status' && attackType === 'Ground' && factor && !target.isGrounded()) otherFactor = 0;
+		if (category !== 'Status' && attackType === 'Ground' && factor &&
+			(!target.isGrounded() || targetSurgeSurferActive)) otherFactor = 0;
 		if (this.battle.hasPseudoWeather('Misty Terrain') && target.isGrounded() && inflictsStatus) {
 			return 0;
 		}
@@ -2964,27 +2980,34 @@ export class BattleTooltips {
 		}
 
 		// Terrain
+		const surgeSurferActive =
+			(this.battle.hasPseudoWeather('Electric Terrain') ||
+				(this.battle.energyWeather === 'supercell' && serverPokemon.item !== 'energynullifier')) &&
+				value.tryAbility("Surge Surfer");
+		const targetSurgeSurferActive = !!target && target.ability === 'Surge Surfer' &&
+			(this.battle.hasPseudoWeather('Electric Terrain') ||
+				(this.battle.energyWeather === 'supercell' && target.item !== 'energynullifier'));
 		if ((this.battle.hasPseudoWeather('Electric Terrain') && moveType === 'Electric') ||
 			(this.battle.hasPseudoWeather('Grassy Terrain') && moveType === 'Grass') ||
 			(this.battle.hasPseudoWeather('Psychic Terrain') && moveType === 'Psychic')) {
-			if (pokemon.isGrounded(serverPokemon) || value.tryAbility("Surge Surfer")) {
+			if (pokemon.isGrounded(serverPokemon) || surgeSurferActive) {
 				value.modify(this.battle.gen > 7 ? 1.3 : 1.5, 'Terrain boost');
 			}
 		} else if (this.battle.hasPseudoWeather('Misty Terrain') && moveType === 'Dragon') {
-			if (target ? (target.isGrounded() || target.ability === 'Surge Surfer') : true) {
+			if (target ? (target.isGrounded() || targetSurgeSurferActive) : true) {
 				value.modify(0.5, 'Misty Terrain + grounded target');
 			}
 		} else if (
 			this.battle.hasPseudoWeather('Grassy Terrain') && ['earthquake', 'bulldoze', 'magnitude'].includes(move.id)
 		) {
-			if (target ? (target.isGrounded() || target.ability === 'Surge Surfer') : true) {
+			if (target ? (target.isGrounded() || targetSurgeSurferActive) : true) {
 				value.modify(0.5, 'Grassy Terrain + grounded target');
 			}
 		}
 		if (
 			move.id === 'expandingforce' &&
 			this.battle.hasPseudoWeather('Psychic Terrain') &&
-			(pokemon.isGrounded(serverPokemon) || value.tryAbility("Surge Surfer"))
+			(pokemon.isGrounded(serverPokemon) || surgeSurferActive)
 		) {
 			value.modify(1.5, 'Expanding Force + Psychic Terrain boost');
 		}
@@ -2992,7 +3015,7 @@ export class BattleTooltips {
 			value.modify(1.5, 'Misty Explosion + Misty Terrain boost');
 		}
 		if (move.id === 'risingvoltage' && this.battle.hasPseudoWeather('Electric Terrain') &&
-			(target?.isGrounded() || target?.ability === 'Surge Surfer')) {
+			(target?.isGrounded() || targetSurgeSurferActive)) {
 			value.modify(2, 'Rising Voltage + Electric Terrain boost');
 		}
 
