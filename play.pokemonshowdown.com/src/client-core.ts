@@ -23,6 +23,11 @@ declare const ColorThief: any;
 
 const PSURL = `${document.location.protocol !== 'http:' ? 'https:' : ''}//${Config.routes.client}/`; // incomplete, change this to swse later
 const MAINMENU_BUTTONS = 8;
+const DEFAULT_SOLID_BG = '#344b6c';
+const SOLID_BG_ID = 'solidcolor';
+const BUTTON_COLOR_MODE_PREFIX = 'buttonmode:';
+const SOLID_COLOR_REGEX = /^#[0-9A-F]{6}$/i;
+type ButtonColorMode = 1 | 3 | 8 | 'rainbow';
 
 export class PSSubscription<T = any> {
 	observable: PSModel<T> | PSStreamModel<T>;
@@ -121,6 +126,8 @@ export class PSStreamModel<T = string> {
 export const PSBackground = new class extends PSStreamModel<string | null> {
 	id = '';
 	curId = '';
+	bgUrl = '';
+	buttonColorMode: ButtonColorMode = MAINMENU_BUTTONS;
 	attrib: { url: string, title: string, artist: string } | null = null;
 	changeCount = 0;
 	menuColors: string[] | null = null;
@@ -128,34 +135,72 @@ export const PSBackground = new class extends PSStreamModel<string | null> {
 	constructor() {
 		super();
 		try {
-			let bg = localStorage.getItem('showdown_bg')?.split('\n') || [''];
-			if (bg.length === 1) {
+			let storedBg = localStorage.getItem('showdown_bg')?.split('\n') || [''];
+			let buttonColorMode: ButtonColorMode = MAINMENU_BUTTONS;
+			if (storedBg[storedBg.length - 1]?.startsWith(BUTTON_COLOR_MODE_PREFIX)) {
+				const storedMode = storedBg.pop()!.slice(BUTTON_COLOR_MODE_PREFIX.length);
+				if (storedMode === '1') {
+					buttonColorMode = 1;
+				} else if (storedMode === '3') {
+					buttonColorMode = 3;
+				} else if (storedMode === 'rainbow') {
+					buttonColorMode = 'rainbow';
+				}
+			}
+			if (storedBg.length === 1) {
 				// id
-				this.load('', bg[0]);
-			} else if (bg.length === 2) {
+				this.load('', storedBg[0], null, buttonColorMode);
+			} else if (storedBg.length === 2) {
 				// url, id
-				this.load(bg[0], bg[1]);
-			} else if (bg.length >= 10) {
+				this.load(storedBg[0], storedBg[1], null, buttonColorMode);
+			} else if (storedBg.length >= 10) {
 				// url, id, menuColors
-				this.load(bg[0], bg[1], bg.slice(2));
+				this.load(storedBg[0], storedBg[1], storedBg.slice(2), buttonColorMode);
 			}
 		} catch {}
 	}
-	save(bgUrl: string) {
-		if (this.id !== 'custom') {
-			localStorage.setItem('showdown_bg', this.id);
-		} else if (this.menuColors) {
-			localStorage.setItem('showdown_bg', bgUrl + '\n' + this.id + '\n' + this.menuColors.join('\n'));
+	save(bgUrl: string = this.bgUrl) {
+		let storedBg = ``;
+		if (this.id !== 'custom' && this.id !== SOLID_BG_ID) {
+			storedBg = this.id;
+		} else if (this.id === 'custom' && this.menuColors) {
+			storedBg = bgUrl + '\n' + this.id + '\n' + this.menuColors.join('\n');
 		} else {
-			localStorage.setItem('showdown_bg', bgUrl + '\n' + this.id);
+			storedBg = bgUrl + '\n' + this.id;
 		}
+		if (this.buttonColorMode !== MAINMENU_BUTTONS) {
+			storedBg += '\n' + BUTTON_COLOR_MODE_PREFIX + String(this.buttonColorMode);
+		}
+		localStorage.setItem('showdown_bg', storedBg);
 	}
 	set(bgUrl: string, bgid: string) {
-		this.load(bgUrl, bgid);
-		this.save(bgUrl);
+		this.load(bgUrl, bgid, null, this.buttonColorMode);
+		this.save(this.bgUrl);
+	}
+	setButtonColorMode(buttonColorMode: string) {
+		let mode: ButtonColorMode;
+		if (buttonColorMode === '1') {
+			mode = 1;
+		} else if (buttonColorMode === '3') {
+			mode = 3;
+		} else if (buttonColorMode === 'rainbow') {
+			mode = 'rainbow';
+		} else {
+			mode = MAINMENU_BUTTONS;
+		}
+		this.buttonColorMode = mode;
+		this.update(null);
+		this.save(this.bgUrl);
 	}
 
-	load(bgUrl: string, bgid: string, menuColors: string[] | null = null) {
+	load(
+		bgUrl: string, bgid: string, menuColors: string[] | null = null,
+		buttonColorMode: ButtonColorMode = MAINMENU_BUTTONS
+	) {
+		if (bgid === 'solidblue') {
+			bgid = SOLID_BG_ID;
+		}
+
 		// id
 		this.id = bgid;
 
@@ -164,7 +209,7 @@ export const PSBackground = new class extends PSStreamModel<string | null> {
 			if (location.host === 'smogtours.psim.us') {
 				bgid = 'shaymin';
 			} else {
-				const bgs = ['charizards', 'horizon', 'ocean', 'shaymin', 'kaskademap'];
+				const bgs = ['charizards', 'horizon', 'ocean', 'shaymin', 'psday', 'kaskademap'];
 				bgid = bgs[Math.floor(Math.random() * bgs.length)];
 				// if someone clicked the random button, try to roll a different bg than before
 				if (bgid === this.curId) bgid = bgs[Math.floor(Math.random() * bgs.length)];
@@ -172,9 +217,13 @@ export const PSBackground = new class extends PSStreamModel<string | null> {
 		}
 		this.curId = bgid;
 
-		if (!bgUrl) {
-			bgUrl = (bgid === 'solidblue' ? '#344b6c' : PSURL + 'fx/client-bg-' + bgid + '.jpg');
+		if (bgid === SOLID_BG_ID) {
+			bgUrl = SOLID_COLOR_REGEX.test(bgUrl) ? bgUrl : DEFAULT_SOLID_BG;
+		} else if (!bgUrl) {
+			bgUrl = PSURL + 'fx/client-bg-' + bgid + '.jpg';
 		}
+		this.bgUrl = bgUrl;
+		this.buttonColorMode = buttonColorMode;
 
 		// April Fool's 2016 - Digimon theme
 		// bgid = 'digimon';
@@ -389,8 +438,9 @@ PSBackground.subscribe(bgUrl => {
 	}
 
 	if (bgUrl !== null) {
+		bgUrl = bgUrl || PSBackground.bgUrl;
 		let background;
-		if (bgUrl.startsWith('#')) {
+		if (PSBackground.curId === SOLID_BG_ID) {
 			background = bgUrl;
 		} else if (PSBackground.curId !== 'custom') {
 			background = `#546bac url(${bgUrl}) no-repeat left center fixed`;
@@ -404,8 +454,19 @@ PSBackground.subscribe(bgUrl => {
 	// main menu button colors
 	let cssBuf = ``;
 	let n = 0;
-	if (PSBackground.menuColors) {
-		for (const hs of PSBackground.menuColors) {
+	if (PSBackground.menuColors && PSBackground.buttonColorMode !== 'rainbow') {
+		for (let i = 0; i < PSBackground.menuColors.length; i++) {
+			let hs = PSBackground.menuColors[i];
+			switch (PSBackground.buttonColorMode) {
+			case 1:
+				hs = PSBackground.menuColors[0];
+				break;
+			case 3:
+				hs = !i ? PSBackground.menuColors[0] :
+					(i < 4 ? (PSBackground.menuColors[1] || PSBackground.menuColors[0]) :
+					(PSBackground.menuColors[2] || PSBackground.menuColors[1] || PSBackground.menuColors[0]));
+				break;
+			}
 			n++;
 			cssBuf += `body .button.mainmenu${n} { background: linear-gradient(to bottom,  hsl(${hs},72%),  hsl(${hs},52%)); border-color: hsl(${hs},40%); }\n`;
 			cssBuf += `body .button.mainmenu${n}:hover { background: linear-gradient(to bottom,  hsl(${hs},62%),  hsl(${hs},42%)); border-color: hsl(${hs},21%); }\n`;
