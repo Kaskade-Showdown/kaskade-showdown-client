@@ -2262,7 +2262,7 @@ export class BattleTooltips {
 
 			// special type immunities
 			if (inflictsStatus && tType.damageTaken?.[(inflictsStatus || inflictsEffect) as 'trapped'] === Dex.IMMUNE) {
-				if (!(['psn', 'tox', 'blt'].includes(inflictsStatus) && sourceAbility === 'Corrosion')) {
+				if (!(['psn'].includes(inflictsStatus) && sourceAbility === 'Corrosion')) {
 					return 0;
 				}
 			}
