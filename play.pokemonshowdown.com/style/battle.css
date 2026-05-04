@@ -440,8 +440,8 @@ License: GPLv2
 	background: #99BBFF url(../fx/weather-raindance.png) no-repeat scroll left top;
 	color: #0044BB;
 }
-.snowscapeweather,
-.hailweather {
+.hailweather,
+.snowscapeweather {
 	background: #AADDEE url(../fx/weather-hail.png) no-repeat scroll left top;
 	color: #114455;
 }

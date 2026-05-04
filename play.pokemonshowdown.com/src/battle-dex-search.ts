@@ -1774,7 +1774,7 @@ class BattleMoveSearch extends BattleTypedSearch<'move'> {
 	}
 	private moveIsWeatherSetup(id: ID): boolean {
 		return [
-			'sunnyday', 'raindance', 'hail', 'bloodmoon', 'foghorn',
+			'sunnyday', 'raindance', 'hail', 'snowscape', 'bloodmoon', 'foghorn',
 			'sandstorm', 'duststorm', 'pollinate', 'swarmsignal', 'smogspread', 'sprinkle',
 			'auraprojection', 'haunt', 'daydream', 'dragonforce', 'supercell', 'magnetize',
 			'strongwinds',

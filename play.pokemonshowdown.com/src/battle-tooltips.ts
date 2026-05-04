@@ -1411,15 +1411,12 @@ export class BattleTooltips {
 						speedModifiers.push(2);
 					}
 				}
-				if (climateWeather === 'hail') {
-					if (this.pokemonHasType(pokemon, 'Ice')) {
-						stats.def = Math.floor(stats.def * 1.25);
-						stats.spd = Math.floor(stats.spd * 1.25);
-					}
-				}
 				if (climateWeather === 'snowscape') {
 					if (this.pokemonHasType(pokemon, 'Ice')) {
 						stats.def = Math.floor(stats.def * 1.5);
+						if (this.battle.isWeatherStateBoosted('snowscape' as ID)) {
+							stats.spd = Math.floor(stats.spd * 1.5);
+						}
 					}
 				}
 				if (climateWeather === 'hail' || climateWeather === 'snowscape') {
@@ -1464,6 +1461,14 @@ export class BattleTooltips {
 				if (irritantWeather === 'sandstorm') {
 					if (this.battle.gen >= 4 && this.pokemonHasType(pokemon, 'Rock')) {
 						stats.spd = Math.floor(stats.spd * 1.5);
+					}
+					if (this.battle.isWeatherStateBoosted('sandstorm' as ID)) {
+						if (this.pokemonHasType(pokemon, 'Rock')) {
+							stats.def = Math.floor(stats.def * 1.5);
+						}
+						if (this.pokemonHasType(pokemon, 'Ground') || this.pokemonHasType(pokemon, 'Steel')) {
+							stats.spd = Math.floor(stats.spd * 1.5);
+						}
 					}
 				}
 				if (irritantWeather === 'duststorm') {
@@ -2290,12 +2295,8 @@ export class BattleTooltips {
 					if (attackType === 'Poison' && targetType === 'Steel' &&
 						sourceAbility === 'Corrosion' && this.battle.irritantWeather === 'smogspread') continue;
 					if (attackType === 'Normal' && targetType === 'Ghost' && this.battle.climateWeather === 'foghorn') continue;
-					if (attackType === 'Ground' && this.battle.clearingWeather === 'strongwinds' &&
-						this.battle.irritantWeather === 'duststorm' && !target.isGrounded()) continue;
-					if (attackType === 'Ghost' && targetType === 'Normal' &&
-						this.battle.clearingWeather === 'strongwinds' && this.battle.energyWeather === 'haunt') continue;
-					if (attackType === 'Ground' && targetType === 'Steel' &&
-						this.battle.clearingWeather === 'strongwinds' && this.battle.energyWeather === 'magnetize') continue;
+					if (attackType === 'Ground' && this.battle.isWeatherStateBoosted('duststorm' as ID) && !target.isGrounded()) continue;
+					if (attackType === 'Ground' && targetType === 'Steel' && this.battle.energyWeather === 'magnetize') continue;
 					if (attackType === 'Fire' && (target.volatiles['sunscreen'])) continue;
 				}
 				// Inverse replaces immunities with weaknesses. This has to
@@ -2325,8 +2326,7 @@ export class BattleTooltips {
 				}
 			} else {
 				factor *= [1, 2, 0.5, 0][tType.damageTaken?.[attackType] || 0] ?? 1;
-				if (attackType === 'Ghost' && targetType === 'Normal' &&
-					this.battle.clearingWeather === 'strongwinds' && this.battle.energyWeather === 'haunt') {
+				if (this.battle.isWeatherStateBoosted('haunt' as ID) && attackType === 'Ghost' && targetType === 'Normal') {
 					factor *= 2;
 				}
 			}

@@ -1764,6 +1764,12 @@ export class Battle {
 		}
 		return null;
 	}
+
+	isWeatherStateBoosted(weather: ID) {
+		const weatherIndex = this.activeWeathers.lastIndexOf(weather);
+		const boosterIndex = this.activeWeathers.lastIndexOf('strongwinds' as ID);
+		return boosterIndex !== -1 && weatherIndex > boosterIndex;
+	}
 	swapSideConditions() {
 		const sideConditions = [
 			'mist', 'lightscreen', 'reflect', 'spikes', 'safeguard', 'tailwind', 'toxicspikes', 'stealthrock', 'waterpledge', 'firepledge', 'grasspledge', 'stickyweb', 'auroraveil', 'gmaxsteelsurge', 'gmaxcannonade', 'gmaxvinelash', 'gmaxwildfire',
