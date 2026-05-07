@@ -88,7 +88,7 @@ class BattlesPanel extends PSRoomPanel<BattlesRoom> {
 	}
 	override render() {
 		const room = this.props.room;
-		return <PSPanelWrapper room={room} scrollable><div class="pad">
+		return <PSPanelWrapper room={room}><div class="pad">
 			<button class="button" style="float:right;font-size:10pt;margin-top:3px" name="closeRoom">
 				<i class="fa fa-times" aria-hidden></i> Close
 			</button>
@@ -1073,7 +1073,7 @@ class BattlePanel extends PSRoomPanel<BattleRoom> {
 		></style> : null;
 
 		if (room.width < 700) {
-			return <PSPanelWrapper room={room} focusClick scrollable="hidden">
+			return <PSPanelWrapper room={room} focusClick noScroll="hidden">
 				{hardcoreStyle}
 				<BattleDiv room={room} />
 				<ChatLog
@@ -1097,7 +1097,7 @@ class BattlePanel extends PSRoomPanel<BattleRoom> {
 			</PSPanelWrapper>;
 		}
 
-		return <PSPanelWrapper room={room} focusClick scrollable="hidden">
+		return <PSPanelWrapper room={room} focusClick noScroll="hidden">
 			{hardcoreStyle}
 			<BattleDiv room={room} />
 			<ChatLog

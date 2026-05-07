@@ -1449,7 +1449,7 @@ class ChatPanel extends PSRoomPanel<ChatRoom> {
 			</TeamForm>
 		</div> : null;
 
-		return <PSPanelWrapper room={room} focusClick fullSize>
+		return <PSPanelWrapper room={room} focusClick noScroll fullSize>
 			<ChatLog
 				class={`chat-log${tinyLayout ? '' : ' hasuserlist'}`} room={this.props.room}
 				left={tinyLayout ? 0 : 146} top={room.tour?.info.isActive ? 30 : 0}

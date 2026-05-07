@@ -495,7 +495,7 @@ class NewsPanel extends PSRoomPanel {
 	};
 	override render() {
 		const cookieSet = document.cookie.includes('preactalpha=1');
-		return <PSPanelWrapper room={this.props.room} fullSize scrollable>
+		return <PSPanelWrapper room={this.props.room} fullSize>
 			<div class="construction">
 				This is the client rewrite beta test.
 				<form>
@@ -686,7 +686,7 @@ class MainMenuPanel extends PSRoomPanel<MainMenuRoom> {
 	override render() {
 		const onlineButton = ' button' + (PS.isOffline ? ' disabled' : '');
 		const tinyLayout = this.props.room.width < 620 ? ' tiny-layout' : '';
-		return <PSPanelWrapper room={this.props.room} scrollable onDragEnter={this.handleDragEnter}>
+		return <PSPanelWrapper room={this.props.room} onDragEnter={this.handleDragEnter}>
 			<div class={`mainmenu-mini-windows${tinyLayout}`}>
 				{this.renderMiniRooms()}
 			</div>
