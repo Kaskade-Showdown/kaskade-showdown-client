@@ -1411,6 +1411,8 @@ class BattleItemSearch extends BattleTypedSearch<'item'> {
 			table = table[`gen${this.dex.gen}natdex`];
 		} else if (this.formatType?.endsWith('doubles')) { // no natdex/bdsp doubles support
 			table = table[`gen${this.dex.gen}doubles`];
+		} else if (this.formatType === 'lc') {
+			table = table[`gen${this.dex.gen}lc`];
 		} else if (this.formatType === 'metronome') {
 			table = table[`gen${this.dex.gen}metronome`];
 		} else if (this.formatType === 'legendsza') {

@@ -524,6 +524,7 @@ process.stdout.write("Building `data/teambuilder-tables.js`... ");
 		} else if (isLC) {
 			BattleTeambuilderTable[gen + 'lc'] = {};
 			BattleTeambuilderTable[gen + 'lc'].tiers = tiers;
+			BattleTeambuilderTable[gen + 'lc'].items = items;
 			BattleTeambuilderTable[gen + 'lc'].overrideTier = overrideTier;
 			BattleTeambuilderTable[gen + 'lc'].metagameBans = metagameBans;
 			BattleTeambuilderTable[gen + 'lc'].formatSlices = formatSlices;
@@ -787,8 +788,9 @@ process.stdout.write("Building `data/teambuilder-tables.js`... ");
 				else poorItems.push(id);
 				break;
 			case 'berryjuice':
-				if (genNum === 2) poorItems.push(id);
-				else goodItems.push(id);
+				if (isLC) popularItems.push(id);
+				else if (!isLC && genNum === 2) poorItems.push(id);
+				else poorItems.push(id);
 				break;
 			case 'dragonfang':
 				if (genNum === 2) poorItems.push(id);
