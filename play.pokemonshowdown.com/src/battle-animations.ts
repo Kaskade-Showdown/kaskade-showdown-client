@@ -1253,6 +1253,7 @@ export class BattleScene implements BattleSceneStub {
 		}
 		// eslint-disable-next-line @stylistic/max-len
 		let weatherTexthtml = clearingWeatherhtml + climateWeatherhtml + irritantWeatherhtml + energyWeatherhtml + cataclysmWeatherhtml;
+		this.updateStatbars();
 
 		if (instant) {
 			/* this.$climateWeather.html('<em>' + climateWeatherhtml + '</em>');
@@ -2259,6 +2260,14 @@ export class PokemonSprite extends Sprite {
 		warpmistspd: ['Warp Mist: SpD', 'good'],
 		warpmistspe: ['Warp Mist: Spe', 'good'],
 
+		magnetizeboost1: ['Magnetized: 20%', 'good'],
+		magnetizeboost2: ['Magnetized: 40%', 'good'],
+		magnetizeboost3: ['Magnetized: 60%', 'good'],
+		magnetizeboost4: ['Magnetized: 80%', 'good'],
+		magnetizeboost5: ['Magnetized: 100%', 'good'],
+		magnetizeboost6: ['Magnetized: 120%', 'good'],
+		magnetizeboost7: ['Magnetized: 140%', 'good'],
+		magnetizeboost8: ['Magnetized: 160%', 'good'],
 		sunscreen: ['Sunscreen', 'good'],
 		bearhug: ['Bear Hug', 'bad'],
 		whirlduel: ['Whirlduel', 'bad'],

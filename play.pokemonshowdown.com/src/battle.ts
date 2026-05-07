@@ -541,6 +541,13 @@ export class Pokemon implements PokemonDetails, PokemonHealth {
 		if (item === 'ironball') {
 			return true;
 		}
+		if (
+			battle.energyWeather === 'magnetize' && item !== 'energynullifier' &&
+			this.getTypeList(serverPokemon).includes('Steel') &&
+			!battle.isWeatherStateBoosted('duststorm' as ID)
+		) {
+			return false;
+		}
 		if (ability === 'levitate' || ability === 'surgesurfer' || ability === 'relicsoul') {
 			return false;
 		}
@@ -2394,7 +2401,9 @@ export class Battle {
 		case '-immune': {
 			let poke = this.getPokemon(args[1])!;
 			let fromeffect = Dex.getEffect(kwArgs.from);
-			this.activateAbility(this.getPokemon(kwArgs.of) || poke, fromeffect);
+			if (fromeffect.effectType === 'Ability' && fromeffect.id !== 'magnetize') {
+				this.activateAbility(this.getPokemon(kwArgs.of) || poke, fromeffect);
+			}
 			this.log(args, kwArgs);
 			this.scene.resultAnim(poke, 'Immune', 'neutral');
 			break;

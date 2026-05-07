@@ -1365,6 +1365,18 @@ export class BattleTooltips {
 		let irritantWeather = this.battle.irritantWeather;
 		let energyWeather = this.battle.energyWeather;
 		let clearingWeather = this.battle.clearingWeather;
+		let nonGrounded = clientPokemon ? !clientPokemon.isGrounded(serverPokemon) : (
+			item !== 'ironball' && (
+				['levitate', 'surgesurfer', 'relicsoul'].includes(ability) ||
+				item === 'airballoon' ||
+				this.pokemonHasType(pokemon, 'Flying') ||
+				(
+					energyWeather === 'magnetize' && item !== 'energynullifier' &&
+					this.pokemonHasType(pokemon, 'Steel') &&
+					!this.battle.isWeatherStateBoosted('duststorm' as ID)
+				)
+			)
+		);
 		// let cataclysmWeather = this.battle.cataclysmWeather;
 		if (this.battle.abilityActive(['Air Lock', 'Cloud Nine', 'Nullify'])) {
 			climateWeather = '' as ID;
@@ -1511,9 +1523,6 @@ export class BattleTooltips {
 					}
 				}
 				if (energyWeather === 'magnetize') {
-					if (this.pokemonHasType(pokemon, 'Steel')) {
-						stats.spd = Math.floor(stats.spd * 1.25);
-					}
 					if (ability === 'magnapult') {
 						speedModifiers.push(2);
 					}
@@ -1522,7 +1531,7 @@ export class BattleTooltips {
 		}
 		if (clearingWeather) {
 			if (clearingWeather === 'strongwinds') {
-				if (this.pokemonHasType(pokemon, 'Flying')) {
+				if (nonGrounded) {
 					stats.spe = Math.floor(stats.spe * 1.25);
 				}
 			}
@@ -1538,6 +1547,13 @@ export class BattleTooltips {
 			stats.spa = Math.floor(stats.spa * 0.5);
 		}
 		if (clientPokemon) {
+			for (let i = 1; i <= 8; i++) {
+				if (clientPokemon.volatiles[`magnetizeboost${i}`]) {
+					stats.atk = Math.floor(stats.atk * (1 + 0.2 * i));
+					stats.spa = Math.floor(stats.spa * (1 + 0.2 * i));
+					break;
+				}
+			}
 			if (clientPokemon.volatiles['slowstart']) {
 				stats.atk = Math.floor(stats.atk * 0.5);
 				speedModifiers.push(0.5);
@@ -2094,6 +2110,12 @@ export class BattleTooltips {
 			}
 
 			if (category !== 'Status' && !move.isZ && !move.id.startsWith('hiddenpower')) {
+				if (
+					moveType === 'Normal' && this.battle.isWeatherStateBoosted('foghorn' as ID) &&
+					value.climateWeatherModify(0, 'Fog')
+				) {
+					moveType = '???';
+				}
 				if (moveType === 'Normal') {
 					if (value.abilityModify(0, 'Aerilate')) moveType = 'Flying';
 					if (value.abilityModify(0, 'Dragonize')) moveType = 'Dragon';
@@ -2296,7 +2318,6 @@ export class BattleTooltips {
 						sourceAbility === 'Corrosion' && this.battle.irritantWeather === 'smogspread') continue;
 					if (attackType === 'Normal' && targetType === 'Ghost' && this.battle.climateWeather === 'foghorn') continue;
 					if (attackType === 'Ground' && this.battle.isWeatherStateBoosted('duststorm' as ID) && !target.isGrounded()) continue;
-					if (attackType === 'Ground' && targetType === 'Steel' && this.battle.energyWeather === 'magnetize') continue;
 					if (attackType === 'Fire' && (target.volatiles['sunscreen'])) continue;
 				}
 				// Inverse replaces immunities with weaknesses. This has to
@@ -2333,9 +2354,10 @@ export class BattleTooltips {
 			if (move.id === 'sheercold' && targetType === 'Ice') otherFactor = 0;
 		}
 
-		// Air Balloon etc. Levitate is already handled but there are a few that aren't
+		// Air Balloon, Magnetosphere, etc. Levitate is already handled but there are a few that aren't
 		if (category !== 'Status' && attackType === 'Ground' && factor &&
-			(!target.isGrounded() || targetSurgeSurferActive)) otherFactor = 0;
+			(!target.isGrounded() || targetSurgeSurferActive) &&
+			!this.battle.isWeatherStateBoosted('duststorm' as ID)) otherFactor = 0;
 		if (this.battle.hasPseudoWeather('Misty Terrain') && target.isGrounded() && inflictsStatus) {
 			return 0;
 		}
@@ -2362,6 +2384,9 @@ export class BattleTooltips {
 		if (targetAbility === "Good as Gold" && category === 'Status') return 0;
 		if (targetAbility === "Own Tempo" && inflictsEffect === 'confusion') return 0;
 		if (sourceAbility === 'Tinted Lens' && factor < 1) otherFactor *= 2;
+		if (this.battle.isWeatherStateBoosted('swarmsignal' as ID) && source.getTypeList().includes('Bug') && factor < 1) {
+			otherFactor *= 2;
+		}
 		if (targetAbility === 'Sturdy' && move.ohko) otherFactor = 0;
 		if (targetAbility === 'Damp' && [
 			'explosion', 'mindblown', 'mistyexplosion', 'selfdestruct',
@@ -2726,6 +2751,9 @@ export class BattleTooltips {
 				value.modify(2, 'Wake-Up Slap + Sleep');
 			}
 		}
+		if (move.type === '???' && this.battle.isWeatherStateBoosted('foghorn' as ID)) {
+			value.climateWeatherModify(1.5, 'Fog');
+		}
 		if (move.id === 'weatherball') { // updated
 			if (!value.abilityModify(2, "Mega Sol")) {
 				switch (this.battle.getRecentWeather(pokemon, serverPokemon)) {
@@ -2917,7 +2945,7 @@ export class BattleTooltips {
 			if (['Rock', 'Ground', 'Steel'].includes(moveType) && this.battle.irritantWeather === 'duststorm') {
 				if (value.tryAbility("Earth Force")) value.irritantWeatherModify(1.3, "Dust Storm", "Earth Force");
 			}
-			if ('Poison'.includes(moveType) && this.battle.irritantWeather === 'smogspread') {
+			if (moveType === 'Poison' && this.battle.irritantWeather === 'smogspread') {
 				if (value.tryAbility("Carbon Capture")) value.irritantWeatherModify(2, "Smog", "Carbon Capture");
 			}
 			if (['Fairy', 'Grass', 'Fire', 'Water'].includes(moveType) && (this.battle.irritantWeather === 'sprinkle')) {
@@ -3028,6 +3056,14 @@ export class BattleTooltips {
 			if (target ? (target.isGrounded() || targetSurgeSurferActive) : true) {
 				value.modify(0.5, 'Grassy Terrain + grounded target');
 			}
+		}
+		if (
+			this.battle.hasPseudoWeather('Misty Terrain') &&
+			moveType !== 'Fairy' &&
+			(move.target === 'allAdjacent' || move.target === 'allAdjacentFoes') &&
+			(target ? (target.isGrounded() || targetSurgeSurferActive) : true)
+		) {
+			value.modify(0.5, 'Misty Terrain + grounded target');
 		}
 		if (
 			move.id === 'expandingforce' &&
