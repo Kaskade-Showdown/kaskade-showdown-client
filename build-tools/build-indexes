@@ -789,7 +789,7 @@ process.stdout.write("Building `data/teambuilder-tables.js`... ");
 				break;
 			case 'berryjuice':
 				if (isLC) popularItems.push(id);
-				else if (!isLC && genNum === 2) poorItems.push(id);
+				else if (genNum === 2) poorItems.push(id);
 				else poorItems.push(id);
 				break;
 			case 'dragonfang':
