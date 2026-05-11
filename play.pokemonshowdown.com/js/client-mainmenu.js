@@ -1282,9 +1282,7 @@
 				this.open = Storage.prefs('openformats') || {
 					"SwSe Doubles": true, "SwSe Singles": true,
 					"SwSe Doubles Other Metagames": true, "SwSe Singles Other Metagames": true,
-					"SwSe Dex-based Metas": true,
-					// For AFD
-					"Random Meta of the Decade": true
+					"SwSe Dex-based Metas": true
 				};
 			}
 			if (!this.starred) this.starred = Storage.prefs('starredformats') || {};
