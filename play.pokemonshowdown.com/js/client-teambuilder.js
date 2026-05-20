@@ -645,9 +645,11 @@
 				if (format === '+') {
 					e.stopImmediatePropagation();
 					var self = this;
-					app.addPopup(FormatPopup, { format: '', sourceEl: e.currentTarget, selectType: 'teambuilder', onselect: function (newFormat) {
-						self.selectFolder(newFormat);
-					} });
+					app.addPopup(FormatPopup, {
+						format: '', sourceEl: e.currentTarget, selectType: 'teambuilder', onselect: function (newFormat) {
+							self.selectFolder(newFormat);
+						}
+					});
 					return;
 				}
 				if (format === '++') {
@@ -656,19 +658,21 @@
 					// app.addPopupPrompt("Folder name:", "Create folder", function (newFormat) {
 					// 	self.selectFolder(newFormat + '/');
 					// });
-					app.addPopup(PromptPopup, { message: "Folder name:", button: "Create folder", sourceEl: e.currentTarget, callback: function (name) {
-						name = $.trim(name);
-						if (name.indexOf('/') >= 0 || name.indexOf('\\') >= 0) {
-							app.addPopupMessage("Names can't contain slashes, since they're used as a folder separator.");
-							name = name.replace(/[\\\/]/g, '');
+					app.addPopup(PromptPopup, {
+						message: "Folder name:", button: "Create folder", sourceEl: e.currentTarget, callback: function (name) {
+							name = $.trim(name);
+							if (name.indexOf('/') >= 0 || name.indexOf('\\') >= 0) {
+								app.addPopupMessage("Names can't contain slashes, since they're used as a folder separator.");
+								name = name.replace(/[\\\/]/g, '');
+							}
+							if (name.indexOf('|') >= 0) {
+								app.addPopupMessage("Names can't contain the character |, since they're used for storing teams.");
+								name = name.replace(/\|/g, '');
+							}
+							if (!name) return;
+							self.selectFolder(name + '/');
 						}
-						if (name.indexOf('|') >= 0) {
-							app.addPopupMessage("Names can't contain the character |, since they're used for storing teams.");
-							name = name.replace(/\|/g, '');
-						}
-						if (!name) return;
-						self.selectFolder(name + '/');
-					} });
+					});
 					return;
 				}
 			} else {
@@ -683,27 +687,29 @@
 			if (this.curFolder.slice(-1) !== '/') return;
 			var oldFolder = this.curFolder.slice(0, -1);
 			var self = this;
-			app.addPopup(PromptPopup, { message: "Folder name:", button: "Rename folder", value: oldFolder, callback: function (name) {
-				name = $.trim(name);
-				if (name.indexOf('/') >= 0 || name.indexOf('\\') >= 0) {
-					app.addPopupMessage("Names can't contain slashes, since they're used as a folder separator.");
-					name = name.replace(/[\\\/]/g, '');
+			app.addPopup(PromptPopup, {
+				message: "Folder name:", button: "Rename folder", value: oldFolder, callback: function (name) {
+					name = $.trim(name);
+					if (name.indexOf('/') >= 0 || name.indexOf('\\') >= 0) {
+						app.addPopupMessage("Names can't contain slashes, since they're used as a folder separator.");
+						name = name.replace(/[\\\/]/g, '');
+					}
+					if (name.indexOf('|') >= 0) {
+						app.addPopupMessage("Names can't contain the character |, since they're used for storing teams.");
+						name = name.replace(/\|/g, '');
+					}
+					if (!name) return;
+					if (name === oldFolder) return;
+					for (var i = 0; i < Storage.teams.length; i++) {
+						var team = Storage.teams[i];
+						if (team.folder !== oldFolder) continue;
+						team.folder = name;
+						if (window.nodewebkit) Storage.saveTeam(team);
+					}
+					if (!window.nodewebkit) Storage.saveTeams();
+					self.selectFolder(name + '/');
 				}
-				if (name.indexOf('|') >= 0) {
-					app.addPopupMessage("Names can't contain the character |, since they're used for storing teams.");
-					name = name.replace(/\|/g, '');
-				}
-				if (!name) return;
-				if (name === oldFolder) return;
-				for (var i = 0; i < Storage.teams.length; i++) {
-					var team = Storage.teams[i];
-					if (team.folder !== oldFolder) continue;
-					team.folder = name;
-					if (window.nodewebkit) Storage.saveTeam(team);
-				}
-				if (!window.nodewebkit) Storage.saveTeams();
-				self.selectFolder(name + '/');
-			} });
+			});
 		},
 		promptDeleteFolder: function () {
 			app.addPopup(DeleteFolderPopup, { folder: this.curFolder, room: this });
@@ -1269,7 +1275,7 @@
 					}
 					buf += '</ul>';
 					var desc = formatInfo.resources.length ? 'more ' : '';
-					buf += '<div style="padding-left: 5px">Find ' + desc + 'helpful resources for this tier on <a href="https://discord.gg/swse">the Discord</a>.</div>';
+					buf += '<div style="padding-left: 5px">Find ' + desc + 'helpful resources for this tier on <a href="' + formatInfo.url + '" target="_blank">the Smogon Dex</a>.</div>';
 				} */
 				buf += '<form id="pokepasteForm" style="display:inline" method="post" action="https://pokepast.es/create" target="_blank">';
 				buf += '<input type="hidden" name="title" id="pasteTitle">';
@@ -1301,6 +1307,7 @@
 			var isVGC = baseFormat.includes('battlespot') || baseFormat.includes('bss') ||
 				baseFormat.includes('vgc') || baseFormat.includes('battlefestival');
 			var isLC = baseFormat.startsWith('lc') || baseFormat.endsWith('lc');
+			// var isSwSe = baseFormat.includes('swse');
 			var buf = '<li value="' + i + '">';
 			if (!set.species) {
 				if (this.deletedSet) {
@@ -1362,7 +1369,7 @@
 						buf += '<span class="detailcell"><label>Gmax</label>' + (set.gigantamax || species.forme === 'Gmax' ? 'Yes' : 'No') + '</span>';
 					}
 				}
-				/* if (this.curTeam.gen === 9 && !isChampions) {
+				/* if (this.curTeam.gen === 9 && !(isChampions || isSwSe)) {
 					buf += '<span class="detailcell"><label>Tera Type</label>' + (set.teraType || species.requiredTeraType || species.types[0]) + '</span>';
 				} */
 			}
@@ -1618,9 +1625,11 @@
 				return;
 			}
 			var self = this;
-			app.addPopup(FormatPopup, { format: format, sourceEl: button, selectType: 'teambuilder', onselect: function (newFormat) {
-				self.changeFormat(newFormat);
-			} });
+			app.addPopup(FormatPopup, {
+				format: format, sourceEl: button, selectType: 'teambuilder', onselect: function (newFormat) {
+					self.changeFormat(newFormat);
+				}
+			});
 		},
 		changeFormat: function (format) {
 			this.curTeam.format = format;
@@ -2264,12 +2273,10 @@
 				switch (species.baseSpecies) {
 				case 'Alcremie':
 				case 'Basculin':
-				case 'Botnyak':
 				case 'Burmy':
 				case 'Castform':
 				case 'Cherrim':
 				case 'Deerling':
-				case 'Eecroach':
 				case 'Flabebe':
 				case 'Floette':
 				case 'Florges':
@@ -2284,9 +2291,12 @@
 				case 'Sawsbuck':
 				case 'Shellos':
 				case 'Sinistea':
-				case 'Stackem':
 				case 'Tatsugiri':
 				case 'Vivillon':
+				// swse
+				case 'Botnyak':
+				case 'Eecroach':
+				case 'Stackem':
 					break;
 				default:
 					smogdexid += '-' + toID(species.forme);
@@ -2900,11 +2910,12 @@
 		updateDetailsForm: function () {
 			var buf = '';
 			var set = this.curSet;
-			// var isChampions = this.curTeam.format.includes('champions');
+			var isChampions = this.curTeam.format.includes('champions');
 			var isLetsGo = this.curTeam.format.includes('letsgo');
 			var isBDSP = this.curTeam.format.includes('bdsp');
 			var isNatDex = this.curTeam.format.includes('nationaldex') || this.curTeam.format.includes('natdex');
 			var isHackmons = this.curTeam.format.includes('hackmons') || this.curTeam.format.endsWith('bh');
+			// var isSwSe = this.curTeam.format.includes('swse');
 			var species = this.curTeam.dex.species.get(set.species);
 			if (!set) return;
 			buf += '<div class="resultheader"><h3>Details</h3></div>';
@@ -2983,7 +2994,7 @@
 				buf += '</select></div></div>';
 			}
 
-			/* if (this.curTeam.gen === 9 && !isChampions) {
+			/* if (this.curTeam.gen === 9 && !(isChampions || isSwSe)) {
 				buf += '<div class="formrow"><label class="formlabel" title="Tera Type">Tera Type:</label><div>';
 				buf += '<select name="teratype" class="button">';
 				var types = Dex.types.all();
@@ -3011,6 +3022,7 @@
 			var isLetsGo = this.curTeam.format.includes('letsgo');
 			var isBDSP = this.curTeam.format.includes('bdsp');
 			var isNatDex = this.curTeam.format.includes('nationaldex') || this.curTeam.format.includes('natdex');
+			// var isSwSe = this.curTeam.format.includes('swse');
 
 			// level
 			var level = parseInt(this.$chart.find('input[name=level]').val(), 10);
@@ -3071,7 +3083,7 @@
 
 			// Tera type
 			/* var teraType = this.$chart.find('select[name=teratype]').val();
-			if (!isChampions && Dex.types.isName(teraType)) {
+			if (!(isChampions || isSwSe) && Dex.types.isName(teraType)) {
 				set.teraType = teraType || species.requiredTeraType || species.types[0];
 			} else {
 				delete set.teraType;
@@ -3102,7 +3114,7 @@
 						buf += '<span class="detailcell"><label>Gmax</label>' + (set.gigantamax || species.forme === 'Gmax' ? 'Yes' : 'No') + '</span>';
 					}
 				}
-				/* if (this.curTeam.gen === 9 && !isChampions) {
+				/* if (this.curTeam.gen === 9 && !(isChampions || isSwSe)) {
 					buf += '<span class="detailcell"><label>Tera Type</label>' + (set.teraType || species.requiredTeraType || species.types[0]) + '</span>';
 				} */
 			}
@@ -3797,7 +3809,7 @@
 				var form = (formid ? formid[0].toUpperCase() + formid.slice(1) : '');
 				var spriteid = baseid + (form ? '-' + formid : '');
 				var data = Dex.getTeambuilderSpriteData(spriteid, dex);
-				var spriteSize = data.spriteDir === 'sprites/gen5' ? 120 : 96;
+				var spriteSize = data.spriteDir === 'sprites/dex' ? 120 : 96;
 				maxSpriteSize = Math.max(maxSpriteSize, spriteSize);
 				var spriteDim = 'width: ' + spriteSize + 'px; height: ' + spriteSize + 'px;';
 				var resize = (data.h ? 'background-size:' + data.h + 'px;' : '');
