@@ -159,7 +159,7 @@ export class BattleLog {
 		}
 		let divClass = 'chat';
 		let divHTML = '';
-		let noNotify: boolean | undefined;
+		let noNotify: boolean | 'subtle' | undefined;
 		if (!['name', 'n'].includes(args[0])) this.lastRename = null;
 		switch (args[0]) {
 		case 'chat': case 'c': case 'c:':
@@ -1276,7 +1276,7 @@ export class BattleLog {
 
 	parseChatMessage(
 		message: string, name: string, timestamp: string, isHighlighted?: boolean
-	): [divClass: string, divHTML: string, noNotify?: boolean] {
+	): [divClass: string, divHTML: string, noNotify?: boolean | 'subtle'] {
 		let showMe = !BattleLog.prefs('chatformatting')?.hideme;
 		let group = ' ';
 		if (!/[A-Za-z0-9]/.test(name.charAt(0))) {
@@ -1364,6 +1364,8 @@ export class BattleLog {
 			return ['chat', BattleLog.sanitizeHTML(target), true];
 		case 'nonotify':
 			return ['chat', BattleLog.sanitizeHTML(target), true];
+		case 'subtlenotify':
+			return ['chat', BattleLog.sanitizeHTML(target), 'subtle'];
 		default:
 			// Not a command or unsupported. Parsed as a normal chat message.
 			if (!name) {

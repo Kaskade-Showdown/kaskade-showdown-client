@@ -1652,6 +1652,17 @@ class BattleOptionsPanel extends PSRoomPanel {
 			}
 			break;
 		}
+		case 'autoTeamSheet': {
+			PS.prefs.set('autoTeamSheet', value);
+			if (value) {
+				room?.send('/acceptopenteamsheets');
+			}
+			break;
+		}
+		case 'spectatefromstart': {
+			PS.prefs.set('spectatefromstart', value);
+			break;
+		}
 		case 'ignoreopp': {
 			PS.prefs.set('ignoreopp', value);
 			this.handleIgnoreOpponent(value);
@@ -1673,7 +1684,6 @@ class BattleOptionsPanel extends PSRoomPanel {
 		}
 		case 'disallowspectators': {
 			PS.prefs.set('disallowspectators', value);
-			PS.mainmenu.disallowSpectators = value;
 			break;
 		}
 		}
@@ -1682,6 +1692,15 @@ class BattleOptionsPanel extends PSRoomPanel {
 		const battleRoom = this.props.room.getParent() as BattleRoom | null;
 		return battleRoom?.battle ? battleRoom : null;
 	}
+	handleBattleVisibility = (ev: Event) => {
+		const room = this.getBattleRoom();
+		if (!room) return this.close();
+
+		const hidden = (ev.currentTarget as HTMLInputElement).checked;
+		room.hideBattleToggled = hidden;
+		room.update(null);
+		room.send(hidden ? '/hiddenroom' : '/publicroom');
+	};
 
 	override render() {
 		const room = this.props.room;
@@ -1694,9 +1713,18 @@ class BattleOptionsPanel extends PSRoomPanel {
 				<p>
 					<label class="checkbox">
 						<input
-							checked={battleRoom.battle.hardcoreMode}
-							type="checkbox" onChange={this.handleHardcoreMode}
-						/> Hardcore mode (hide info not shown in-game)
+							type="checkbox"
+							checked={battleRoom.hideBattleToggled}
+							onChange={this.handleBattleVisibility}
+						/> Hide current battle
+					</label>
+				</p>
+				<p>
+					<label class="checkbox">
+						<input
+							checked={battleRoom.battle?.ignoreNicks}
+							type="checkbox" onChange={this.handleIgnoreNicks}
+						/> Ignore Pok&eacute;mon nicknames
 					</label>
 				</p>
 				<p>
@@ -1718,9 +1746,9 @@ class BattleOptionsPanel extends PSRoomPanel {
 				<p>
 					<label class="checkbox">
 						<input
-							checked={battleRoom.battle?.ignoreNicks}
-							type="checkbox" onChange={this.handleIgnoreNicks}
-						/> Ignore nicknames
+							checked={battleRoom.battle.hardcoreMode}
+							type="checkbox" onChange={this.handleHardcoreMode}
+						/> Hardcore mode (hide info not shown in-game)
 					</label>
 				</p>
 			</>}
@@ -1731,6 +1759,14 @@ class BattleOptionsPanel extends PSRoomPanel {
 						name="disallowspectators" checked={PS.prefs.disallowspectators || false}
 						type="checkbox" onChange={this.handleAllSettings}
 					/> <abbr title="You can still invite spectators by giving them the URL or using the /invite command">Invite only (hide from Battles list)</abbr>
+				</label>
+			</p>
+			<p>
+				<label class="checkbox">
+					<input
+						name="autotimer" checked={PS.prefs.autotimer || false}
+						type="checkbox" onChange={this.handleAllSettings}
+					/> Automatically start timer
 				</label>
 			</p>
 			<p>
@@ -1760,17 +1796,25 @@ class BattleOptionsPanel extends PSRoomPanel {
 			<p>
 				<label class="checkbox">
 					<input
-						name="autotimer" checked={PS.prefs.autotimer || false}
+						name="autohardcore" checked={PS.prefs.autohardcore || false}
 						type="checkbox" onChange={this.handleAllSettings}
-					/> Automatically start timer
+					/> Automatically enable hardcore mode
 				</label>
 			</p>
 			<p>
 				<label class="checkbox">
 					<input
-						name="autohardcore" checked={PS.prefs.autohardcore || false}
+						name="autoTeamSheet" checked={PS.prefs.autoTeamSheet || false}
 						type="checkbox" onChange={this.handleAllSettings}
-					/> Automatically enable hardcore mode
+					/> Automatically accept Open Team Sheets
+				</label>
+			</p>
+			<p>
+				<label class="checkbox">
+					<input
+						name="spectatefromstart" checked={!!PS.prefs.spectatefromstart}
+						type="checkbox" onChange={this.handleAllSettings}
+					/> Start at turn 0 when spectating battles
 				</label>
 			</p>
 			{!PS.prefs.onepanel && document.body.offsetWidth >= 800 && <p>
@@ -1902,9 +1946,9 @@ class BattleTimerPanel extends PSRoomPanel {
 		const room = this.props.room.getParent() as BattleRoom;
 		return <PSPanelWrapper room={this.props.room}><div class="pad">
 			{room.battle.kickingInactive ? (
-				<button class="button" data-cmd="/closeand /inopener /timer stop">Stop Timer</button>
+				<button class="button" data-cmd="/closeand /inopener /timer off">Stop Timer</button>
 			) : (
-				<button class="button" data-cmd="/closeand /inopener /timer start">Start Timer</button>
+				<button class="button" data-cmd="/closeand /inopener /timer on">Start Timer</button>
 			)}
 		</div>
 		</PSPanelWrapper>;
