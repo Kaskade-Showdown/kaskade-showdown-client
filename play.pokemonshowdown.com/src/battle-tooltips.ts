@@ -2127,11 +2127,9 @@ export class BattleTooltips {
 				}
 			}
 
-			if (category !== 'Status' && !move.isZ && !move.id.startsWith('hiddenpower')) {
-				if (
-					moveType === 'Normal' && this.battle.isWeatherStateBoosted('foghorn' as ID) &&
-					value.climateWeatherModify(0, 'Fog')
-				) {
+			if (!(move.isZ && move.category !== 'Status') && !move.id.startsWith('hiddenpower')) {
+				if (moveType === 'Normal' && this.battle.isWeatherStateBoosted('foghorn' as ID) &&
+					value.climateWeatherModify(0, 'Fog')) {
 					moveType = '???';
 				}
 				if (moveType === 'Normal') {
@@ -2382,10 +2380,10 @@ export class BattleTooltips {
 		if (this.battle.hasPseudoWeather('Psychic Terrain') && target.isGrounded() && priority > 0) {
 			otherFactor = 0;
 		}
-		if (this.battle.climateWeather === 'primordialsea' && attackType === 'Fire') {
+		if (this.battle.climateWeather === 'primordialsea' && attackType === 'Fire' && move.category !== 'Status') {
 			otherFactor = 0;
 		}
-		if (this.battle.climateWeather === 'desolateland' && attackType === 'Water') {
+		if (this.battle.climateWeather === 'desolateland' && attackType === 'Water' && move.category !== 'Status') {
 			otherFactor = 0;
 		}
 
