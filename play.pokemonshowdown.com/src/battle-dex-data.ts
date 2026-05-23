@@ -1084,6 +1084,8 @@ export const BattlePokemonIconIndexes: { [id: string]: number } = {
 	draggalong: 1980 + 77,
 	ramnarok: 1980 + 78,
 	ramnarokradiant: 1980 + 79,
+	flox: 1980 + 80,
+	obliteryx: 1980 + 81,
 };
 
 export const BattlePokemonIconIndexesLeft: { [id: string]: number } = {
