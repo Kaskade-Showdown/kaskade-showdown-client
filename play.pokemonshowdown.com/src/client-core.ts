@@ -21,7 +21,7 @@ declare const ColorThief: any;
  *********************************************************************/
 // PS's model classes are defined here
 
-const PSURL = `${document.location.protocol !== 'http:' ? 'https:' : ''}//${Config.routes.client}/`; // incomplete, change this to swse later
+const PSURL = `${document.location.protocol !== 'http:' ? 'https:' : ''}//${Config.routes.client}/`;
 const MAINMENU_BUTTONS = 8;
 const DEFAULT_SOLID_BG = '#344b6c';
 const SOLID_BG_ID = 'solidcolor';
