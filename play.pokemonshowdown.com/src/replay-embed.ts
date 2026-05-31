@@ -33,27 +33,27 @@ function requireScript(url: string) {
 	document.head.appendChild(scriptEl);
 }
 
-linkStyle('https://kaskadeshowdown.dynv6.net/style/font-awesome.css?');
-linkStyle('https://kaskadeshowdown.dynv6.net/style/battle.css?a7');
-linkStyle('https://kaskadeshowdown.dynv6.net/style/replay.css?a7');
-linkStyle('https://kaskadeshowdown.dynv6.net/style/utilichart.css?a7');
+linkStyle('https://kaskadeshowdown.com/style/font-awesome.css?');
+linkStyle('https://kaskadeshowdown.com/style/battle.css?a7');
+linkStyle('https://kaskadeshowdown.com/style/replay.css?a7');
+linkStyle('https://kaskadeshowdown.com/style/utilichart.css?a7');
 
-requireScript('https://kaskadeshowdown.dynv6.net/js/lib/ps-polyfill.js');
-requireScript('https://kaskadeshowdown.dynv6.net/config/config.js?a7');
-requireScript('https://kaskadeshowdown.dynv6.net/js/lib/jquery-1.11.0.min.js');
-requireScript('https://kaskadeshowdown.dynv6.net/js/lib/html-sanitizer-minified.js');
-requireScript('https://kaskadeshowdown.dynv6.net/js/battle-sound.js');
-requireScript('https://kaskadeshowdown.dynv6.net/js/battledata.js?a7');
-requireScript('https://kaskadeshowdown.dynv6.net/data/pokedex-mini.js?a7');
-requireScript('https://kaskadeshowdown.dynv6.net/data/pokedex-mini-bw.js?a7');
-requireScript('https://kaskadeshowdown.dynv6.net/data/graphics.js?a7');
-requireScript('https://kaskadeshowdown.dynv6.net/data/pokedex.js?a7');
-requireScript('https://kaskadeshowdown.dynv6.net/data/moves.js?a7');
-requireScript('https://kaskadeshowdown.dynv6.net/data/abilities.js?a7');
-requireScript('https://kaskadeshowdown.dynv6.net/data/items.js?a7');
-requireScript('https://kaskadeshowdown.dynv6.net/data/teambuilder-tables.js?a7');
-requireScript('https://kaskadeshowdown.dynv6.net/js/battle-tooltips.js?a7');
-requireScript('https://kaskadeshowdown.dynv6.net/js/battle.js?a7');
+requireScript('https://kaskadeshowdown.com/js/lib/ps-polyfill.js');
+requireScript('https://kaskadeshowdown.com/config/config.js?a7');
+requireScript('https://kaskadeshowdown.com/js/lib/jquery-1.11.0.min.js');
+requireScript('https://kaskadeshowdown.com/js/lib/html-sanitizer-minified.js');
+requireScript('https://kaskadeshowdown.com/js/battle-sound.js');
+requireScript('https://kaskadeshowdown.com/js/battledata.js?a7');
+requireScript('https://kaskadeshowdown.com/data/pokedex-mini.js?a7');
+requireScript('https://kaskadeshowdown.com/data/pokedex-mini-bw.js?a7');
+requireScript('https://kaskadeshowdown.com/data/graphics.js?a7');
+requireScript('https://kaskadeshowdown.com/data/pokedex.js?a7');
+requireScript('https://kaskadeshowdown.com/data/moves.js?a7');
+requireScript('https://kaskadeshowdown.com/data/abilities.js?a7');
+requireScript('https://kaskadeshowdown.com/data/items.js?a7');
+requireScript('https://kaskadeshowdown.com/data/teambuilder-tables.js?a7');
+requireScript('https://kaskadeshowdown.com/js/battle-tooltips.js?a7');
+requireScript('https://kaskadeshowdown.com/js/battle.js?a7');
 
 const Replays = {
 	$el: null! as JQuery,
