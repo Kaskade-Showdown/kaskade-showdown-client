@@ -58,11 +58,11 @@
 				bannedHosts: [],
 				whitelist: [],
 				routes: {
-					root: "pokemonshowdown.com",
-					client: "play.pokemonshowdown.com",
-					dex: "dex.pokemonshowdown.com",
-					replays: "replay.pokemonshowdown.com",
-					users: "pokemonshowdown.com/users"
+					root: "api.kaskadeshowdown.com",
+					client: "kaskadeshowdown.com",
+					dex: "dex.kaskadeshowdown.com",
+					replays: "replay.kaskadeshowdown.com",
+					users: "kaskadeshowdown.com/users"
 				},
 				defaultserver: {
 					id: 'showdown',
@@ -77,7 +77,7 @@
 		}
 		function loadRemoteData(src) {
 			var scriptEl = document.createElement('script');
-			scriptEl.src = src.replace(/.*\/(data|js)\//g, 'https://play.pokemonshowdown.com/$1/');
+			scriptEl.src = src.replace(/.*\/(data|js)\//g, 'https://kaskadeshowdown.com/$1/');
 			document.head.appendChild(scriptEl);
 		}
 		Config.testclient = true;
@@ -107,7 +107,7 @@
 	<script src="js/client-main.js"></script>
 	<script nomodule src="js/lib/sockjs-1.4.0-nwjsfix.min.js"></script>
 	<script src="js/client-connection.js"></script>
-	<script> Net.defaultRoute = 'https://play.pokemonshowdown.com'; </script>
+	<script> Net.defaultRoute = 'https://kaskadeshowdown.com'; </script>
 
 	<script src="js/lib/preact.min.js"></script>
 	<script src="js/panels.js"></script>
@@ -155,8 +155,8 @@
 	<script src="js/battle-team-editor.js?"></script>
 	<script src="js/panel-teambuilder-team.js?"></script>
 
-	<script src="https://play.pokemonshowdown.com/data/pokedex-mini.js"></script>
-	<script src="https://play.pokemonshowdown.com/data/pokedex-mini-bw.js"></script>
+	<script src="https://kaskadeshowdown.com/data/pokedex-mini.js"></script>
+	<script src="https://kaskadeshowdown.com/data/pokedex-mini-bw.js"></script>
 	<script src="data/typechart.js" onerror="loadRemoteData(this.src)"></script>
 	<script src="data/aliases.js" onerror="loadRemoteData(this.src)"></script>
 	<script src="js/lib/d3.v3.min.js"></script>
