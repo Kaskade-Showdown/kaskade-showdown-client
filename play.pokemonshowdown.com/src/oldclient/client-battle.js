@@ -1644,7 +1644,6 @@
 			buf += '<p><label class="checkbox"><input type="checkbox" name="allignoreopp"' + (Dex.prefs('ignoreopp') ? ' checked' : '') + ' /> Ignore opponent</label></p>';
 			buf += '<p><label class="checkbox"><input type="checkbox" name="autohardcore"' + (Dex.prefs('hardcoremode') ? ' checked' : '') + ' /> Automatically enable hardcore mode</label></p>';
 			buf += '<p><label class="checkbox"><input type="checkbox" name="autoTeamSheet"' + (Dex.prefs('autoTeamSheet') ? ' checked' : '') + ' /> Automatically accept Open Team Sheets</label></p>';
-			buf += '<p><label class="checkbox"><input type="checkbox" name="spectatefromstart"' + (Dex.prefs('spectatefromstart') ? ' checked' : '') + ' /> Automatically accept Open Team Sheets</label></p>';
 			if (rightPanelBattlesPossible) buf += '<p><label class="checkbox"><input type="checkbox" name="rightpanelbattles"' + (Dex.prefs('rightpanelbattles') ? ' checked' : '') + ' /> Start at turn 0 when spectating battles</label></p>';
 			buf += '<p class="buttonbar">';
 			buf += '<button name="close" class="button">Done</button> ';
