@@ -13,6 +13,13 @@ import { PSRoomPanel, PSPanelWrapper, PSView } from "./panels";
 import { PSHeader } from "./panel-topbar";
 
 const WARNING_SECONDS = 5;
+const BUTTON_COLOR_OPTIONS = [
+	{ value: 1, label: '1 color' },
+	{ value: 3, label: '3 colors' },
+	{ value: 8, label: '8 colors' },
+	{ value: 'rainbow', label: 'Rainbow!' },
+] as const;
+const SOLID_COLOR_REGEX = /^#[0-9A-F]{6}$/i;
 
 /**
  * User popup
@@ -713,16 +720,16 @@ class OptionsPanel extends PSRoomPanel {
 					name="noanim" checked={PS.prefs.noanim || false} type="checkbox" onChange={this.handleOnChange}
 				/> Disable animations</label>
 			</p>
-			<p>
+			{/*  <p>
 				<label class="checkbox"><input
 					name="bwgfx" checked={PS.prefs.bwgfx || false} type="checkbox" onChange={this.handleOnChange}
 				/>  Use 2D sprites instead of 3D models</label>
-			</p>
-			<p>
+			</p> */}
+			{/* <p>
 				<label class="checkbox"><input
 					name="nopastgens" checked={PS.prefs.nopastgens || false} type="checkbox" onChange={this.handleOnChange}
 				/> Use modern sprites for past generations</label>
-			</p>
+			</p> */}
 			<hr />
 			<h3>Chat</h3>
 			<p>
@@ -983,8 +990,7 @@ class AvatarsPanel extends PSRoomPanel {
 		const room = this.props.room;
 
 		const avatars: [number, string][] = [];
-		for (let i = 1; i <= 293; i++) {
-			if (i === 162 || i === 168) continue;
+		for (let i = 1; i <= 5; i++) {
 			avatars.push([i, window.BattleAvatarNumbers?.[i] || `${i}`]);
 		}
 
@@ -1257,7 +1263,27 @@ class BackgroundListPanel extends PSRoomPanel {
 		}
 	}
 
-	declare state: { status?: string, bgUrl?: string };
+	declare state: {
+		status?: string,
+		bgUrl?: string,
+		solidColor?: string,
+	};
+
+	static readonly defaultSolidColor = '#344b6c';
+
+	normalizeSolidColor(color: string | undefined) {
+		return SOLID_COLOR_REGEX.test(color || '') ? color! : BackgroundListPanel.defaultSolidColor;
+	}
+
+	getSolidColor() {
+		const currentColor = PSBackground.id === 'solidcolor' ? PSBackground.bgUrl : undefined;
+		return this.normalizeSolidColor(this.state.solidColor || currentColor);
+	}
+
+	getSolidColorInputValue() {
+		const currentColor = PSBackground.id === 'solidcolor' ? PSBackground.bgUrl : undefined;
+		return (this.state.solidColor || currentColor || BackgroundListPanel.defaultSolidColor).toUpperCase();
+	}
 
 	setBg = (ev: Event) => {
 		let curtarget = ev.currentTarget as HTMLButtonElement;
@@ -1265,11 +1291,23 @@ class BackgroundListPanel extends PSRoomPanel {
 		if (bg === 'custom') {
 			PSBackground.set(this.props.room.args?.bgUrl as string || '', 'custom');
 			this.close();
+		} else if (bg === 'solidcolor') {
+			PSBackground.set(this.getSolidColor(), 'solidcolor');
 		} else {
 			PSBackground.set('', bg);
 		}
 		ev.preventDefault();
 		ev.stopImmediatePropagation();
+		this.forceUpdate();
+	};
+
+	setSolidColor = (ev: Event) => {
+		const solidColor = (ev.currentTarget as HTMLInputElement).value.trim().toUpperCase();
+		this.setState({ solidColor });
+	};
+	setButtonColorMode = (ev: Event) => {
+		const value = (ev.currentTarget as HTMLButtonElement).value;
+		PSBackground.setButtonColorMode(value);
 		this.forceUpdate();
 	};
 
@@ -1342,6 +1380,8 @@ class BackgroundListPanel extends PSRoomPanel {
 	override render() {
 		const room = this.props.room;
 		const option = (val: string) => val === PSBackground.id ? 'option cur' : 'option';
+		const solidColor = this.getSolidColor();
+		const solidColorInput = this.getSolidColorInputValue();
 		return this.renderUpload() || <PSPanelWrapper room={room} width={480}><div class="pad">
 			<p><strong>Default</strong></p>
 			<div class="bglist">
@@ -1360,12 +1400,16 @@ class BackgroundListPanel extends PSRoomPanel {
 			<div style="clear: left"></div>
 			<p><strong>Official</strong></p>
 			<div class="bglist">
-				<button onClick={this.setBg} value="charizards" class={option('charizards')}>
+				<button onClick={this.setBg} value="kaskademap" class={option('kaskademap')}>
 					<span class="bg" style="background-position: 0 -0px"></span>{}
+					Kaskade region
+				</button>
+				<button onClick={this.setBg} value="charizards" class={option('charizards')}>
+					<span class="bg" style="background-position: 0 -90px"></span>{}
 					Charizards
 				</button>
 				<button onClick={this.setBg} value="horizon" class={option('horizon')}>
-					<span class="bg" style="background-position: 0 -90px"></span>{}
+					<span class="bg" style="background-position: 0 -180px"></span>{}
 					Horizon
 				</button>
 				<button onClick={this.setBg} value="ocean" class={option('ocean')}>
@@ -1376,12 +1420,48 @@ class BackgroundListPanel extends PSRoomPanel {
 					<span class="bg" style="background-position: 0 -360px"></span>{}
 					Shaymin
 				</button>
-				<button onClick={this.setBg} value="solidblue" class={option('solidblue')}>
-					<span class="bg" style="background: #344b6c"></span>{}
-					Solid blue
+				<button onClick={this.setBg} value="psday" class={option('psday')}>
+					<span class="bg" style="background-position: 0 -450px"></span>{}
+					PS! Day
 				</button>
 			</div>
 			<div style="clear: left"></div>
+			<p><strong>Solid color</strong></p>
+			<div class="solidcolorpicker">
+				<div class="solidcolorpreview bglist">
+					<button onClick={this.setBg} value="solidcolor" class={option('solidcolor')}>
+						<span class="bg" style={`background: ${solidColor}`}></span>{}
+						Use {solidColor.toUpperCase()}
+					</button>
+				</div>
+				<div class="solidcolorpicker-left">
+					<label>
+						Color: <input
+							type="color" value={solidColor}
+							onInput={this.setSolidColor} onChange={this.setSolidColor}
+						/>
+					</label>
+					<label>
+						Hex: <input
+							class="textbox"
+							type="text" inputMode="text" maxLength={7}
+							placeholder="#344B6C" value={solidColorInput}
+							onInput={this.setSolidColor} onChange={this.setSolidColor}
+						/>
+					</label>
+				</div>
+				<div class="buttoncolorpicker">
+					<strong>Button colors:</strong>
+					{BUTTON_COLOR_OPTIONS.map(colorOption => <button
+						type="button"
+						class={'button' + (PSBackground.buttonColorMode === colorOption.value ? ' disabled' : '')}
+						value={colorOption.value}
+						onClick={this.setButtonColorMode}
+					>
+						<strong>{colorOption.label}</strong>
+					</button>)}
+				</div>
+			</div>
 			<p><strong>Custom</strong></p>
 			<p>
 				Upload:
@@ -1585,6 +1665,13 @@ class BattleOptionsPanel extends PSRoomPanel {
 			}
 			break;
 		}
+		case 'autoTeamSheet': {
+			PS.prefs.set('autoTeamSheet', value);
+			if (value) {
+				room?.send('/acceptopenteamsheets');
+			}
+			break;
+		}
 		case 'spectatefromstart': {
 			PS.prefs.set('spectatefromstart', value);
 			break;
@@ -1610,7 +1697,6 @@ class BattleOptionsPanel extends PSRoomPanel {
 		}
 		case 'disallowspectators': {
 			PS.prefs.set('disallowspectators', value);
-			PS.mainmenu.disallowSpectators = value;
 			break;
 		}
 		}
@@ -1619,6 +1705,15 @@ class BattleOptionsPanel extends PSRoomPanel {
 		const battleRoom = this.props.room.getParent() as BattleRoom | null;
 		return battleRoom?.battle ? battleRoom : null;
 	}
+	handleBattleVisibility = (ev: Event) => {
+		const room = this.getBattleRoom();
+		if (!room) return this.close();
+
+		const hidden = (ev.currentTarget as HTMLInputElement).checked;
+		room.hideBattleToggled = hidden;
+		room.update(null);
+		room.send(hidden ? '/hiddenroom' : '/publicroom');
+	};
 
 	override render() {
 		const room = this.props.room;
@@ -1631,9 +1726,18 @@ class BattleOptionsPanel extends PSRoomPanel {
 				<p>
 					<label class="checkbox">
 						<input
-							checked={battleRoom.battle.hardcoreMode}
-							type="checkbox" onChange={this.handleHardcoreMode}
-						/> Hardcore mode (hide info not shown in-game)
+							type="checkbox"
+							checked={battleRoom.hideBattleToggled}
+							onChange={this.handleBattleVisibility}
+						/> Hide current battle
+					</label>
+				</p>
+				<p>
+					<label class="checkbox">
+						<input
+							checked={battleRoom.battle?.ignoreNicks}
+							type="checkbox" onChange={this.handleIgnoreNicks}
+						/> Ignore Pok&eacute;mon nicknames
 					</label>
 				</p>
 				<p>
@@ -1655,9 +1759,9 @@ class BattleOptionsPanel extends PSRoomPanel {
 				<p>
 					<label class="checkbox">
 						<input
-							checked={battleRoom.battle?.ignoreNicks}
-							type="checkbox" onChange={this.handleIgnoreNicks}
-						/> Ignore nicknames
+							checked={battleRoom.battle.hardcoreMode}
+							type="checkbox" onChange={this.handleHardcoreMode}
+						/> Hardcore mode (hide info not shown in-game)
 					</label>
 				</p>
 			</>}
@@ -1668,6 +1772,14 @@ class BattleOptionsPanel extends PSRoomPanel {
 						name="disallowspectators" checked={PS.prefs.disallowspectators || false}
 						type="checkbox" onChange={this.handleAllSettings}
 					/> <abbr title="You can still invite spectators by giving them the URL or using the /invite command">Invite only (hide from Battles list)</abbr>
+				</label>
+			</p>
+			<p>
+				<label class="checkbox">
+					<input
+						name="autotimer" checked={PS.prefs.autotimer || false}
+						type="checkbox" onChange={this.handleAllSettings}
+					/> Automatically start timer
 				</label>
 			</p>
 			<p>
@@ -1697,17 +1809,17 @@ class BattleOptionsPanel extends PSRoomPanel {
 			<p>
 				<label class="checkbox">
 					<input
-						name="autotimer" checked={PS.prefs.autotimer || false}
+						name="autohardcore" checked={PS.prefs.autohardcore || false}
 						type="checkbox" onChange={this.handleAllSettings}
-					/> Automatically start timer
+					/> Automatically enable hardcore mode
 				</label>
 			</p>
 			<p>
 				<label class="checkbox">
 					<input
-						name="autohardcore" checked={PS.prefs.autohardcore || false}
+						name="autoTeamSheet" checked={PS.prefs.autoTeamSheet || false}
 						type="checkbox" onChange={this.handleAllSettings}
-					/> Automatically enable hardcore mode
+					/> Automatically accept Open Team Sheets
 				</label>
 			</p>
 			<p>
@@ -1851,9 +1963,9 @@ class BattleTimerPanel extends PSRoomPanel {
 		const room = this.props.room.getParent() as BattleRoom;
 		return <PSPanelWrapper room={this.props.room}><div class="pad">
 			{room.battle.kickingInactive ? (
-				<button class="button" data-cmd="/closeand /inopener /timer stop">Stop Timer</button>
+				<button class="button" data-cmd="/closeand /inopener /timer off">Stop Timer</button>
 			) : (
-				<button class="button" data-cmd="/closeand /inopener /timer start">Start Timer</button>
+				<button class="button" data-cmd="/closeand /inopener /timer on">Start Timer</button>
 			)}
 		</div>
 		</PSPanelWrapper>;
@@ -1905,7 +2017,7 @@ class RulesPanel extends PSRoomPanel<PopupRoom> {
 					<p><strong style="color:red">{(BattleLog.escapeHTML(message) || 'You have been warned for breaking the rules.')}
 					</strong></p>
 				}
-				<h2>Pok&eacute;mon Showdown Rules</h2>
+				<h2>Kaskade Showdown Rules</h2>
 				<p><b>1.</b> Be nice to people. Respect people. Don't be rude or mean to people.</p>
 				<p><b>2.</b> {}
 					Follow US laws (PS is based in the US). No porn (minors use PS), don't distribute pirated material, {}

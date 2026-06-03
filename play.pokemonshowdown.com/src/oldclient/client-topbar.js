@@ -15,7 +15,7 @@
 		initialize: function () {
 			// April Fool's 2016 - Digimon Showdown
 			// this.$el.html('<img class="logo" src="' + Dex.resourcePrefix + 'sprites/afd/digimonshowdown.png" alt="Digimon Showdown! (beta)" width="146" height="44" /><div class="maintabbarbottom"></div><div class="tabbar maintabbar"><div class="inner"></div></div><div class="userbar"></div>');
-			this.$el.html('<img class="logo" src="' + Dex.resourcePrefix + 'pokemonshowdownbeta.png" srcset="' + Dex.resourcePrefix + 'pokemonshowdownbeta@2x.png 2x" alt="Pok&eacute;mon Showdown! (beta)" width="146" height="44" /><div class="maintabbarbottom"></div><div class="tabbar maintabbar"><div class="inner"></div></div><div class="userbar"></div>');
+			this.$el.html('<img class="logo" src="' + Dex.resourcePrefix + 'pokemonshowdownbeta.png" srcset="' + Dex.resourcePrefix + 'pokemonshowdownbeta@2x.png 2x" alt="Kaskade Showdown!" width="146" height="44" /><div class="maintabbarbottom"></div><div class="tabbar maintabbar"><div class="inner"></div></div><div class="userbar"></div>');
 			this.$tabbar = this.$('.maintabbar .inner');
 			// this.$sidetabbar = this.$('.sidetabbar');
 			this.$userbar = this.$('.userbar');
@@ -206,7 +206,7 @@
 			for (var i in app.rooms) {
 				if (app.rooms[i] !== app.curRoom && app.rooms[i].notificationClass === ' notifying') notificationClass = ' notifying';
 			}
-			var buf = '<ul><li><a class="button minilogo' + notificationClass + '" href="' + app.root + '"><img src="' + Dex.resourcePrefix + 'favicon-256.png" width="32" height="32" alt="Pok&eacute;mon Showdown! (beta)" /><i class="fa fa-caret-down" style="display:inline-block"></i></a></li></ul>';
+			var buf = '<ul><li><a class="button minilogo' + notificationClass + '" href="' + app.root + '"><img src="' + Dex.resourcePrefix + 'favicon-256.png" width="32" height="32" alt="Kaskade Showdown!" /><i class="fa fa-caret-down" style="display:inline-block"></i></a></li></ul>';
 
 			buf += '<ul>' + this.renderRoomTab(app.curRoom) + '</ul>';
 
@@ -520,8 +520,8 @@
 			if (navigator.userAgent.includes(' Chrome/64.')) {
 				buf += '<p><label class="checkbox"><input type="checkbox" name="nogif"' + (Dex.prefs('nogif') ? ' checked' : '') + ' /> Disable GIFs for Chrome 64 bug</label></p>';
 			}
-			buf += '<p><label class="checkbox"><input type="checkbox" name="bwgfx"' + (Dex.prefs('bwgfx') ? ' checked' : '') + ' /> Use 2D sprites instead of 3D models</label></p>';
-			buf += '<p><label class="checkbox"><input type="checkbox" name="nopastgens"' + (Dex.prefs('nopastgens') ? ' checked' : '') + ' /> Use modern sprites for past generations</label></p>';
+			// buf += '<p><label class="checkbox"><input type="checkbox" name="bwgfx"' + (Dex.prefs('bwgfx') ? ' checked' : '') + ' /> Use 3D models instead of 2D sprites</label></p>';
+			// buf += '<p><label class="checkbox"><input type="checkbox" name="nopastgens"' + (Dex.prefs('nopastgens') ? ' checked' : '') + ' /> Use modern sprites for past generations</label></p>';
 
 			buf += '<hr />';
 			buf += '<p><strong>Chat</strong></p>';
@@ -596,7 +596,7 @@
 		setNoanim: function (e) {
 			var noanim = !!e.currentTarget.checked;
 			Storage.prefs('noanim', noanim);
-			Dex.loadSpriteData(noanim || Dex.prefs('bwgfx') ? 'bw' : 'xy');
+			Dex.loadSpriteData(noanim || !Dex.prefs('bwgfx') ? 'bw' : 'xy');
 		},
 		setNogif: function (e) {
 			var nogif = !!e.currentTarget.checked;
@@ -754,8 +754,7 @@
 			buf += '<p>Choose an avatar or <button name="close" class="button">Cancel</button></p>';
 
 			buf += '<div class="avatarlist">';
-			for (var i = 1; i <= 293; i++) {
-				if (i === 162 || i === 168) continue;
+			for (var i = 1; i <= 5; i++) {
 				var offset = '-' + (((i - 1) % 16) * 80 + 1) + 'px -' + (Math.floor((i - 1) / 16) * 80 + 1) + 'px';
 				buf += '<button name="setAvatar" value="' + i + '" style="background-position:' + offset + '" class="option pixelated' + (i === cur ? ' cur' : '') + '" title="/avatar ' + i + '"></button>';
 			}
@@ -823,27 +822,50 @@
 
 	var CustomBackgroundPopup = this.CustomBackgroundPopup = Popup.extend({
 		events: {
-			'change input[name=bgfile]': 'setBgFile'
+			'change input[name=bgfile]': 'setBgFile',
+			'input input[name=solidcolor]': 'updateSolidColorPreview',
+			'change input[name=solidcolor]': 'updateSolidColorPreview',
+			'input input[name=solidcolorhex]': 'updateSolidColorPreview',
+			'change input[name=solidcolorhex]': 'updateSolidColorPreview'
 		},
 		initialize: function () {
 			var buf = '';
 			var cur = Storage.bg.id;
+			var solidColor = (cur === Storage.bg.SOLID_BG_ID ? Storage.bg.curUrl : Storage.bg.DEFAULT_SOLID_BG);
 			buf += '<p><strong>Default</strong></p>';
 			buf += '<div class="bglist">';
 
-			buf += '<button name="setBg" value="" class="option' + (!cur ? ' cur' : '') + '"><strong style="background:#888888;color:white;padding:16px 18px;display:block;font-size:12pt">' + (location.host === Config.routes.client ? 'Random' : 'Default') + '</strong></button>';
+			buf += '<button name="setBg" value="" class="option' + (!cur ? ' cur' : '') + '"><strong style="background:#888888;color:white;padding:16px 18px;display:block;font-size:12pt">Random</strong></button>';
 
 			buf += '</div><div style="clear:left"></div>';
 			buf += '<p><strong>Official</strong></p>';
 			buf += '<div class="bglist">';
 
-			buf += '<button name="setBg" value="charizards" class="option' + (cur === 'charizards' ? ' cur' : '') + '"><span class="bg" style="background-position:0 -' + (90 * 0) + 'px"></span>Charizards</button>';
-			buf += '<button name="setBg" value="horizon" class="option' + (cur === 'horizon' ? ' cur' : '') + '"><span class="bg" style="background-position:0 -' + (90 * 1) + 'px"></span>Horizon</button>';
+			buf += '<button name="setBg" value="kaskademap" class="option' + (cur === 'kaskademap' ? ' cur' : '') + '"><span class="bg" style="background-position:0 -' + (90 * 0) + 'px"></span>Kaskade region</button>';
+			buf += '<button name="setBg" value="charizards" class="option' + (cur === 'charizards' ? ' cur' : '') + '"><span class="bg" style="background-position:0 -' + (90 * 1) + 'px"></span>Charizards</button>';
+			buf += '<button name="setBg" value="horizon" class="option' + (cur === 'horizon' ? ' cur' : '') + '"><span class="bg" style="background-position:0 -' + (90 * 2) + 'px"></span>Horizon</button>';
 			buf += '<button name="setBg" value="ocean" class="option' + (cur === 'ocean' ? ' cur' : '') + '"><span class="bg" style="background-position:0 -' + (90 * 3) + 'px"></span>Ocean</button>';
 			buf += '<button name="setBg" value="shaymin" class="option' + (cur === 'shaymin' ? ' cur' : '') + '"><span class="bg" style="background-position:0 -' + (90 * 4) + 'px"></span>Shaymin</button>';
-			buf += '<button name="setBg" value="solidblue" class="option' + (cur === 'solidblue' ? ' cur' : '') + '"><span class="bg" style="background: #344b6c"></span>Solid blue</button>';
+			buf += '<button name="setBg" value="psday" class="option' + (cur === 'psday' ? ' cur' : '') + '"><span class="bg" style="background-position:0 -' + (90 * 5) + 'px"></span>PS! Day</button>';
 
 			buf += '</div><div style="clear:left"></div>';
+			buf += '<p><strong>Solid color</strong></p>';
+			buf += '<div class="solidcolorpicker">';
+			buf += '<div class="solidcolorpreview bglist">';
+			buf += '<button name="setBg" value="solidcolor" class="option' + (cur === 'solidcolor' ? ' cur' : '') + '"><span class="bg" style="background:' + BattleLog.escapeHTML(solidColor) + '"></span>Use ' + BattleLog.escapeHTML(solidColor.toUpperCase()) + '</button>';
+			buf += '</div>';
+			buf += '<div class="solidcolorpicker-left">';
+			buf += '<label>Color: <input type="color" name="solidcolor" value="' + BattleLog.escapeHTML(solidColor.toUpperCase()) + '"></label>';
+			buf += '<label>Hex: <input class="textbox" type="text" name="solidcolorhex" maxlength="7" placeholder="#344B6C" value="' + BattleLog.escapeHTML(solidColor.toUpperCase()) + '"></label>';
+			buf += '</div>';
+			buf += '<div class="buttoncolorpicker">';
+			buf += '<strong>Button colors:</strong>';
+			buf += '<button name="setButtonColorMode" value="1" class="button' + (Storage.bg.buttonColorMode === '1' ? ' disabled' : '') + '"><strong>1 color</strong></button>';
+			buf += '<button name="setButtonColorMode" value="3" class="button' + (Storage.bg.buttonColorMode === '3' ? ' disabled' : '') + '"><strong>3 colors</strong></button>';
+			buf += '<button name="setButtonColorMode" value="8" class="button' + (Storage.bg.buttonColorMode === '8' ? ' disabled' : '') + '"><strong>8 colors</strong></button>';
+			buf += '<button name="setButtonColorMode" value="rainbow" class="button' + (Storage.bg.buttonColorMode === 'rainbow' ? ' disabled' : '') + '"><strong>Rainbow!</strong></button>';
+			buf += '</div>';
+			buf += '</div>';
 			buf += '<p><strong>Custom</strong></p>';
 			buf += '<p>Drag and drop an image to PS (the background settings don\'t need to be open), or upload:</p>';
 			buf += '<p><input type="file" accept="image/*" name="bgfile"></p>';
@@ -855,13 +877,38 @@
 			// buf = '<p>Sorry, the background chooser is experiencing technical difficulties. Please try again tomorrow!</p><p><button name="close"><strong>Done</strong></button></p>';
 
 			this.$el.css('max-width', 448).html(buf);
-			this.$el.html(buf);
+			this.updateSolidColorPreview();
 		},
 		setBg: function (bgid) {
-			var bgUrl = (bgid === 'solidblue' ? '#344b6c' : Dex.resourcePrefix + 'fx/client-bg-' + bgid + '.jpg');
+			var solidColor = this.normalizeSolidColor(String(this.$('input[name=solidcolor]').val() || Storage.bg.DEFAULT_SOLID_BG).trim().toUpperCase()).toUpperCase();
+			var bgUrl = '';
+			if (bgid === 'solidcolor') {
+				bgUrl = solidColor;
+			} else if (bgid) {
+				bgUrl = Dex.resourcePrefix + 'fx/client-bg-' + bgid + '.jpg';
+			}
 			Storage.bg.set(bgUrl, bgid);
 			this.$('.cur').removeClass('cur');
 			this.$('button[value="' + bgid + '"]').addClass('cur');
+			if (bgid === 'solidcolor') this.updateSolidColorPreview();
+		},
+		normalizeSolidColor: function (color) {
+			return /^#[0-9A-F]{6}$/i.test(color || '') ? color : Storage.bg.DEFAULT_SOLID_BG;
+		},
+		updateSolidColorPreview: function (e) {
+			var isHexInput = e && e.currentTarget && e.currentTarget.name === 'solidcolorhex';
+			var inputColor = String((isHexInput ? this.$('input[name=solidcolorhex]') : this.$('input[name=solidcolor]')).val() || '').trim().toUpperCase();
+			var solidColor = this.normalizeSolidColor(inputColor);
+			this.$('input[name=solidcolor]').val(solidColor.toUpperCase());
+			if (!isHexInput) this.$('input[name=solidcolorhex]').val(solidColor.toUpperCase());
+			var $button = this.$('button[value="solidcolor"]');
+			$button.find('.bg').attr('style', 'background:' + BattleLog.escapeHTML(solidColor));
+			$button.contents().last()[0].textContent = 'Use ' + solidColor.toUpperCase();
+		},
+		setButtonColorMode: function (mode) {
+			Storage.bg.setButtonColorMode(mode);
+			this.$('button[name=setButtonColorMode]').removeClass('disabled');
+			this.$('button[name=setButtonColorMode][value="' + mode + '"]').addClass('disabled');
 		},
 		setBgFile: function (e) {
 			$('.bgstatus').text('Changing background image...');

@@ -127,7 +127,7 @@ export class BattleTextParser {
 			if ([
 				'ingrain', 'quickguard', 'wideguard', 'craftyshield', 'matblock', 'protect', 'mist', 'safeguard',
 				'electricterrain', 'mistyterrain', 'psychicterrain', 'telepathy', 'stickyhold', 'suctioncups', 'aromaveil',
-				'flowerveil', 'sweetveil', 'disguise', 'safetygoggles', 'protectivepads',
+				'flowerveil', 'sweetveil', 'disguise', 'safetygoggles', 'protectivepads', 'resilientoil',
 			].includes(id)) {
 				if (target) {
 					kwArgs.of = pokemon;
@@ -140,7 +140,7 @@ export class BattleTextParser {
 				return { args: ['-singlemove', pokemon, effect], kwArgs: { of: target } };
 			}
 			if ([
-				'bind', 'wrap', 'clamp', 'whirlpool', 'firespin', 'magmastorm', 'sandtomb', 'infestation', 'snaptrap', 'thundercage', 'trapped',
+				'bearhug', 'bind', 'clamp', 'whirlduel', 'whirlpool', 'firespin', 'magmastorm', 'sandtomb', 'infestation', 'possess', 'snaptrap', 'thundercage', 'trapped', 'wrangle', 'wrap',
 			].includes(id)) {
 				return { args: ['-start', pokemon, effect], kwArgs: { of: target } };
 			}
@@ -203,7 +203,7 @@ export class BattleTextParser {
 			break;
 		}
 
-		case '-weather': {
+		case '-climateWeather': {
 			if (args[1] === 'Snow') args[1] = 'Snowscape';
 			break;
 		}
@@ -535,6 +535,7 @@ export class BattleTextParser {
 				switch (newSpeciesId) {
 				case 'greninjaash': id = 'battlebond'; break;
 				case 'mimikyubusted': id = 'disguise'; break;
+				case 'stackemrockless': id = 'rockybody'; break;
 				case 'zygardecomplete': id = 'powerconstruct'; break;
 				case 'necrozmaultra': id = 'ultranecroziumz'; break;
 				case 'darmanitanzen': id = 'zenmode'; break;
@@ -545,11 +546,17 @@ export class BattleTextParser {
 				case 'aegislash': id = 'stancechange'; templateName = 'transformEnd'; break;
 				case 'wishiwashischool': id = 'schooling'; break;
 				case 'wishiwashi': id = 'schooling'; templateName = 'transformEnd'; break;
+				case 'eecroachswarming': id = 'swarming'; break; // swse
+				case 'eecroach': id = 'swarming'; templateName = 'transformEnd'; break;
 				case 'miniormeteor': id = 'shieldsdown'; break;
 				case 'minior': id = 'shieldsdown'; templateName = 'transformEnd'; break;
 				case 'eiscuenoice': id = 'iceface'; break;
 				case 'eiscue': id = 'iceface'; templateName = 'transformEnd'; break;
 				case 'terapagosterastal': id = 'terashift'; break;
+				case 'blurruncharged': id = 'powerplumage'; break;
+				case 'blurrun': id = 'powerplumage'; templateName = 'transformEnd'; break;
+				case 'bearvoyanceawakened': id = 'consecration'; break;
+				case 'bearvoyance': id = 'consecration'; templateName = 'transformEnd'; break;
 				}
 			} else if (newSpecies) {
 				id = 'transform';
@@ -640,7 +647,7 @@ export class BattleTextParser {
 				const template = this.template('activate', 'perishsong');
 				return line1 + template.replace('[POKEMON]', this.pokemon(pokemon)).replace('[NUMBER]', num);
 			}
-			if (id.startsWith('protosynthesis') || id.startsWith('quarkdrive')) {
+			if (id.startsWith('protosynthesis') || id.startsWith('quarkdrive') || id.startsWith('warpmist')) {
 				const stat = id.slice(-3);
 				const template = this.template('start', id.slice(0, id.length - 3));
 				return line1 + template.replace('[POKEMON]', this.pokemon(pokemon)).replace('[STAT]', BattleTextParser.stat(stat));
@@ -746,6 +753,10 @@ export class BattleTextParser {
 				const template = this.template('eatItem', kwArgs.from);
 				return line1 + template.replace('[POKEMON]', this.pokemon(pokemon)).replace('[ITEM]', this.effect(item));
 			}
+			if (kwArgs.drink) {
+				const template = this.template('drinkItem', kwArgs.from);
+				return line1 + template.replace('[POKEMON]', this.pokemon(pokemon)).replace('[ITEM]', this.effect(item));
+			}
 			const id = BattleTextParser.effectId(kwArgs.from);
 			if (id === 'gem') {
 				const template = this.template('useGem', item);
@@ -753,6 +764,10 @@ export class BattleTextParser {
 					.replace('[MOVE]', kwArgs.move);
 			}
 			if (id === 'stealeat') {
+				const template = this.template('removeItem', "Bug Bite");
+				return line1 + template.replace('[SOURCE]', this.pokemon(kwArgs.of)).replace('[ITEM]', this.effect(item));
+			}
+			if (id === 'stealdrink') {
 				const template = this.template('removeItem', "Bug Bite");
 				return line1 + template.replace('[SOURCE]', this.pokemon(kwArgs.of)).replace('[ITEM]', this.effect(item));
 			}
@@ -838,19 +853,83 @@ export class BattleTextParser {
 			return template.replace('[TEAM]', this.team(side)).replace('[PARTY]', this.party(side));
 		}
 
-		case '-weather': {
-			const [, weather] = args;
-			if (!weather || weather === 'none') {
+		case '-climateWeather': {
+			const [, climateWeather] = args;
+			if (!climateWeather || climateWeather === 'none') {
 				const template = this.template('end', kwArgs.from, 'NODEFAULT');
-				if (!template) return this.template('endFieldEffect').replace('[EFFECT]', this.effect(weather));
+				if (!template) return this.template('endFieldEffect').replace('[EFFECT]', this.effect(climateWeather));
 				return template;
 			}
 			if (kwArgs.upkeep) {
-				return this.template('upkeep', weather, 'NODEFAULT');
+				return this.template('upkeep', climateWeather, 'NODEFAULT');
 			}
 			const line1 = this.maybeAbility(kwArgs.from, kwArgs.of);
-			let template = this.template('start', weather, 'NODEFAULT');
-			if (!template) template = this.template('startFieldEffect').replace('[EFFECT]', this.effect(weather));
+			let template = this.template('start', climateWeather, 'NODEFAULT');
+			if (!template) template = this.template('startFieldEffect').replace('[EFFECT]', this.effect(climateWeather));
+			return line1 + template;
+		}
+
+		case '-irritantWeather': {
+			const [, irritantWeather] = args;
+			if (!irritantWeather || irritantWeather === 'none') {
+				const template = this.template('end', kwArgs.from, 'NODEFAULT');
+				if (!template) return this.template('endFieldEffect').replace('[EFFECT]', this.effect(irritantWeather));
+				return template;
+			}
+			if (kwArgs.upkeep) {
+				return this.template('upkeep', irritantWeather, 'NODEFAULT');
+			}
+			const line1 = this.maybeAbility(kwArgs.from, kwArgs.of);
+			let template = this.template('start', irritantWeather, 'NODEFAULT');
+			if (!template) template = this.template('startFieldEffect').replace('[EFFECT]', this.effect(irritantWeather));
+			return line1 + template;
+		}
+
+		case '-energyWeather': {
+			const [, energyWeather] = args;
+			if (!energyWeather || energyWeather === 'none') {
+				const template = this.template('end', kwArgs.from, 'NODEFAULT');
+				if (!template) return this.template('endFieldEffect').replace('[EFFECT]', this.effect(energyWeather));
+				return template;
+			}
+			if (kwArgs.upkeep) {
+				return this.template('upkeep', energyWeather, 'NODEFAULT');
+			}
+			const line1 = this.maybeAbility(kwArgs.from, kwArgs.of);
+			let template = this.template('start', energyWeather, 'NODEFAULT');
+			if (!template) template = this.template('startFieldEffect').replace('[EFFECT]', this.effect(energyWeather));
+			return line1 + template;
+		}
+
+		case '-clearingWeather': {
+			const [, clearingWeather] = args;
+			if (!clearingWeather || clearingWeather === 'none') {
+				const template = this.template('end', kwArgs.from, 'NODEFAULT');
+				if (!template) return this.template('endFieldEffect').replace('[EFFECT]', this.effect(clearingWeather));
+				return template;
+			}
+			if (kwArgs.upkeep) {
+				return this.template('upkeep', clearingWeather, 'NODEFAULT');
+			}
+			const line1 = this.maybeAbility(kwArgs.from, kwArgs.of);
+			let template = this.template('start', clearingWeather, 'NODEFAULT');
+			if (!template) template = this.template('startFieldEffect').replace('[EFFECT]', this.effect(clearingWeather));
+			return line1 + template;
+		}
+
+		case '-cataclysmWeather': {
+			const [, cataclysmWeather] = args;
+			if (!cataclysmWeather || cataclysmWeather === 'none') {
+				const template = this.template('end', kwArgs.from, 'NODEFAULT');
+				if (!template) return this.template('endFieldEffect').replace('[EFFECT]', this.effect(cataclysmWeather));
+				return template;
+			}
+			if (kwArgs.upkeep) {
+				return this.template('upkeep', cataclysmWeather, 'NODEFAULT');
+			}
+			const line1 = this.maybeAbility(kwArgs.from, kwArgs.of);
+			let template = this.template('start', cataclysmWeather, 'NODEFAULT');
+			if (!template) template = this.template('startFieldEffect').replace('[EFFECT]', this.effect(cataclysmWeather));
 			return line1 + template;
 		}
 
@@ -1103,7 +1182,8 @@ export class BattleTextParser {
 			const line1 = this.maybeAbility(kwArgs.from, kwArgs.of || pokemon);
 			let templateId = 'block';
 			if (['desolateland', 'primordialsea'].includes(blocker) &&
-				!['sunnyday', 'raindance', 'sandstorm', 'hail', 'snowscape', 'chillyreception'].includes(id)) {
+				!['sunnyday', 'raindance', 'hail', 'snowscape', 'chillyreception',
+					'bloodmoon', 'foghorn'].includes(id)) {
 				templateId = 'blockMove';
 			} else if (blocker === 'uproar' && kwArgs.msg) {
 				templateId = 'blockSelf';
@@ -1119,7 +1199,7 @@ export class BattleTextParser {
 			}
 
 			templateId = 'fail';
-			if (['brn', 'frz', 'par', 'psn', 'slp', 'substitute', 'shedtail'].includes(id)) {
+			if (['brn', 'frz', 'par', 'psn', 'slp', 'fst', 'substitute', 'shedtail'].includes(id)) {
 				templateId = 'alreadyStarted';
 			}
 			if (kwArgs.heavy) templateId = 'failTooHeavy';

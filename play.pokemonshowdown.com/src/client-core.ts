@@ -21,7 +21,13 @@ declare const ColorThief: any;
  *********************************************************************/
 // PS's model classes are defined here
 
-const PSURL = `${document.location.protocol !== 'http:' ? 'https:' : ''}//${Config.routes.client}/`;
+const PSURL = `${document.location.protocol !== 'http:' ? 'https:' : ''}//${Config.routes.client}/`; // incomplete, change this to swse later
+const MAINMENU_BUTTONS = 8;
+const DEFAULT_SOLID_BG = '#344b6c';
+const SOLID_BG_ID = 'solidcolor';
+const BUTTON_COLOR_MODE_PREFIX = 'buttonmode:';
+const SOLID_COLOR_REGEX = /^#[0-9A-F]{6}$/i;
+type ButtonColorMode = 1 | 3 | 8 | 'rainbow';
 
 export class PSSubscription<T = any> {
 	observable: PSModel<T> | PSStreamModel<T>;
@@ -120,6 +126,8 @@ export class PSStreamModel<T = string> {
 export const PSBackground = new class extends PSStreamModel<string | null> {
 	id = '';
 	curId = '';
+	bgUrl = '';
+	buttonColorMode: ButtonColorMode = MAINMENU_BUTTONS;
 	attrib: { url: string, title: string, artist: string } | null = null;
 	changeCount = 0;
 	menuColors: string[] | null = null;
@@ -127,34 +135,72 @@ export const PSBackground = new class extends PSStreamModel<string | null> {
 	constructor() {
 		super();
 		try {
-			let bg = localStorage.getItem('showdown_bg')?.split('\n') || [''];
-			if (bg.length === 1) {
+			let storedBg = localStorage.getItem('showdown_bg')?.split('\n') || [''];
+			let buttonColorMode: ButtonColorMode = MAINMENU_BUTTONS;
+			if (storedBg[storedBg.length - 1]?.startsWith(BUTTON_COLOR_MODE_PREFIX)) {
+				const storedMode = storedBg.pop()!.slice(BUTTON_COLOR_MODE_PREFIX.length);
+				if (storedMode === '1') {
+					buttonColorMode = 1;
+				} else if (storedMode === '3') {
+					buttonColorMode = 3;
+				} else if (storedMode === 'rainbow') {
+					buttonColorMode = 'rainbow';
+				}
+			}
+			if (storedBg.length === 1) {
 				// id
-				this.load('', bg[0]);
-			} else if (bg.length === 2) {
+				this.load('', storedBg[0], null, buttonColorMode);
+			} else if (storedBg.length === 2) {
 				// url, id
-				this.load(bg[0], bg[1]);
-			} else if (bg.length >= 7) {
+				this.load(storedBg[0], storedBg[1], null, buttonColorMode);
+			} else if (storedBg.length >= 10) {
 				// url, id, menuColors
-				this.load(bg[0], bg[1], bg.slice(2));
+				this.load(storedBg[0], storedBg[1], storedBg.slice(2), buttonColorMode);
 			}
 		} catch {}
 	}
-	save(bgUrl: string) {
-		if (this.id !== 'custom') {
-			localStorage.setItem('showdown_bg', this.id);
-		} else if (this.menuColors) {
-			localStorage.setItem('showdown_bg', bgUrl + '\n' + this.id + '\n' + this.menuColors.join('\n'));
+	save(bgUrl: string = this.bgUrl) {
+		let storedBg = ``;
+		if (this.id !== 'custom' && this.id !== SOLID_BG_ID) {
+			storedBg = this.id;
+		} else if (this.id === 'custom' && this.menuColors) {
+			storedBg = bgUrl + '\n' + this.id + '\n' + this.menuColors.join('\n');
 		} else {
-			localStorage.setItem('showdown_bg', bgUrl + '\n' + this.id);
+			storedBg = bgUrl + '\n' + this.id;
 		}
+		if (this.buttonColorMode !== MAINMENU_BUTTONS) {
+			storedBg += '\n' + BUTTON_COLOR_MODE_PREFIX + String(this.buttonColorMode);
+		}
+		localStorage.setItem('showdown_bg', storedBg);
 	}
 	set(bgUrl: string, bgid: string) {
-		this.load(bgUrl, bgid);
-		this.save(bgUrl);
+		this.load(bgUrl, bgid, null, this.buttonColorMode);
+		this.save(this.bgUrl);
+	}
+	setButtonColorMode(buttonColorMode: string) {
+		let mode: ButtonColorMode;
+		if (buttonColorMode === '1') {
+			mode = 1;
+		} else if (buttonColorMode === '3') {
+			mode = 3;
+		} else if (buttonColorMode === 'rainbow') {
+			mode = 'rainbow';
+		} else {
+			mode = MAINMENU_BUTTONS;
+		}
+		this.buttonColorMode = mode;
+		this.update(null);
+		this.save(this.bgUrl);
 	}
 
-	load(bgUrl: string, bgid: string, menuColors: string[] | null = null) {
+	load(
+		bgUrl: string, bgid: string, menuColors: string[] | null = null,
+		buttonColorMode: ButtonColorMode = MAINMENU_BUTTONS
+	) {
+		if (bgid === 'solidblue') {
+			bgid = SOLID_BG_ID;
+		}
+
 		// id
 		this.id = bgid;
 
@@ -163,7 +209,7 @@ export const PSBackground = new class extends PSStreamModel<string | null> {
 			if (location.host === 'smogtours.psim.us') {
 				bgid = 'shaymin';
 			} else {
-				const bgs = ['horizon', 'ocean', 'shaymin', 'charizards'];
+				const bgs = ['charizards', 'horizon', 'ocean', 'shaymin', 'psday', 'kaskademap'];
 				bgid = bgs[Math.floor(Math.random() * bgs.length)];
 				// if someone clicked the random button, try to roll a different bg than before
 				if (bgid === this.curId) bgid = bgs[Math.floor(Math.random() * bgs.length)];
@@ -171,9 +217,13 @@ export const PSBackground = new class extends PSStreamModel<string | null> {
 		}
 		this.curId = bgid;
 
-		if (!bgUrl) {
-			bgUrl = (bgid === 'solidblue' ? '#344b6c' : PSURL + 'fx/client-bg-' + bgid + '.jpg');
+		if (bgid === SOLID_BG_ID) {
+			bgUrl = SOLID_COLOR_REGEX.test(bgUrl) ? bgUrl : DEFAULT_SOLID_BG;
+		} else if (!bgUrl) {
+			bgUrl = PSURL + 'fx/client-bg-' + bgid + '.jpg';
 		}
+		this.bgUrl = bgUrl;
+		this.buttonColorMode = buttonColorMode;
 
 		// April Fool's 2016 - Digimon theme
 		// bgid = 'digimon';
@@ -184,14 +234,33 @@ export const PSBackground = new class extends PSStreamModel<string | null> {
 		// menuColors, attrib
 		let attrib = null;
 		switch (bgid) {
+		case 'charizards':
+			menuColors = [
+				"211.03448275862067,28.155339805825246%",
+				"36.84782608695652,75.40983606557377%",
+				"22.191780821917806,37.43589743589743%",
+				"178.56,52.30125523012552%",
+				"11.180124223602485,71.55555555555554%",
+				"191.84713375796179,81.34715025906736%",
+				"73.58490566037737,58.241758241758255%",
+				"186.42857142857144,50.000000000000014%",
+			];
+			attrib = {
+				url: 'https://lit.link/en/seiryuuden',
+				title: 'Charizards',
+				artist: 'Jessica Valencia',
+			};
+			break;
 		case 'horizon':
 			menuColors = [
-				"318.87640449438203,35.177865612648226%",
-				"216,46.2962962962963%",
-				"221.25,32.25806451612904%",
-				"197.8021978021978,52.60115606936417%",
+				"228,65.65656565656568%",
 				"232.00000000000003,19.480519480519483%",
-				"228.38709677419354,60.7843137254902%",
+				"197.6842105263158,54.913294797687875%",
+				"222.65060240963857,33.60323886639676%",
+				"217.05882352941174,47.22222222222222%",
+				"266.8085106382979,22.48803827751196%",
+				"319.09090909090907,34.920634920634924%",
+				"353.33333333333337,32.43243243243244%",
 			];
 			attrib = {
 				url: 'https://vtas.deviantart.com/art/Pokemon-Horizon-312267168',
@@ -201,12 +270,14 @@ export const PSBackground = new class extends PSStreamModel<string | null> {
 			break;
 		case 'ocean':
 			menuColors = [
-				"82.8169014084507,34.63414634146342%",
-				"216.16438356164383,29.55465587044534%",
-				"212.92682926829266,59.42028985507245%",
-				"209.18918918918916,57.51295336787566%",
 				"199.2857142857143,48.275862068965495%",
-				"213.11999999999998,55.06607929515419%",
+				"213.38709677419357,57.4074074074074%",
+				"208.141592920354,56.218905472636806%",
+				"207.95454545454544,66.66666666666664%",
+				"228.81355932203388,35.757575757575744%",
+				"84.32432432432434,36.27450980392157%",
+				"216.9230769230769,40.94488188976379%",
+				"198.3206106870229,52.610441767068274%",
 			];
 			attrib = {
 				url: 'https://quanyails.deviantart.com/art/Sunrise-Ocean-402667154',
@@ -216,12 +287,14 @@ export const PSBackground = new class extends PSStreamModel<string | null> {
 			break;
 		case 'shaymin':
 			menuColors = [
-				"39.000000000000064,21.7391304347826%",
-				"170.00000000000003,2.380952380952378%",
-				"157.5,11.88118811881188%",
-				"174.78260869565216,12.041884816753928%",
-				"185.00000000000003,12.76595744680851%",
-				"20,5.660377358490567%",
+				"44.210526315789515,19.999999999999993%",
+				"175.00000000000003,13.043478260869565%",
+				"170.00000000000003,12.5%",
+				"154.2857142857143,2.766798418972328%",
+				"157.77777777777777,12.79620853080568%",
+				"33.06122448979592,26.77595628415302%",
+				"340.42105263157896,41.85022026431718%",
+				"15.000000000000016,5.660377358490567%",
 			];
 			attrib = {
 				url: 'http://cargocollective.com/bluep',
@@ -229,19 +302,21 @@ export const PSBackground = new class extends PSStreamModel<string | null> {
 				artist: 'Daniel Kong',
 			};
 			break;
-		case 'charizards':
+		case 'psday':
 			menuColors = [
-				"37.159090909090914,74.57627118644066%",
-				"10.874999999999998,70.79646017699115%",
-				"179.51612903225808,52.10084033613446%",
-				"20.833333333333336,36.73469387755102%",
-				"192.3076923076923,80.41237113402063%",
-				"210,29.629629629629633%",
+				"24.705882352941195,41.46341463414633%",
+				"254.02597402597405,48.42767295597485%",
+				"165.9574468085106,46.07843137254901%",
+				"20,20.547945205479454%",
+				"260.6106870229008,60.368663594470064%",
+				"300,18.875502008032132%",
+				"206.66666666666666,26.359832635983267%",
+				"344.1891891891892,61.15702479338842%",
 			];
 			attrib = {
-				url: 'https://lit.link/en/seiryuuden',
-				title: 'Charizards',
-				artist: 'Jessica Valencia',
+				url: 'i can find their twitter and smogon page, but it seems they\'re retired. what should be here?',
+				title: 'Pok&eacute;mon Showdown Day background',
+				artist: 'LifeisDANK',
 			};
 			break;
 		case 'digimon':
@@ -251,15 +326,35 @@ export const PSBackground = new class extends PSStreamModel<string | null> {
 				"112.50000000000001,7.8431372549019605%",
 				"217.82608695652175,54.761904761904766%",
 				"0,1.6949152542372816%",
-				"",
+				"170.45454545454544,27.500000000000004%",
+				"217.82608695652175,54.761904761904766%",
+				"84.70588235294119,13.821138211382115%",
 			];
+			break;
+		case 'kaskademap':
+			menuColors = [
+				"61.93548387096774,35.63218390804598%",
+				"54.159292035398224,57.360406091370564%",
+				"201.99999999999997,24.590163934426222%",
+				"34.871794871794876,51.091703056768544%",
+				"68.29787234042556,48.958333333333336%",
+				"31.395348837209305,46.23655913978495%",
+				"197.99999999999997,46.05263157894737%",
+				"150,13.043478260869582%",
+			];
+			attrib = {
+				url: 'https://x.com/barbie_e4',
+				title: 'Kaskade region',
+				artist: 'Gianluca Barbera',
+			};
+			break;
 		}
 		if (!menuColors && bgUrl.startsWith('#')) {
 			const r = parseInt(bgUrl.slice(1, 3), 16) / 255;
 			const g = parseInt(bgUrl.slice(3, 5), 16) / 255;
 			const b = parseInt(bgUrl.slice(5, 7), 16) / 255;
 			const hs = this.getHueSat(r, g, b);
-			menuColors = [hs, hs, hs, hs, hs, hs];
+			menuColors = Array(MAINMENU_BUTTONS).fill(hs);
 		}
 		this.attrib = attrib;
 		this.menuColors = menuColors;
@@ -290,16 +385,18 @@ export const PSBackground = new class extends PSStreamModel<string | null> {
 		// or localStorage throws
 		try {
 			const colorThief = new ColorThief();
-			const colors = colorThief.getPalette(img, 5);
+			const colors = colorThief.getPalette(img, MAINMENU_BUTTONS);
+			(window as any).colors = colors;
 
 			let menuColors = [];
 			if (!colors) {
-				menuColors = ['0, 0%', '0, 0%', '0, 0%', '0, 0%', '0, 0%'];
+				menuColors = Array(MAINMENU_BUTTONS).fill('0, 0%');
 			} else {
-				for (let i = 0; i < 5; i++) {
-					const color = colors[i];
+				const extractedColors = colors.length ? colors : [[0, 0, 0]];
+				for (let i = 0; i < MAINMENU_BUTTONS; i++) {
+					const color = extractedColors[Math.min(i, extractedColors.length - 1)];
 					const hs = PSBackground.getHueSat(color[0] / 255, color[1] / 255, color[2] / 255);
-					menuColors.unshift(hs);
+					menuColors.push(hs);
 				}
 			}
 			this.menuColors = menuColors;
@@ -341,8 +438,9 @@ PSBackground.subscribe(bgUrl => {
 	}
 
 	if (bgUrl !== null) {
+		bgUrl = bgUrl || PSBackground.bgUrl;
 		let background;
-		if (bgUrl.startsWith('#')) {
+		if (PSBackground.curId === SOLID_BG_ID) {
 			background = bgUrl;
 		} else if (PSBackground.curId !== 'custom') {
 			background = `#546bac url(${bgUrl}) no-repeat left center fixed`;
@@ -356,8 +454,19 @@ PSBackground.subscribe(bgUrl => {
 	// main menu button colors
 	let cssBuf = ``;
 	let n = 0;
-	if (PSBackground.menuColors) {
-		for (const hs of PSBackground.menuColors) {
+	if (PSBackground.menuColors && PSBackground.buttonColorMode !== 'rainbow') {
+		for (let i = 0; i < PSBackground.menuColors.length; i++) {
+			let hs = PSBackground.menuColors[i];
+			switch (PSBackground.buttonColorMode) {
+			case 1:
+				hs = PSBackground.menuColors[0];
+				break;
+			case 3:
+				hs = !i ? PSBackground.menuColors[0] :
+					(i < 4 ? (PSBackground.menuColors[1] || PSBackground.menuColors[0]) :
+					(PSBackground.menuColors[2] || PSBackground.menuColors[1] || PSBackground.menuColors[0]));
+				break;
+			}
 			n++;
 			cssBuf += `body .button.mainmenu${n} { background: linear-gradient(to bottom,  hsl(${hs},72%),  hsl(${hs},52%)); border-color: hsl(${hs},40%); }\n`;
 			cssBuf += `body .button.mainmenu${n}:hover { background: linear-gradient(to bottom,  hsl(${hs},62%),  hsl(${hs},42%)); border-color: hsl(${hs},21%); }\n`;

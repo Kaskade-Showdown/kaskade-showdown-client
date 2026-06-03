@@ -39,7 +39,7 @@ export class BattleSceneStub {
 	resetBgm(): void { }
 	updateBgm(): void { }
 	resultAnim(
-		pokemon: Pokemon, result: string, type: "bad" | "good" | "neutral" | "par" | "psn" | "frz" | "slp" | "brn"
+		pokemon: Pokemon, result: string, type: "bad" | "good" | "neutral" | "par" | "psn" | "frz" | "slp" | "brn" | "fst"
 	): void { }
 	typeAnim(pokemon: Pokemon, types: string): void { }
 	resume(): void { }
@@ -56,7 +56,11 @@ export class BattleSceneStub {
 	updateSidebars(): void { }
 	updateStatbars(): void { }
 	updateWeather(instant?: boolean): void { }
-	upkeepWeather(): void { }
+	upkeepClimateWeather(): void { }
+	upkeepIrritantWeather(): void { }
+	upkeepEnergyWeather(): void { }
+	upkeepClearingWeather(): void { }
+	upkeepCataclysmWeather(): void { }
 	wait(time: number): void { }
 	setFrameHTML(html: any): void { }
 	setControlsHTML(html: any): void { }

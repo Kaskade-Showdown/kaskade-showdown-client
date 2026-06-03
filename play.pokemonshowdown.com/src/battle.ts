@@ -1,5 +1,5 @@
 /**
- * Pokemon Showdown Battle
+ * Kaskade Showdown Battle
  *
  * This is the main file for handling battle animations
  *
@@ -100,7 +100,7 @@ export class Pokemon implements PokemonDetails, PokemonHealth {
 	moddedType: Dex.TypeName[] = [];
 
 	boosts: { [stat: string]: number } = {};
-	status: Dex.StatusName | 'tox' | '' | '???' = '';
+	status: Dex.StatusName | 'tox' | 'blt' | '' | '???' = '';
 	statusStage = 0;
 	volatiles: { [effectid: string]: EffectState } = {};
 	turnstatuses: { [effectid: string]: EffectState } = {};
@@ -109,7 +109,7 @@ export class Pokemon implements PokemonDetails, PokemonHealth {
 
 	/** [[moveName, ppUsed]] */
 	moveTrack: [string, PPState][] = [];
-	statusData = { sleepTurns: 0, toxicTurns: 0 };
+	statusData = { sleepTurns: 0, toxicTurns: 0, blightTurns: 0 };
 	timesAttacked = 0;
 
 	sprite: PokemonSprite;
@@ -468,6 +468,7 @@ export class Pokemon implements PokemonDetails, PokemonHealth {
 		// this.lastMove = '';
 		this.statusStage = 0;
 		this.statusData.toxicTurns = 0;
+		this.statusData.blightTurns = 0;
 		if (this.side.battle.gen === 5) this.statusData.sleepTurns = 0;
 	}
 	copyVolatileFrom(pokemon: Pokemon, copySource: 'batonpass' | 'shedtail' | 'illusion') {
@@ -476,11 +477,12 @@ export class Pokemon implements PokemonDetails, PokemonHealth {
 		// this.lastMove = pokemon.lastMove; // I think
 		if (copySource === 'batonpass') {
 			const volatilesToRemove = [
-				'airballoon', 'attract', 'autotomize', 'disable', 'encore', 'foresight', 'gmaxchistrike', 'imprison', 'laserfocus', 'mimic', 'miracleeye', 'nightmare', 'saltcure', 'smackdown', 'stockpile1', 'stockpile2', 'stockpile3', 'syrupbomb', 'torment', 'typeadd', 'typechange', 'yawn',
+				'airballoon', 'attract', 'autotomize', 'caffeinecrash', 'disable', 'encore', 'foresight', 'gmaxchistrike', 'imprison', 'laserfocus', 'mimic', 'miracleeye', 'nightmare', 'saltcure', 'smackdown', 'stockpile1', 'stockpile2', 'stockpile3', 'syrupbomb', 'torment', 'typeadd', 'typechange', 'yawn',
 			];
 			for (const statName of Dex.statNamesExceptHP) {
 				volatilesToRemove.push('protosynthesis' + statName);
 				volatilesToRemove.push('quarkdrive' + statName);
+				volatilesToRemove.push('warpmist' + statName);
 			}
 			for (const volatile of volatilesToRemove) {
 				delete this.volatiles[volatile];
@@ -542,7 +544,14 @@ export class Pokemon implements PokemonDetails, PokemonHealth {
 		if (item === 'ironball') {
 			return true;
 		}
-		if (ability === 'levitate') {
+		if (
+			battle.energyWeather === 'magnetize' && item !== 'energynullifier' &&
+			this.getTypeList(serverPokemon).includes('Steel') &&
+			!battle.isWeatherStateBoosted('duststorm' as ID)
+		) {
+			return false;
+		}
+		if (ability === 'levitate' || ability === 'surgesurfer' || ability === 'relicsoul') {
 			return false;
 		}
 		if (this.volatiles['magnetrise'] || this.volatiles['telekinesis']) {
@@ -666,7 +675,7 @@ export class Side {
 	}
 
 	rollTrainerSprites() {
-		let sprites = ['lucas', 'dawn', 'ethan', 'lyra', 'hilbert', 'hilda'];
+		let sprites = ['lark', 'robin', 'wren'];
 		this.avatar = sprites[Math.floor(Math.random() * sprites.length)];
 	}
 
@@ -730,6 +739,7 @@ export class Side {
 		case 'lightscreen':
 			this.sideConditions[condition] = [effect.name, 1, 5, this.battle.gen >= 4 ? 8 : 0];
 			break;
+		case 'resilientoil':
 		case 'mist':
 			this.sideConditions[condition] = [effect.name, 1, 5, 0];
 			break;
@@ -749,6 +759,7 @@ export class Side {
 		case 'spikes':
 		case 'toxicspikes':
 		case 'stickyweb':
+		case 'steelbarbs':
 			this.sideConditions[condition] = [effect.name, 1, 0, 0];
 			break;
 		case 'gmaxwildfire':
@@ -947,6 +958,7 @@ export class Side {
 			this.battle.log(['switchout', pokemon.ident], { from: effect.id });
 		}
 		pokemon.statusData.toxicTurns = 0;
+		pokemon.statusData.blightTurns = 0;
 		if (this.battle.gen === 5) pokemon.statusData.sleepTurns = 0;
 		this.lastPokemon = pokemon;
 		this.active[slot] = null;
@@ -1025,7 +1037,7 @@ export interface PokemonHealth {
 	hp: number;
 	maxhp: number;
 	hpcolor: HPColor | '';
-	status: Dex.StatusName | 'tox' | '' | '???';
+	status: Dex.StatusName | 'tox' | 'blt' | '' | '???';
 	fainted?: boolean;
 }
 export interface ServerPokemon extends PokemonDetails, PokemonHealth {
@@ -1112,10 +1124,23 @@ export class Battle {
 	ended = false;
 	isReplay = false;
 	usesUpkeep = false;
-	weather = '' as ID;
+	climateWeather = '' as ID;
+	irritantWeather = '' as ID;
+	energyWeather = '' as ID;
+	clearingWeather = '' as ID;
+	cataclysmWeather = '' as ID;
 	pseudoWeather = [] as WeatherState[];
-	weatherTimeLeft = 0;
-	weatherMinTimeLeft = 0;
+	climateWeatherTimeLeft = 0;
+	irritantWeatherTimeLeft = 0;
+	energyWeatherTimeLeft = 0;
+	clearingWeatherTimeLeft = 0;
+	cataclysmWeatherTimeLeft = 0;
+	climateWeatherMinTimeLeft = 0;
+	irritantWeatherMinTimeLeft = 0;
+	energyWeatherMinTimeLeft = 0;
+	clearingWeatherMinTimeLeft = 0;
+	cataclysmWeatherMinTimeLeft = 0;
+	activeWeathers = [] as ID[];
 	/**
 	 * The side from which perspective we're viewing. Should be identical to
 	 * `nearSide` except in multi battles, where `nearSide` is always the first
@@ -1307,9 +1332,22 @@ export class Battle {
 		this.started = !this.paused;
 		this.ended = false;
 		this.atQueueEnd = false;
-		this.weather = '' as ID;
-		this.weatherTimeLeft = 0;
-		this.weatherMinTimeLeft = 0;
+		this.climateWeather = '' as ID;
+		this.irritantWeather = '' as ID;
+		this.energyWeather = '' as ID;
+		this.clearingWeather = '' as ID;
+		this.cataclysmWeather = '' as ID;
+		this.climateWeatherTimeLeft = 0;
+		this.irritantWeatherTimeLeft = 0;
+		this.energyWeatherTimeLeft = 0;
+		this.clearingWeatherTimeLeft = 0;
+		this.cataclysmWeatherTimeLeft = 0;
+		this.climateWeatherMinTimeLeft = 0;
+		this.irritantWeatherMinTimeLeft = 0;
+		this.energyWeatherMinTimeLeft = 0;
+		this.clearingWeatherMinTimeLeft = 0;
+		this.cataclysmWeatherMinTimeLeft = 0;
+		this.activeWeathers = [];
 		this.pseudoWeather = [];
 		this.lastMove = '';
 
@@ -1435,43 +1473,317 @@ export class Battle {
 		this.turnsSinceMoved = 0;
 		this.scene.updateAcceleration();
 	}
-	changeWeather(weatherName: string, poke?: Pokemon, isUpkeep?: boolean, ability?: Dex.Effect) {
+	changeClimateWeather(weatherName: string, poke?: Pokemon, isUpkeep?: boolean, ability?: Dex.Effect) {
 		let weather = toID(weatherName);
+		const previousWeather = this.climateWeather;
 		if (!weather || weather === 'none') {
+			const indexToRemove = this.activeWeathers.indexOf(previousWeather);
+			if (indexToRemove !== -1) {
+				this.activeWeathers.splice(indexToRemove, 1);
+			}
 			weather = '' as ID;
 		}
 		if (isUpkeep) {
-			if (this.weather && this.weatherTimeLeft) {
-				this.weatherTimeLeft--;
-				if (this.weatherMinTimeLeft !== 0) this.weatherMinTimeLeft--;
+			if (this.climateWeather && this.climateWeatherTimeLeft) {
+				this.climateWeatherTimeLeft--;
+				if (this.climateWeatherMinTimeLeft !== 0) this.climateWeatherMinTimeLeft--;
 			}
 			if (this.seeking === null) {
-				this.scene.upkeepWeather();
+				this.scene.upkeepClimateWeather();
 			}
 			return;
 		}
 		if (weather) {
-			let isExtremeWeather = (weather === 'deltastream' || weather === 'desolateland' || weather === 'primordialsea');
+			let isExtremeWeather = (weather === 'desolateland' || weather === 'primordialsea');
+			if (ability && ability.effectType === 'Move') {
+				if (this.climateWeather && this.climateWeatherTimeLeft) {
+					this.climateWeatherTimeLeft++;
+					if (this.climateWeatherMinTimeLeft !== 0) this.climateWeatherMinTimeLeft++;
+				}
+			} else if (poke) {
+				if (ability) {
+					this.activateAbility(poke, ability.name);
+				}
+				this.climateWeatherTimeLeft = (this.gen <= 5 || isExtremeWeather) ? 0 : 8;
+				this.climateWeatherMinTimeLeft = (this.gen <= 5 || isExtremeWeather) ? 0 : 5;
+				this.activeWeathers.push(weather);
+			} else if (isExtremeWeather) {
+				this.climateWeatherTimeLeft = 0;
+				this.climateWeatherMinTimeLeft = 0;
+			} else {
+				this.climateWeatherTimeLeft = (this.gen <= 3 ? 5 : 8);
+				this.climateWeatherMinTimeLeft = (this.gen <= 3 ? 0 : 5);
+			}
+			if (previousWeather && previousWeather !== weather) {
+				const indexToRemove = this.activeWeathers.indexOf(previousWeather);
+				if (indexToRemove !== -1) this.activeWeathers.splice(indexToRemove, 1);
+			}
+			const existingIndex = this.activeWeathers.indexOf(weather);
+			if (existingIndex !== -1) this.activeWeathers.splice(existingIndex, 1);
+			this.activeWeathers.push(weather);
+		}
+		this.climateWeather = weather;
+		this.scene.updateWeather();
+	}
+	changeIrritantWeather(weatherName: string, poke?: Pokemon, isUpkeep?: boolean, ability?: Dex.Effect) {
+		let weather = toID(weatherName);
+		const previousWeather = this.irritantWeather;
+		if (!weather || weather === 'none') {
+			const indexToRemove = this.activeWeathers.indexOf(previousWeather);
+			if (indexToRemove !== -1) {
+				this.activeWeathers.splice(indexToRemove, 1);
+			}
+			weather = '' as ID;
+		}
+		if (isUpkeep) {
+			if (this.irritantWeather && this.irritantWeatherTimeLeft) {
+				this.irritantWeatherTimeLeft--;
+				if (this.irritantWeatherMinTimeLeft !== 0) this.irritantWeatherMinTimeLeft--;
+			}
+			if (this.seeking === null) {
+				this.scene.upkeepIrritantWeather();
+			}
+			return;
+		}
+		if (weather) {
+			let isExtremeWeather = false;
+			if (ability && ability.effectType === 'Move') {
+				if (this.irritantWeather && this.irritantWeatherTimeLeft) {
+					this.irritantWeatherTimeLeft++;
+					if (this.irritantWeatherMinTimeLeft !== 0) this.irritantWeatherMinTimeLeft++;
+				}
+			} else if (poke) {
+				if (ability) {
+					this.activateAbility(poke, ability.name);
+				}
+				this.irritantWeatherTimeLeft = (this.gen <= 5 || isExtremeWeather) ? 0 : 8;
+				this.irritantWeatherMinTimeLeft = (this.gen <= 5 || isExtremeWeather) ? 0 : 5;
+				this.activeWeathers.push(weather);
+			} else if (isExtremeWeather) {
+				this.irritantWeatherTimeLeft = 0;
+				this.irritantWeatherMinTimeLeft = 0;
+			} else {
+				this.irritantWeatherTimeLeft = (this.gen <= 3 ? 5 : 8);
+				this.irritantWeatherMinTimeLeft = (this.gen <= 3 ? 0 : 5);
+			}
+			if (previousWeather && previousWeather !== weather) {
+				const indexToRemove = this.activeWeathers.indexOf(previousWeather);
+				if (indexToRemove !== -1) this.activeWeathers.splice(indexToRemove, 1);
+			}
+			const existingIndex = this.activeWeathers.indexOf(weather);
+			if (existingIndex !== -1) this.activeWeathers.splice(existingIndex, 1);
+			this.activeWeathers.push(weather);
+		}
+		this.irritantWeather = weather;
+		this.scene.updateWeather();
+	}
+	changeEnergyWeather(weatherName: string, poke?: Pokemon, isUpkeep?: boolean, ability?: Dex.Effect) {
+		let weather = toID(weatherName);
+		const previousWeather = this.energyWeather;
+		if (!weather || weather === 'none') {
+			const indexToRemove = this.activeWeathers.indexOf(previousWeather);
+			if (indexToRemove !== -1) {
+				this.activeWeathers.splice(indexToRemove, 1);
+			}
+			weather = '' as ID;
+		}
+		if (isUpkeep) {
+			if (this.energyWeather && this.energyWeatherTimeLeft) {
+				this.energyWeatherTimeLeft--;
+				if (this.energyWeatherMinTimeLeft !== 0) this.energyWeatherMinTimeLeft--;
+			}
+			if (this.seeking === null) {
+				this.scene.upkeepEnergyWeather();
+			}
+			return;
+		}
+		if (weather) {
+			let isExtremeWeather = false;
+			if (ability && ability.effectType === 'Move') {
+				if (this.energyWeather && this.energyWeatherTimeLeft) {
+					this.energyWeatherTimeLeft++;
+					if (this.energyWeatherMinTimeLeft !== 0) this.energyWeatherMinTimeLeft++;
+				}
+			} else if (poke) {
+				if (ability) {
+					this.activateAbility(poke, ability.name);
+				}
+				this.energyWeatherTimeLeft = (this.gen <= 5 || isExtremeWeather) ? 0 : 8;
+				this.energyWeatherMinTimeLeft = (this.gen <= 5 || isExtremeWeather) ? 0 : 5;
+				this.activeWeathers.push(weather);
+			} else if (isExtremeWeather) {
+				this.energyWeatherTimeLeft = 0;
+				this.energyWeatherMinTimeLeft = 0;
+			} else {
+				this.energyWeatherTimeLeft = (this.gen <= 3 ? 5 : 8);
+				this.energyWeatherMinTimeLeft = (this.gen <= 3 ? 0 : 5);
+			}
+			if (previousWeather && previousWeather !== weather) {
+				const indexToRemove = this.activeWeathers.indexOf(previousWeather);
+				if (indexToRemove !== -1) this.activeWeathers.splice(indexToRemove, 1);
+			}
+			const existingIndex = this.activeWeathers.indexOf(weather);
+			if (existingIndex !== -1) this.activeWeathers.splice(existingIndex, 1);
+			this.activeWeathers.push(weather);
+		}
+		this.energyWeather = weather;
+		this.scene.updateWeather();
+	}
+	changeClearingWeather(weatherName: string, poke?: Pokemon, isUpkeep?: boolean, ability?: Dex.Effect) {
+		let weather = toID(weatherName);
+		const previousWeather = this.clearingWeather;
+		if (!weather || weather === 'none') {
+			const indexToRemove = this.activeWeathers.indexOf(previousWeather);
+			if (indexToRemove !== -1) {
+				this.activeWeathers.splice(indexToRemove, 1);
+			}
+			weather = '' as ID;
+		}
+		if (isUpkeep) {
+			if (this.clearingWeather && this.clearingWeatherTimeLeft) {
+				this.clearingWeatherTimeLeft--;
+				if (this.clearingWeatherMinTimeLeft !== 0) this.clearingWeatherMinTimeLeft--;
+			}
+			if (this.seeking === null) {
+				this.scene.upkeepClearingWeather();
+			}
+			return;
+		}
+		if (weather) {
+			let isExtremeWeather = (weather === 'deltastream');
+			if (ability && ability.effectType === 'Move') {
+				if (this.clearingWeather && this.clearingWeatherTimeLeft) {
+					this.clearingWeatherTimeLeft++;
+					if (this.clearingWeatherMinTimeLeft !== 0) this.clearingWeatherMinTimeLeft++;
+				}
+			} else if (poke) {
+				if (ability) {
+					this.activateAbility(poke, ability.name);
+				}
+				this.clearingWeatherTimeLeft = (this.gen <= 5 || isExtremeWeather) ? 0 : 8;
+				this.clearingWeatherMinTimeLeft = (this.gen <= 5 || isExtremeWeather) ? 0 : 5;
+				this.activeWeathers.push(weather);
+			} else if (isExtremeWeather) {
+				this.clearingWeatherTimeLeft = 0;
+				this.clearingWeatherMinTimeLeft = 0;
+			} else {
+				this.clearingWeatherTimeLeft = (this.gen <= 3 ? 5 : 8);
+				this.clearingWeatherMinTimeLeft = (this.gen <= 3 ? 0 : 5);
+			}
+			if (previousWeather && previousWeather !== weather) {
+				const indexToRemove = this.activeWeathers.indexOf(previousWeather);
+				if (indexToRemove !== -1) this.activeWeathers.splice(indexToRemove, 1);
+			}
+			const existingIndex = this.activeWeathers.indexOf(weather);
+			if (existingIndex !== -1) this.activeWeathers.splice(existingIndex, 1);
+			this.activeWeathers.push(weather);
+		}
+		this.clearingWeather = weather;
+		this.scene.updateWeather();
+	}
+	changeCataclysmWeather(weatherName: string, poke?: Pokemon, isUpkeep?: boolean, ability?: Dex.Effect) {
+		let weather = toID(weatherName);
+		const previousWeather = this.cataclysmWeather;
+		if (!weather || weather === 'none') {
+			const indexToRemove = this.activeWeathers.indexOf(previousWeather);
+			if (indexToRemove !== -1) {
+				this.activeWeathers.splice(indexToRemove, 1);
+			}
+			weather = '' as ID;
+		}
+		if (isUpkeep) {
+			if (this.cataclysmWeather && this.cataclysmWeatherTimeLeft) {
+				this.cataclysmWeatherTimeLeft--;
+				if (this.cataclysmWeatherMinTimeLeft !== 0) this.cataclysmWeatherMinTimeLeft--;
+			}
+			if (this.seeking === null) {
+				this.scene.upkeepCataclysmWeather();
+			}
+			return;
+		}
+		if (weather) {
+			let isExtremeWeather = (weather === 'cataclysmiclight');
 			if (poke) {
 				if (ability) {
 					this.activateAbility(poke, ability.name);
 				}
-				this.weatherTimeLeft = (this.gen <= 5 || isExtremeWeather) ? 0 : 8;
-				this.weatherMinTimeLeft = (this.gen <= 5 || isExtremeWeather) ? 0 : 5;
+				this.cataclysmWeatherTimeLeft = (this.gen <= 5 || isExtremeWeather) ? 0 : 8;
+				this.cataclysmWeatherMinTimeLeft = (this.gen <= 5 || isExtremeWeather) ? 0 : 5;
+				this.activeWeathers.push(weather);
 			} else if (isExtremeWeather) {
-				this.weatherTimeLeft = 0;
-				this.weatherMinTimeLeft = 0;
+				this.cataclysmWeatherTimeLeft = 0;
+				this.cataclysmWeatherMinTimeLeft = 0;
 			} else {
-				this.weatherTimeLeft = (this.gen <= 3 ? 5 : 8);
-				this.weatherMinTimeLeft = (this.gen <= 3 ? 0 : 5);
+				this.cataclysmWeatherTimeLeft = (this.gen <= 3 ? 5 : 8);
+				this.cataclysmWeatherMinTimeLeft = (this.gen <= 3 ? 0 : 5);
+			}
+			if (previousWeather && previousWeather !== weather) {
+				const indexToRemove = this.activeWeathers.indexOf(previousWeather);
+				if (indexToRemove !== -1) this.activeWeathers.splice(indexToRemove, 1);
+			}
+			const existingIndex = this.activeWeathers.indexOf(weather);
+			if (existingIndex !== -1) this.activeWeathers.splice(existingIndex, 1);
+			this.activeWeathers.push(weather);
+		}
+		this.cataclysmWeather = weather;
+		this.scene.updateWeather();
+	}
+	getRecentWeather(pokemon: Pokemon, serverPokemon?: ServerPokemon) {
+		const item = toID(serverPokemon?.item || pokemon.item);
+		const ability = toID(pokemon.effectiveAbility(serverPokemon));
+		const suppressed = this.hasPseudoWeather('Magic Room') || pokemon.volatiles['embargo'] || ability === 'klutz';
+
+		for (let i = this.activeWeathers.length - 1; i >= 0; i--) {
+			const recentWeather = this.activeWeathers[i];
+			switch (recentWeather) {
+			case 'sunnyday':
+			case 'desolateland':
+			case 'raindance':
+			case 'primordialsea':
+			case 'hail':
+			case 'snowscape':
+			case 'bloodmoon':
+			case 'foghorn':
+				if (item === 'utilityumbrella' && !suppressed) break;
+				return recentWeather;
+			case 'sandstorm':
+				if (this.climateWeather !== 'sandstorm' && item === 'safetygoggles' && !suppressed) {
+					break;
+				}
+				return recentWeather;
+			case 'duststorm':
+			case 'pollinate':
+			case 'swarmsignal':
+			case 'smogspread':
+			case 'sprinkle':
+				if (item === 'safetygoggles' && !suppressed) break;
+				return recentWeather;
+			case 'auraprojection':
+			case 'haunt':
+			case 'daydream':
+			case 'dragonforce':
+			case 'supercell':
+			case 'magnetize':
+				if (item === 'energynullifier' && !suppressed) break;
+				return recentWeather;
+			case 'strongwinds':
+			case 'deltastream':
+			case 'cataclysmiclight':
+				return recentWeather;
 			}
 		}
-		this.weather = weather;
-		this.scene.updateWeather();
+		return null;
+	}
+
+	isWeatherStateBoosted(weather: ID) {
+		const weatherIndex = this.activeWeathers.lastIndexOf(weather);
+		const boosterIndex = this.activeWeathers.lastIndexOf('strongwinds' as ID);
+		return boosterIndex !== -1 && weatherIndex > boosterIndex;
 	}
 	swapSideConditions() {
 		const sideConditions = [
 			'mist', 'lightscreen', 'reflect', 'spikes', 'safeguard', 'tailwind', 'toxicspikes', 'stealthrock', 'waterpledge', 'firepledge', 'grasspledge', 'stickyweb', 'auroraveil', 'gmaxsteelsurge', 'gmaxcannonade', 'gmaxvinelash', 'gmaxwildfire',
+			'steelbarbs', 'resilientoil',
 		];
 		if (this.gameType === 'freeforall') {
 			// Court Change rotates side conditions clockwise in a free-for-all
@@ -1532,6 +1844,7 @@ export class Battle {
 		for (const poke of [...this.nearSide.active, ...this.farSide.active]) {
 			if (poke) {
 				if (poke.status === 'tox') poke.statusData.toxicTurns++;
+				if (poke.status === 'blt') poke.statusData.blightTurns++;
 				poke.clearTurnstatuses();
 			}
 		}
@@ -1788,6 +2101,9 @@ export class Battle {
 				case 'psn':
 					this.scene.runStatusAnim('psn' as ID, [poke]);
 					break;
+				case 'fst':
+					this.scene.runStatusAnim('fst' as ID, [poke]);
+					break;
 				case 'baddreams':
 					this.scene.runStatusAnim('cursed' as ID, [poke]);
 					break;
@@ -1851,6 +2167,7 @@ export class Battle {
 					poke.side.wisher = null;
 					poke.statusData.sleepTurns = 0;
 					poke.statusData.toxicTurns = 0;
+					poke.statusData.blightTurns = 0;
 					break;
 				case 'wish':
 					this.scene.runResidualAnim('wish' as ID, poke);
@@ -2087,7 +2404,9 @@ export class Battle {
 		case '-immune': {
 			let poke = this.getPokemon(args[1])!;
 			let fromeffect = Dex.getEffect(kwArgs.from);
-			this.activateAbility(this.getPokemon(kwArgs.of) || poke, fromeffect);
+			if (fromeffect.effectType === 'Ability' && fromeffect.id !== 'magnetize') {
+				this.activateAbility(this.getPokemon(kwArgs.of) || poke, fromeffect);
+			}
 			this.log(args, kwArgs);
 			this.scene.resultAnim(poke, 'Immune', 'neutral');
 			break;
@@ -2114,6 +2433,7 @@ export class Battle {
 			case 'brn':
 				this.scene.resultAnim(poke, 'Already burned', 'neutral');
 				break;
+			case 'blt':
 			case 'tox':
 			case 'psn':
 				this.scene.resultAnim(poke, 'Already poisoned', 'neutral');
@@ -2130,6 +2450,9 @@ export class Battle {
 				break;
 			case 'frz':
 				this.scene.resultAnim(poke, 'Already frozen', 'neutral');
+				break;
+			case 'fst':
+				this.scene.resultAnim(poke, 'Already frostbitten', 'neutral');
 				break;
 			case 'unboost':
 				this.scene.resultAnim(poke, 'Stat drop blocked', 'neutral');
@@ -2220,6 +2543,11 @@ export class Battle {
 				this.scene.resultAnim(poke, 'Burned', 'brn');
 				this.scene.runStatusAnim('brn' as ID, [poke]);
 				break;
+			case 'blt':
+				this.scene.resultAnim(poke, 'Blight poison', 'psn');
+				this.scene.runStatusAnim('psn' as ID, [poke]);
+				poke.statusData.blightTurns = 0;
+				break;
 			case 'tox':
 				this.scene.resultAnim(poke, 'Toxic poison', 'psn');
 				this.scene.runStatusAnim('psn' as ID, [poke]);
@@ -2242,6 +2570,10 @@ export class Battle {
 			case 'frz':
 				this.scene.resultAnim(poke, 'Frozen', 'frz');
 				this.scene.runStatusAnim('frz' as ID, [poke]);
+				break;
+			case 'fst':
+				this.scene.resultAnim(poke, 'Frostbitten', 'fst');
+				this.scene.runStatusAnim('fst' as ID, [poke]);
 				break;
 			default:
 				this.scene.updateStatbar(poke);
@@ -2272,8 +2604,10 @@ export class Battle {
 				case 'brn':
 					this.scene.resultAnim(poke, 'Burn cured', 'good');
 					break;
+				case 'blt':
 				case 'tox':
 				case 'psn':
+					poke.statusData.blightTurns = 0;
 					poke.statusData.toxicTurns = 0;
 					this.scene.resultAnim(poke, 'Poison cured', 'good');
 					break;
@@ -2286,6 +2620,9 @@ export class Battle {
 					break;
 				case 'frz':
 					this.scene.resultAnim(poke, 'Thawed', 'good');
+					break;
+				case 'fst':
+					this.scene.resultAnim(poke, 'Frostbite cured', 'good');
 					break;
 				default:
 					poke.removeVolatile('confusion' as ID);
@@ -2798,6 +3135,10 @@ export class Battle {
 				poke.side.addSideCondition(effect, false);
 				this.scene.updateWeather();
 				break;
+			// swse
+			case 'resilientoil':
+				this.scene.resultAnim(poke, 'Resilient Oil', 'good');
+				break;
 			}
 			if (!(effect.id === 'typechange' && poke.terastallized) &&
 				effect.id !== 'futuresight' && effect.id !== 'doomdesire') {
@@ -2813,7 +3154,7 @@ export class Battle {
 			let fromeffect = Dex.getEffect(kwArgs.from);
 			poke.removeVolatile(effect.id);
 
-			if (kwArgs.silent && !(effect.id === 'protosynthesis' || effect.id === 'quarkdrive')) {
+			if (kwArgs.silent && !(effect.id === 'protosynthesis' || effect.id === 'quarkdrive' || effect.id === 'warpmist')) {
 				// do nothing
 			} else {
 				switch (effect.id) {
@@ -2894,6 +3235,14 @@ export class Battle {
 					poke.removeVolatile('quarkdrivespa' as ID);
 					poke.removeVolatile('quarkdrivespd' as ID);
 					poke.removeVolatile('quarkdrivespe' as ID);
+					break;
+				// swse
+				case 'warpmist':
+					poke.removeVolatile('warpmistatk' as ID);
+					poke.removeVolatile('warpmistdef' as ID);
+					poke.removeVolatile('warpmistspa' as ID);
+					poke.removeVolatile('warpmistspd' as ID);
+					poke.removeVolatile('warpmistspe' as ID);
 					break;
 				default:
 					if (effect.effectType === 'Move') {
@@ -3142,6 +3491,7 @@ export class Battle {
 			case 'grasspledge':
 			case 'firepledge':
 			case 'waterpledge':
+			case 'resilientoil':
 				this.scene.updateWeather();
 				break;
 			}
@@ -3163,14 +3513,58 @@ export class Battle {
 			this.log(args, kwArgs);
 			break;
 		}
-		case '-weather': {
+		case '-climateWeather': {
 			let effect = Dex.getEffect(args[1]);
 			let poke = this.getPokemon(kwArgs.of) || undefined;
 			let ability = Dex.getEffect(kwArgs.from);
 			if (!effect.id || effect.id === 'none') {
-				kwArgs.from = this.weather;
+				kwArgs.from = this.climateWeather;
 			}
-			this.changeWeather(effect.name, poke, !!kwArgs.upkeep, ability);
+			this.changeClimateWeather(effect.name, poke, !!kwArgs.upkeep, ability);
+			this.log(args, kwArgs);
+			break;
+		}
+		case '-irritantWeather': {
+			let effect = Dex.getEffect(args[1]);
+			let poke = this.getPokemon(kwArgs.of) || undefined;
+			let ability = Dex.getEffect(kwArgs.from);
+			if (!effect.id || effect.id === 'none') {
+				kwArgs.from = this.irritantWeather;
+			}
+			this.changeIrritantWeather(effect.name, poke, !!kwArgs.upkeep, ability);
+			this.log(args, kwArgs);
+			break;
+		}
+		case '-energyWeather': {
+			let effect = Dex.getEffect(args[1]);
+			let poke = this.getPokemon(kwArgs.of) || undefined;
+			let ability = Dex.getEffect(kwArgs.from);
+			if (!effect.id || effect.id === 'none') {
+				kwArgs.from = this.energyWeather;
+			}
+			this.changeEnergyWeather(effect.name, poke, !!kwArgs.upkeep, ability);
+			this.log(args, kwArgs);
+			break;
+		}
+		case '-clearingWeather': {
+			let effect = Dex.getEffect(args[1]);
+			let poke = this.getPokemon(kwArgs.of) || undefined;
+			let ability = Dex.getEffect(kwArgs.from);
+			if (!effect.id || effect.id === 'none') {
+				kwArgs.from = this.clearingWeather;
+			}
+			this.changeClearingWeather(effect.name, poke, !!kwArgs.upkeep, ability);
+			this.log(args, kwArgs);
+			break;
+		}
+		case '-cataclysmWeather': {
+			let effect = Dex.getEffect(args[1]);
+			let poke = this.getPokemon(kwArgs.of) || undefined;
+			let ability = Dex.getEffect(kwArgs.from);
+			if (!effect.id || effect.id === 'none') {
+				kwArgs.from = this.cataclysmWeather;
+			}
+			this.changeCataclysmWeather(effect.name, poke, !!kwArgs.upkeep, ability);
 			this.log(args, kwArgs);
 			break;
 		}
@@ -3338,9 +3732,12 @@ export class Battle {
 		// status parse
 		if (!status) {
 			output.status = '';
-		} else if (status === 'par' || status === 'brn' || status === 'slp' || status === 'frz' || status === 'tox') {
+		} else if (status === 'par' || status === 'brn' || status === 'slp' || status === 'frz' || status === 'tox' ||
+			status === 'fst' || status === 'blt') {
 			output.status = status;
 		} else if (status === 'psn' && output.status !== 'tox') {
+			output.status = status;
+		} else if (status === 'psn' && output.status !== 'blt') {
 			output.status = status;
 		} else if (status === 'fnt') {
 			output.hp = 0;

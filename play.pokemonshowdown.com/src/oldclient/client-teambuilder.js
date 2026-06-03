@@ -238,7 +238,7 @@
 					buf += '<p><button class="button" name="insecureUse">Use teambuilder insecurely</button></p></div>';
 				} else if (Storage.whenTeamsLoaded.error) {
 					buf = '<div class="pad"><p class="message-error">We got an error trying to load teams: ' + Storage.whenTeamsLoaded.error.message + '.</p>';
-					buf += '<p>This might be because you didn\'t give us permission to load teams: on macOS, this is in System Preferences → Security &amp; Privacy → Privacy → Files and Folders → Pokemon Showdown</p></div>';
+					buf += '<p>This might be because you didn\'t give us permission to load teams: on macOS, this is in System Preferences → Security &amp; Privacy → Privacy → Files and Folders → Kaskade Showdown</p></div>';
 				} else {
 					buf = '<div class="pad"><p>lol zarel this is a horrible teambuilder</p>';
 					buf += '<p>that\'s because we\'re not done loading it...</p></div>';
@@ -563,7 +563,7 @@
 		greeting: function (answer, button) {
 			var buf = '<p><strong>' + $(button).html() + '</p></strong>';
 			if (answer === 'N') {
-				buf += '<p>Aww, that\'s too bad. :( I hope playing on Pok&eacute;mon Showdown today can help cheer you up!</p>';
+				buf += '<p>Aww, that\'s too bad. :( I hope playing on Kaskade Showdown today can help cheer you up!</p>';
 			} else if (answer === 'Y') {
 				buf += '<p>Cool! I just added some pretty cool teambuilder features, so I\'m pretty happy, too. Did you know you can drag and drop teams to different format-folders? You can also drag and drop them to and from your computer (works best in Chrome).</p>';
 				buf += '<p><button class="button" name="greeting" value="W"><i class="fa fa-question-circle"></i> Wait, who are you? Talking to a teambuilder is weird.</button></p>';
@@ -642,9 +642,11 @@
 				if (format === '+') {
 					e.stopImmediatePropagation();
 					var self = this;
-					app.addPopup(FormatPopup, { format: '', sourceEl: e.currentTarget, selectType: 'teambuilder', onselect: function (newFormat) {
-						self.selectFolder(newFormat);
-					} });
+					app.addPopup(FormatPopup, {
+						format: '', sourceEl: e.currentTarget, selectType: 'teambuilder', onselect: function (newFormat) {
+							self.selectFolder(newFormat);
+						}
+					});
 					return;
 				}
 				if (format === '++') {
@@ -653,19 +655,21 @@
 					// app.addPopupPrompt("Folder name:", "Create folder", function (newFormat) {
 					// 	self.selectFolder(newFormat + '/');
 					// });
-					app.addPopup(PromptPopup, { message: "Folder name:", button: "Create folder", sourceEl: e.currentTarget, callback: function (name) {
-						name = $.trim(name);
-						if (name.indexOf('/') >= 0 || name.indexOf('\\') >= 0) {
-							app.addPopupMessage("Names can't contain slashes, since they're used as a folder separator.");
-							name = name.replace(/[\\\/]/g, '');
+					app.addPopup(PromptPopup, {
+						message: "Folder name:", button: "Create folder", sourceEl: e.currentTarget, callback: function (name) {
+							name = $.trim(name);
+							if (name.indexOf('/') >= 0 || name.indexOf('\\') >= 0) {
+								app.addPopupMessage("Names can't contain slashes, since they're used as a folder separator.");
+								name = name.replace(/[\\\/]/g, '');
+							}
+							if (name.indexOf('|') >= 0) {
+								app.addPopupMessage("Names can't contain the character |, since they're used for storing teams.");
+								name = name.replace(/\|/g, '');
+							}
+							if (!name) return;
+							self.selectFolder(name + '/');
 						}
-						if (name.indexOf('|') >= 0) {
-							app.addPopupMessage("Names can't contain the character |, since they're used for storing teams.");
-							name = name.replace(/\|/g, '');
-						}
-						if (!name) return;
-						self.selectFolder(name + '/');
-					} });
+					});
 					return;
 				}
 			} else {
@@ -680,27 +684,29 @@
 			if (this.curFolder.slice(-1) !== '/') return;
 			var oldFolder = this.curFolder.slice(0, -1);
 			var self = this;
-			app.addPopup(PromptPopup, { message: "Folder name:", button: "Rename folder", value: oldFolder, callback: function (name) {
-				name = $.trim(name);
-				if (name.indexOf('/') >= 0 || name.indexOf('\\') >= 0) {
-					app.addPopupMessage("Names can't contain slashes, since they're used as a folder separator.");
-					name = name.replace(/[\\\/]/g, '');
+			app.addPopup(PromptPopup, {
+				message: "Folder name:", button: "Rename folder", value: oldFolder, callback: function (name) {
+					name = $.trim(name);
+					if (name.indexOf('/') >= 0 || name.indexOf('\\') >= 0) {
+						app.addPopupMessage("Names can't contain slashes, since they're used as a folder separator.");
+						name = name.replace(/[\\\/]/g, '');
+					}
+					if (name.indexOf('|') >= 0) {
+						app.addPopupMessage("Names can't contain the character |, since they're used for storing teams.");
+						name = name.replace(/\|/g, '');
+					}
+					if (!name) return;
+					if (name === oldFolder) return;
+					for (var i = 0; i < Storage.teams.length; i++) {
+						var team = Storage.teams[i];
+						if (team.folder !== oldFolder) continue;
+						team.folder = name;
+						if (window.nodewebkit) Storage.saveTeam(team);
+					}
+					if (!window.nodewebkit) Storage.saveTeams();
+					self.selectFolder(name + '/');
 				}
-				if (name.indexOf('|') >= 0) {
-					app.addPopupMessage("Names can't contain the character |, since they're used for storing teams.");
-					name = name.replace(/\|/g, '');
-				}
-				if (!name) return;
-				if (name === oldFolder) return;
-				for (var i = 0; i < Storage.teams.length; i++) {
-					var team = Storage.teams[i];
-					if (team.folder !== oldFolder) continue;
-					team.folder = name;
-					if (window.nodewebkit) Storage.saveTeam(team);
-				}
-				if (!window.nodewebkit) Storage.saveTeams();
-				self.selectFolder(name + '/');
-			} });
+			});
 		},
 		promptDeleteFolder: function () {
 			app.addPopup(DeleteFolderPopup, { folder: this.curFolder, room: this });
@@ -1251,7 +1257,7 @@
 					buf += '<li><button name="addPokemon" class="button big"><i class="fa fa-plus"></i> Add Pok&eacute;mon</button></li>';
 				}
 				buf += '</ol>';
-				var formatInfo = this.formatResources[this.curTeam.format];
+				/* var formatInfo = this.formatResources[this.curTeam.format];
 				// data's there and loaded
 				if (formatInfo && formatInfo !== true) {
 					if (formatInfo.resources.length || formatInfo.url) {
@@ -1264,7 +1270,7 @@
 					buf += '</ul>';
 					var desc = formatInfo.resources.length ? 'more ' : '';
 					buf += '<div style="padding-left: 5px">Find ' + desc + 'helpful resources for this tier on <a href="' + formatInfo.url + '" target="_blank">the Smogon Dex</a>.</div>';
-				}
+				} */
 				buf += '<form id="pokepasteForm" style="display:inline" method="post" action="https://pokepast.es/create" target="_blank">';
 				buf += '<input type="hidden" name="title" id="pasteTitle">';
 				buf += '<input type="hidden" name="paste" id="pasteData">';
@@ -1295,6 +1301,7 @@
 			var isVGC = baseFormat.includes('battlespot') || baseFormat.includes('bss') ||
 				baseFormat.includes('vgc') || baseFormat.includes('battlefestival');
 			var isLC = baseFormat.startsWith('lc') || baseFormat.endsWith('lc');
+			// var isSwSe = baseFormat.includes('swse');
 			var buf = '<li value="' + i + '">';
 			if (!set.species) {
 				if (this.deletedSet) {
@@ -1356,9 +1363,9 @@
 						buf += '<span class="detailcell"><label>Gmax</label>' + (set.gigantamax || species.forme === 'Gmax' ? 'Yes' : 'No') + '</span>';
 					}
 				}
-				if (this.curTeam.gen === 9 && !isChampions) {
+				/* if (this.curTeam.gen === 9 && !(isChampions || isSwSe)) {
 					buf += '<span class="detailcell"><label>Tera Type</label>' + (set.teraType || species.requiredTeraType || species.types[0]) + '</span>';
-				}
+				} */
 			}
 			buf += '</button></div></div>';
 
@@ -1612,9 +1619,11 @@
 				return;
 			}
 			var self = this;
-			app.addPopup(FormatPopup, { format: format, sourceEl: button, selectType: 'teambuilder', onselect: function (newFormat) {
-				self.changeFormat(newFormat);
-			} });
+			app.addPopup(FormatPopup, {
+				format: format, sourceEl: button, selectType: 'teambuilder', onselect: function (newFormat) {
+					self.changeFormat(newFormat);
+				}
+			});
 		},
 		changeFormat: function (format) {
 			this.curTeam.format = format;
@@ -2275,6 +2284,10 @@
 				case 'Sinistea':
 				case 'Tatsugiri':
 				case 'Vivillon':
+				// swse
+				case 'Botnyak':
+				case 'Eecroach':
+				case 'Stackem':
 					break;
 				default:
 					smogdexid += '-' + toID(species.forme);
@@ -2895,6 +2908,7 @@
 			var isBDSP = this.curTeam.format.includes('bdsp');
 			var isNatDex = this.curTeam.format.includes('nationaldex') || this.curTeam.format.includes('natdex');
 			var isHackmons = this.curTeam.format.includes('hackmons') || this.curTeam.format.endsWith('bh');
+			// var isSwSe = this.curTeam.format.includes('swse');
 			var species = this.curTeam.dex.species.get(set.species);
 			if (!set) return;
 			buf += '<div class="resultheader"><h3>Details</h3></div>';
@@ -2973,7 +2987,7 @@
 				buf += '</select></div></div>';
 			}
 
-			if (this.curTeam.gen === 9 && !isChampions) {
+			/* if (this.curTeam.gen === 9 && !(isChampions || isSwSe)) {
 				buf += '<div class="formrow"><label class="formlabel" title="Tera Type">Tera Type:</label><div>';
 				buf += '<select name="teratype" class="button">';
 				var types = Dex.types.all();
@@ -2982,7 +2996,7 @@
 					buf += '<option value="' + types[i].name + '"' + (teraType === types[i].name ? ' selected="selected"' : '') + '>' + types[i].name + '</option>';
 				}
 				buf += '</select></div></div>';
-			}
+			} */
 
 			buf += '</form>';
 			if (species.cosmeticFormes) {
@@ -2997,10 +3011,11 @@
 			var set = this.curSet;
 			if (!set) return;
 			var species = this.curTeam.dex.species.get(set.species);
-			var isChampions = this.curTeam.format.includes('champions');
+			// var isChampions = this.curTeam.format.includes('champions');
 			var isLetsGo = this.curTeam.format.includes('letsgo');
 			var isBDSP = this.curTeam.format.includes('bdsp');
 			var isNatDex = this.curTeam.format.includes('nationaldex') || this.curTeam.format.includes('natdex');
+			// var isSwSe = this.curTeam.format.includes('swse');
 
 			// level
 			var level = parseInt(this.$chart.find('input[name=level]').val(), 10);
@@ -3060,12 +3075,12 @@
 			}
 
 			// Tera type
-			var teraType = this.$chart.find('select[name=teratype]').val();
-			if (!isChampions && Dex.types.isName(teraType)) {
+			/* var teraType = this.$chart.find('select[name=teratype]').val();
+			if (!(isChampions || isSwSe) && Dex.types.isName(teraType)) {
 				set.teraType = teraType || species.requiredTeraType || species.types[0];
 			} else {
 				delete set.teraType;
-			}
+			} */
 
 			// update details cell
 			var buf = '';
@@ -3092,9 +3107,9 @@
 						buf += '<span class="detailcell"><label>Gmax</label>' + (set.gigantamax || species.forme === 'Gmax' ? 'Yes' : 'No') + '</span>';
 					}
 				}
-				if (this.curTeam.gen === 9 && !isChampions) {
+				/* if (this.curTeam.gen === 9 && !(isChampions || isSwSe)) {
 					buf += '<span class="detailcell"><label>Tera Type</label>' + (set.teraType || species.requiredTeraType || species.types[0]) + '</span>';
-				}
+				} */
 			}
 			this.$('button[name=details]').html(buf);
 

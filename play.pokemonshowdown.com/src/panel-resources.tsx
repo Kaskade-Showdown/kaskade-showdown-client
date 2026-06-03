@@ -73,7 +73,7 @@ class ResourcePanel extends PSRoomPanel<ResourceRoom> {
 				</p>
 				<ul>
 					<li>
-						<a href="https://www.smogon.com/forums/threads/3676132/">Beginner's Guide to Pokémon Showdown</a>
+						<a href="https://www.smogon.com/forums/threads/3676132/">Beginner's Guide to Kaskade Showdown</a>
 					</li>
 					<li>
 						<a href="https://www.smogon.com/dp/articles/intro_comp_pokemon">An introduction to competitive Pokémon</a>

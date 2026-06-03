@@ -2,7 +2,7 @@
 <html><head>
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0" />
-	<title>Showdown!</title>
+	<title>Kaskade Showdown!</title>
 	<link rel="shortcut icon" href="favicon.ico" id="dynamic-favicon" />
 	<link rel="stylesheet" href="style/battle.css" />
 	<link rel="stylesheet" href="style/client2.css" />
@@ -16,7 +16,7 @@
 	<div id="ps-frame">
 		<div id="header" class="header">
 			<div class="maintabbarbottom"></div>
-			<img class="logo" src="https://play.pokemonshowdown.com/favicon-256.png" alt="Pokémon Showdown! (beta)" width="50" height="50">
+			<img class="logo" src="favicon-256.png" alt="Kaskade Showdown!" width="50" height="50">
 		</div>
 		<div class="ps-room scrollable" id="room-">
 			<div class="mainmenu-mini-windows">
@@ -24,19 +24,19 @@
 					<h3 class="mini-window-header"><button class="closebutton" tabindex="-1" aria-label="Close"><i class="fa fa-times-circle"></i></button>News</h3>
 					<div id="room-news" class="mini-window-contents ps-room-light scrollable" style="height: auto;">
 						<div class="readable-bg">
-							<div class="newsentry"><h4>Test client</h4><p>Welcome to the test client! You can test client changes here!</p><p>&mdash;<strong>Zarel</strong> <small class="date">on Sep 25, 2015</small></p></div>
+							<div class="newsentry"><h4>Welcome to Kaskade Showdown!</h4><p><a href="https://docs.google.com/spreadsheets/d/1mUW2Ri72_5BzJaDHmGzaBMjDtyAW8nth6djeHCQqFHo/edit?usp=sharing" target="_blank">This</a> sheet has detailed information on every new Pokemon, ability, move, item, and most importantly, Weathergy in the current demo!</p><p>Check out the <a href="https://discord.gg/swse" target="_blank">Discord</a> for the latest updates and battling other players!</p><p>&mdash;<strong>ry</strong> <small class="date">on March 19, 2026</small></p></div>
 						</div>
 					</div>
 				</div>
 			</div>
 			<div class="mainmenu">
-				<div id="loading-message" class="mainmessage">Loading... <noscript>FAILED<br /><br />Pok&eacute;mon Showdown requires JavaScript.</noscript></div>
+				<div id="loading-message" class="mainmessage">Loading... <noscript>FAILED<br /><br />Kaskade Showdown requires JavaScript.</noscript></div>
 			</div>
 			<div class="mainmenufooter">
 				<div class="bgcredit"></div>
 				<small>
-					<a href="//dex.pokemonshowdown.com/" target="_blank">Pok&eacute;dex</a> | <a href="//replay.pokemonshowdown.com/" target="_blank">Replays</a> | <a href="http://smogon.com/forums/" target="_blank">Forum</a><br />
-					<a href="//pokemonshowdown.com/rules" target="_blank">Rules</a> | <a href="//pokemonshowdown.com/credits" target="_blank">Credits</a> | <a href="//pokemonshowdown.com/privacy" target="_blank">Privacy</a>
+					<a href="//kaskadeshowdown.com/replays/" target="_blank">Replays</a><br />
+					<a href="https://discord.gg/sFV7EabFU5" target="_blank">Discord</a> | <a href="https://swirlingseasons.wiki.gg/" target="_blank">Wiki</a> | <a href="https://docs.google.com/spreadsheets/d/1mUW2Ri72_5BzJaDHmGzaBMjDtyAW8nth6djeHCQqFHo/edit?usp=sharing" target="_blank">Detailed Google Sheet</a>
 				</small>
 			</div>
 		</div>
@@ -53,7 +53,7 @@
 		linkStyle("style/battle-search.css");
 		linkStyle("style/font-awesome.css");
 	</script>
-	<script src="https://play.pokemonshowdown.com/config/config.js"></script>
+	<script src="../config/config.js"></script>
 	<script>
 		if (!window.Config) {
 			// offline
@@ -62,15 +62,15 @@
 				bannedHosts: [],
 				whitelist: [],
 				routes: {
-					root: "pokemonshowdown.com",
-					client: "play.pokemonshowdown.com",
-					dex: "dex.pokemonshowdown.com",
-					replays: "replay.pokemonshowdown.com",
-					users: "pokemonshowdown.com/users"
+					root: "api.kaskadeshowdown.com",
+					client: "kaskadeshowdown.com",
+					dex: "dex.kaskadeshowdown.com",
+					replays: "replay.kaskadeshowdown.com",
+					users: "kaskadeshowdown.com/users"
 				},
 				defaultserver: {
 					id: 'showdown',
-					host: 'sim3.psim.us',
+					host: 'api.kaskadeshowdown.com',
 					port: 443,
 					httpport: 8000,
 					altport: 80,
@@ -81,7 +81,7 @@
 		}
 		function loadRemoteData(src) {
 			var scriptEl = document.createElement('script');
-			scriptEl.src = src.replace(/.*\/(data|js)\//g, 'https://play.pokemonshowdown.com/$1/');
+			scriptEl.src = src.replace(/.*\/(data|js)\//g, 'https://kaskadeshowdown.com/$1/');
 			document.head.appendChild(scriptEl);
 		}
 		Config.testclient = true;
@@ -111,7 +111,7 @@
 	<script src="js/client-main.js"></script>
 	<script nomodule src="js/lib/sockjs-1.4.0-nwjsfix.min.js"></script>
 	<script src="js/client-connection.js"></script>
-	<script> Net.defaultRoute = 'https://play.pokemonshowdown.com'; </script>
+	<script> Net.defaultRoute = 'https://kaskadeshowdown.com'; </script>
 
 	<script src="js/lib/preact.min.js"></script>
 	<script src="js/panels.js"></script>
@@ -159,8 +159,8 @@
 	<script src="js/battle-team-editor.js?"></script>
 	<script src="js/panel-teambuilder-team.js?"></script>
 
-	<script src="https://play.pokemonshowdown.com/data/pokedex-mini.js"></script>
-	<script src="https://play.pokemonshowdown.com/data/pokedex-mini-bw.js"></script>
+	<script src="https://kaskadeshowdown.com/data/pokedex-mini.js"></script>
+	<script src="https://kaskadeshowdown.com/data/pokedex-mini-bw.js"></script>
 	<script src="data/typechart.js" onerror="loadRemoteData(this.src)"></script>
 	<script src="data/aliases.js" onerror="loadRemoteData(this.src)"></script>
 	<script src="js/lib/d3.v3.min.js"></script>

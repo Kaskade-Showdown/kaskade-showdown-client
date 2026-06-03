@@ -48,7 +48,6 @@ export class MainMenuRoom extends PSRoom {
 	/** used to track the moment between "search sent" and "server acknowledged search sent" */
 	teamSent: string | null = null;
 	search: { searching: string[], games: Record<RoomID, string> | null } = { searching: [], games: null };
-	disallowSpectators: boolean | null = PS.prefs.disallowspectators;
 	lastChallenged: number | null = null;
 	constructor(options: RoomOptions) {
 		super(options);
@@ -63,8 +62,7 @@ export class MainMenuRoom extends PSRoom {
 		}
 	}
 	adjustPrivacy() {
-		PS.prefs.set('disallowspectators', this.disallowSpectators);
-		if (this.disallowSpectators) return '/noreply /hidenext \n';
+		if (PS.prefs.disallowspectators) return '/noreply /hidenext \n';
 		return '';
 	}
 	startSearch = (format: string, team?: Team, parentElem?: HTMLElement | null) => {
@@ -640,9 +638,9 @@ class MainMenuPanel extends PSRoomPanel<MainMenuRoom> {
 		if (PS.down) {
 			return <div class="menugroup" style="background: rgba(10,10,10,.6)">
 				{PS.down === 'ddos' ? (
-					<p class="error"><strong>Pok&eacute;mon Showdown is offline due to a DDoS attack!</strong></p>
+					<p class="error"><strong>Kaskade Showdown is offline due to a DDoS attack!</strong></p>
 				) : (
-					<p class="error"><strong>Pok&eacute;mon Showdown is offline due to technical difficulties!</strong></p>
+					<p class="error"><strong>Kaskade Showdown is offline due to technical difficulties!</strong></p>
 				)}
 				<p>
 					<div style={{ textAlign: 'center' }}>
@@ -730,10 +728,10 @@ class MainMenuPanel extends PSRoomPanel<MainMenuRoom> {
 					</div>
 
 					<div class="menugroup">
-						<p><a class={"mainmenu4 mainmenu" + onlineButton} href="battles">Watch a battle</a></p>
-						<p><a class={"mainmenu5 mainmenu" + onlineButton} href="users">Find a user</a></p>
-						<p><a class={"mainmenu6 mainmenu" + onlineButton} href="view-friends-all">Friends</a></p>
-						<p><a class={"mainmenu7 mainmenu" + onlineButton} href="resources">Info & Resources</a></p>
+						<p><a class={"mainmenu5 mainmenu" + onlineButton} href="battles">Watch a battle</a></p>
+						<p><a class={"mainmenu6 mainmenu" + onlineButton} href="users">Find a user</a></p>
+						<p><a class={"mainmenu7 mainmenu" + onlineButton} href="view-friends-all">Friends</a></p>
+						<p><a class={"mainmenu8 mainmenu" + onlineButton} href="resources">Info & Resources</a></p>
 					</div>
 				</div>
 				<div class="mainmenu-right" style={{ display: PS.leftPanelWidth ? 'none' : 'block' }}>
@@ -910,7 +908,7 @@ export class TeamForm extends preact.Component<{
 		if (window.BattleFormats) {
 			this.format ||= this.props.defaultFormat || '';
 			if (!this.format) {
-				this.format = `gen${Dex.gen}randombattle`;
+				this.format = `gen${Dex.gen}swserandombattle`;
 
 				const starredPrefs = PS.prefs.starredformats || {};
 				// .reverse() because the newest starred format should be the default one

@@ -2550,10 +2550,12 @@ class StatForm extends preact.Component<{
 			switch (species.baseSpecies) {
 			case 'Alcremie':
 			case 'Basculin':
+			case 'Botnyak':
 			case 'Burmy':
 			case 'Castform':
 			case 'Cherrim':
 			case 'Deerling':
+			case 'Eecroach':
 			case 'Flabebe':
 			case 'Floette':
 			case 'Florges':
@@ -2568,6 +2570,7 @@ class StatForm extends preact.Component<{
 			case 'Sawsbuck':
 			case 'Shellos':
 			case 'Sinistea':
+			case 'Stackem':
 			case 'Tatsugiri':
 			case 'Vivillon':
 				break;

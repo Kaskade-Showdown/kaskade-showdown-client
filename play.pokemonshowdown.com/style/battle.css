@@ -250,7 +250,8 @@ License: GPLv2
 .statbar span.psn,
 .statbar span.slp,
 .statbar span.par,
-.statbar span.frz {
+.statbar span.frz,
+.statbar span.fst {
 	padding: 1px 2px;
 	border: 0;
 	border-radius: 3px;
@@ -273,6 +274,10 @@ License: GPLv2
 }
 .statbar span.frz {
 	background: #009AA4;
+	color: #FFFFFF;
+}
+.statbar span.fst {
+	background: #74CEC0;
 	color: #FFFFFF;
 }
 .statbar span.bad {
@@ -426,28 +431,85 @@ License: GPLv2
 .sunweather,
 .sunnydayweather,
 .desolatelandweather {
-	background: #FFEEBB url(../fx/weather-sunnyday.jpg) no-repeat scroll left top;
+	background: #FFEEBB url(../fx/weather-sunnyday.png) no-repeat scroll left top;
 	color: #664411;
 }
 .rainweather,
 .raindanceweather,
 .primordialseaweather {
-	background: #99BBFF url(../fx/weather-raindance.jpg) no-repeat scroll left top;
+	background: #99BBFF url(../fx/weather-raindance.png) no-repeat scroll left top;
 	color: #0044BB;
+}
+.hailweather,
+.snowscapeweather {
+	background: #AADDEE url(../fx/weather-hail.png) no-repeat scroll left top;
+	color: #114455;
+}
+.bloodmoonweather {
+	background: #05172559 url(../fx/weather-bloodmoon.png) no-repeat scroll left top;
+	color: #090c38;
+}
+.foghornweather {
+	background: #05172559 url(../fx/weather-foghorn.png) no-repeat scroll left top;
+	color: #090c38;
 }
 .sandstormweather {
 	background: #E6E0AC url(../fx/weather-sandstorm.png) no-repeat scroll left top;
 	color: #554433;
 }
-.snowscapeweather,
-.hailweather {
-	background: #AADDEE url(../fx/weather-hail.png) no-repeat scroll left top;
-	color: #114455;
+.duststormweather {
+	background: #05172559 url(../fx/weather-duststorm.png) no-repeat scroll left top;
+	color: #090c38;
+}
+.pollinateweather {
+	background: #05172559 url(../fx/weather-pollinate.png) no-repeat scroll left top;
+	color: #090c38;
+}
+.swarmsignalweather {
+	background: #05172559 url(../fx/weather-swarmsignal.png) no-repeat scroll left top;
+	color: #090c38;
+}
+.smogspreadweather {
+	background: #05172559 url(../fx/weather-smogspread.png) no-repeat scroll left top;
+	color: #090c38;
+}
+.sprinkleweather {
+	background: #05172559 url(../fx/weather-sprinkle.png) no-repeat scroll left top;
+	color: #090c38;
+}
+.auraprojectionweather {
+	background: #05172559 url(../fx/weather-auraprojection.png) no-repeat scroll left top;
+	color: #090c38;
+}
+.hauntweather {
+	background: #05172559 url(../fx/weather-haunt.png) no-repeat scroll left top;
+	color: #090c38;
+}
+.daydreamweather {
+	background: #05172559 url(../fx/weather-daydream.png) no-repeat scroll left top;
+	color: #090c38;
+}
+.dragonforceweather {
+	background: #05172559 url(../fx/weather-dragonforce.png) no-repeat scroll left top;
+	color: #090c38;
+}
+.supercellweather {
+	background: #05172559 url(../fx/weather-supercell.png) no-repeat scroll left top;
+	color: #090c38;
+}
+.magnetizeweather {
+	background: #05172559 url(../fx/weather-magnetize.png) no-repeat scroll left top;
+	color: #090c38;
+}
+.strongwindsweather {
+	background: #AAAAAA url(../fx/weather-strongwinds.png) no-repeat scroll left top;
+	color: #666666;
 }
 .deltastreamweather {
 	background: #AAAAAA url(../fx/weather-strongwind.png) no-repeat scroll left top;
 	color: #666666;
 }
+
 .mistyterrainweather {
 	background: #EEAACC url(../fx/weather-mistyterrain.png) no-repeat scroll left top;
 	color: #551144;
@@ -523,6 +585,10 @@ License: GPLv2
 .battle .frzresult strong {
 	color: #FFFFFF;
 	background: #009AA4;
+}
+.battle .fstresult strong {
+	color: #FFFFFF;
+	background: #74CEC0;
 }
 .battle .abilityresult strong {
 	color: #FFFFFF;

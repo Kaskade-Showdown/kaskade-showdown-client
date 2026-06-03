@@ -1,10 +1,10 @@
 /**
- * Pokemon Showdown Dex
+ * Kaskade Showdown Dex
  *
- * Roughly equivalent to sim/dex.js in a Pokemon Showdown server, but
+ * Roughly equivalent to sim/dex.js in a Kaskade Showdown server, but
  * designed for use in browsers rather than in Node.
  *
- * This is a generic utility library for Pokemon Showdown code: any
+ * This is a generic utility library for Kaskade Showdown code: any
  * code shared between the replay viewer and the client usually ends up
  * here.
  *
@@ -231,14 +231,11 @@ export const Dex = new class implements ModdedDex {
 	pokeballs: string[] | null = null;
 
 	resourcePrefix = (() => {
-		let prefix = '';
-		if (window.document?.location?.protocol !== 'http:') prefix = 'https:';
-		return `${prefix}//${window.Config ? Config.routes.client : 'play.pokemonshowdown.com'}/`;
+		return `https://raw.githubusercontent.com/Kaskade-Showdown/kaskade-audio-visual/master/visual/`;
 	})();
 
 	fxPrefix = (() => {
-		const protocol = (window.document?.location?.protocol !== 'http:') ? 'https:' : '';
-		return `${protocol}//${window.Config ? Config.routes.client : 'play.pokemonshowdown.com'}/fx/`;
+		return `https://raw.githubusercontent.com/Kaskade-Showdown/kaskade-showdown-client/master/play.pokemonshowdown.com/fx/`;
 	})();
 
 	loadedSpriteData = { xy: 1, bw: 0 };
@@ -634,7 +631,7 @@ export const Dex = new class implements ModdedDex {
 		//
 		let graphicsGen = mechanicsGen;
 		if (Dex.prefs('nopastgens')) graphicsGen = 6;
-		if (Dex.prefs('bwgfx') && graphicsGen >= 6) graphicsGen = 5;
+		if (!Dex.prefs('bwgfx') && graphicsGen >= 6) graphicsGen = 5;
 		spriteData.gen = Math.max(graphicsGen, Math.min(species.gen, 5));
 		const baseDir = ['', 'gen1', 'gen2', 'gen3', 'gen4', 'gen5', '', '', '', ''][spriteData.gen];
 
@@ -791,7 +788,19 @@ export const Dex = new class implements ModdedDex {
 		}
 
 		if (isFemale) {
-			if (['unfezant', 'frillish', 'jellicent', 'meowstic', 'pyroar'].includes(id)) {
+			if (['venusaur', 'butterfree', 'rattata', 'raticate', 'raticatekaskade', 'pikachu', 'pikachustarter', 'raichu', 'zubat',
+				'golbat', 'gloom', 'vileplume', 'kadabra', 'alakazam', 'doduo', 'dodrio', 'hypno', 'rhyhorn', 'rhydon', 'goldeen',
+				'seaking', 'scyther', 'magikarp', 'gyarados', 'eevee', 'eeveestarter', 'meganium', 'ledyba', 'ledian', 'xatu',
+				'sudowoodo', 'politoed', 'aipom', 'wooper', 'quagsire', 'murkrow', 'wobbuffet', 'girafarig', 'gligar', 'steelix',
+				'scizor', 'heracross', 'sneasel', 'sneaselhisui', 'ursaring', 'octillery', 'houndoom', 'donphan', 'torchic',
+				'combusken', 'blaziken', 'butterfree', 'dustox', 'ludicolo', 'nuzelaf', 'shiftry', 'meditite', 'medicham', 'roselia',
+				'gulpin', 'swalot', 'numel', 'camerupt', 'cacturne', 'milotic', 'relicanth', 'starly', 'staravia', 'staraptor',
+				'bidoof', 'bibarel', 'kricketot', 'kricketune', 'shinx', 'shinxkaskade', 'luxio', 'luxiokaskade', 'luxray',
+				'luxraykaskade', 'roserade', 'combee', 'pachirisu', 'buizel', 'floatzel', 'ambipom', 'ambipomkaskade', 'gible',
+				'gabite', 'garchomp', 'hippopotas', 'hippowdon', 'croagunk', 'toxicroak', 'finneon', 'lumineon', 'snover',
+				'snoverlowland', 'abomasnow', 'abomasnowlowland', 'weavile', 'rhyperior', 'tangrowth', 'mamoswine', 'unfezant',
+				'frillish', 'jellicent', 'pyroar', 'meowstic',
+				'catteraxe', 'auditaur', 'oxillery', 'tamroast', 'weepollen'].includes(id)) {
 				num = BattlePokemonIconIndexes[id + 'f'];
 			}
 		}
@@ -866,7 +875,7 @@ export const Dex = new class implements ModdedDex {
 		if (pokemon.shiny) spriteData.shiny = true;
 		if (dex.modid === 'gen7letsgo') gen = 8;
 		if (Dex.prefs('nopastgens')) gen = 9;
-		if (Dex.prefs('bwgfx') && gen > 5) gen = 5;
+		if (!Dex.prefs('bwgfx') && gen > 5) gen = 5;
 		// TODO: refactor after we get home sprites for Z-A Megas and Eternal Floette
 		let homeExists = (!species.isNonstandard || !['CAP', 'Custom'].includes(species.isNonstandard) ||
 			species.id === "xerneasneutral") && ![

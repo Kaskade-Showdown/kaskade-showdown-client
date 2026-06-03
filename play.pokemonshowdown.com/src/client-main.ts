@@ -16,7 +16,7 @@ import { ChatRoom } from './panel-chat';
 import type { MainMenuRoom } from './panel-mainmenu';
 import { Dex, toID, type ID } from './battle-dex';
 import { BattleTextParser, type Args } from './battle-text-parser';
-import type { BattleRoom } from './panel-battle';
+import { BattleRoom } from './panel-battle';
 import { Teams } from './battle-teams';
 import type preact from '../js/lib/preact';
 
@@ -117,6 +117,7 @@ class PSPrefs extends PSStreamModel<string | null> {
 	ignoreopp: boolean | null = null;
 	autotimer: boolean | null = null;
 	autohardcore: boolean | null = null;
+	autoTeamSheet: boolean | null = null;
 	spectatefromstart: boolean | null = null;
 	rightpanelbattles: boolean | null = null;
 	disallowspectators: boolean | null = null;
@@ -522,6 +523,7 @@ class PSTeams extends PSStreamModel<'team' | 'format'> {
 				teams[team.teamid] = team;
 			}
 
+			const NOT_LOADED_REGEX = /^[^|]*\|\|\|\|\|\|\|\|\|\|\|(?:\][^|]*\|\|\|\|\|\|\|\|\|\|\|)*$/;
 			// find exact teamid matches
 			for (const localTeam of this.list) {
 				if (localTeam.teamid) {
@@ -531,7 +533,7 @@ class PSTeams extends PSStreamModel<'team' | 'format'> {
 					}
 					localTeam.uploaded = {
 						teamid: team.teamid,
-						notLoaded: this.unloadedPackedTeam(team.team) === localTeam.packedTeam,
+						notLoaded: NOT_LOADED_REGEX.test(localTeam.packedTeam),
 						private: team.private,
 					};
 					delete teams[localTeam.teamid];
@@ -554,7 +556,7 @@ class PSTeams extends PSStreamModel<'team' | 'format'> {
 						localTeam.teamid = team.teamid;
 						localTeam.uploaded = {
 							teamid: team.teamid,
-							notLoaded: this.unloadedPackedTeam(team.team) === localTeam.packedTeam,
+							notLoaded: NOT_LOADED_REGEX.test(localTeam.packedTeam),
 							private: team.private,
 						};
 						break;
@@ -641,7 +643,7 @@ class PSUser extends PSStreamModel<PSLoginState | null> {
 	named = false;
 	away = false;
 	registered: { name: string, userid: ID } | null = null;
-	avatar = "lucas";
+	avatar = "lark";
 	challstr = '';
 	loggingIn: string | null = null;
 	initializing = true;
@@ -768,7 +770,7 @@ class PSUser extends PSStreamModel<PSLoginState | null> {
 		if (assertion.startsWith('\r')) assertion = assertion.slice(1);
 		if (assertion.startsWith('\n')) assertion = assertion.slice(1);
 		if (assertion.includes('<')) {
-			PS.alert("Something is interfering with our connection to the login server. Most likely, your internet provider needs you to re-log-in, or your internet provider is blocking Pokémon Showdown.");
+			PS.alert("Something is interfering with our connection to the login server. Most likely, your internet provider needs you to re-log-in, or your internet provider is blocking Kaskade Showdown.");
 			return;
 		}
 		if (assertion === ';') {
@@ -1118,11 +1120,11 @@ export class PSRoom extends PSStreamModel<Args | null> implements RoomOptions {
 	}
 	autoDismissNotifications() {
 		let room = PS.rooms[this.id] as ChatRoom;
-		if (room.lastMessageTime) {
+		if (room.lastViewedTime) {
 			// Mark chat messages as read to avoid double-notifying on reload
 			let lastMessageDates = PS.prefs.logtimes || {};
 			if (!lastMessageDates[PS.server.id]) lastMessageDates[PS.server.id] = {};
-			lastMessageDates[PS.server.id][room.id] = room.lastMessageTime || 0;
+			lastMessageDates[PS.server.id][room.id] = room.lastViewedTime || 0;
 			PS.prefs.set('logtimes', lastMessageDates);
 		}
 		for (let i = this.notifications.length - 1; i >= 0; i--) {
@@ -1497,7 +1499,7 @@ export class PSRoom extends PSStreamModel<Args | null> implements RoomOptions {
 				if (curMode === false) curMode = 'NEVER';
 				if (curMode) curMode = curMode.toUpperCase();
 				if (!curMode) curMode = 'DEFAULT (currently ' + (Dex.afdMode ? 'FULL' : 'OFF') + ')';
-				this.add('||AFD is currently set to ' + mode);
+				this.add('||AFD is currently set to ' + curMode);
 				this.send('/help afd');
 			}
 			for (let roomid in PS.rooms) {
@@ -2603,6 +2605,10 @@ export const PS = new class extends PSModel {
 
 		const oldid = room.id;
 		room.id = id;
+		if (room.classType === 'battle') {
+			(room as BattleRoom).isHiddenBattle = BattleRoom.checkHiddenBattle(id);
+			if ((room as BattleRoom).battle) (room as BattleRoom).battle.roomid = id;
+		}
 		this.rooms[id] = room;
 		delete this.rooms[oldid];
 

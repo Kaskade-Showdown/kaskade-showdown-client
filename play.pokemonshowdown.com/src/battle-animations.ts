@@ -1,5 +1,5 @@
 /**
- * Pokemon Showdown Battle Animations
+ * Kaskade Showdown Battle Animations
  *
  * There are the specific resource files and scripts for misc animations
  *
@@ -57,7 +57,12 @@ export class BattleScene implements BattleSceneStub {
 	$options: JQuery = null!;
 	log: BattleLog;
 	$terrain: JQuery = null!;
-	$weather: JQuery = null!;
+	$climateWeather: JQuery = null!;
+	$irritantWeather: JQuery = null!;
+	$energyWeather: JQuery = null!;
+	$clearingWeather: JQuery = null!;
+	$cataclysmWeather: JQuery = null!;
+	$weatherText: JQuery = null!;
 	$bgEffect: JQuery = null!;
 	$bg: JQuery = null!;
 	$sprite: JQuery = null!;
@@ -86,7 +91,11 @@ export class BattleScene implements BattleSceneStub {
 	messagebarOpen = false;
 	customControls = false;
 	interruptionCount = 1;
-	curWeather = '';
+	curClimateWeather = '';
+	curIrritantWeather = '';
+	curEnergyWeather = '';
+	curClearingWeather = '';
+	curCataclysmWeather = '';
 	curTerrain = '';
 
 	// Animation state
@@ -154,7 +163,12 @@ export class BattleScene implements BattleSceneStub {
 
 		this.$bg = $('<div class="backdrop" style="background-image:url(' + Dex.resourcePrefix + this.backdropImage + ');display:block;opacity:0.8"></div>');
 		this.$terrain = $('<div class="weather"></div>');
-		this.$weather = $('<div class="weather"></div>');
+		this.$climateWeather = $('<div class="weather"></div>');
+		this.$irritantWeather = $('<div class="weather"></div>');
+		this.$energyWeather = $('<div class="weather"></div>');
+		this.$clearingWeather = $('<div class="weather"></div>');
+		this.$cataclysmWeather = $('<div class="weather"></div>');
+		this.$weatherText = $('<div class="weather"></div>');
 		this.$bgEffect = $('<div></div>');
 		this.$sprite = $('<div></div>');
 
@@ -179,7 +193,12 @@ export class BattleScene implements BattleSceneStub {
 
 		this.$battle.append(this.$bg);
 		this.$battle.append(this.$terrain);
-		this.$battle.append(this.$weather);
+		this.$battle.append(this.$climateWeather);
+		this.$battle.append(this.$irritantWeather);
+		this.$battle.append(this.$energyWeather);
+		this.$battle.append(this.$clearingWeather);
+		this.$battle.append(this.$cataclysmWeather);
+		this.$battle.append(this.$weatherText);
 		this.$battle.append(this.$bgEffect);
 		this.$battle.append(this.$sprite);
 		this.$battle.append(this.$stat);
@@ -200,7 +219,11 @@ export class BattleScene implements BattleSceneStub {
 		this.timeOffset = 0;
 		this.pokemonTimeOffset = 0;
 		this.curTerrain = '';
-		this.curWeather = '';
+		this.curClimateWeather = '';
+		this.curIrritantWeather = '';
+		this.curEnergyWeather = '';
+		this.curClearingWeather = '';
+		this.curCataclysmWeather = '';
 
 		this.log.battleParser!.perspective = this.battle.mySide.sideid;
 
@@ -578,7 +601,7 @@ export class BattleScene implements BattleSceneStub {
 	updateGen() {
 		let gen = this.battle.gen;
 		if (Dex.prefs('nopastgens')) gen = 6;
-		if (Dex.prefs('bwgfx') && gen > 5) gen = 5;
+		if (!Dex.prefs('bwgfx') && gen > 5) gen = 5;
 		this.gen = gen;
 		this.activeCount = this.battle.nearSide?.active.length || 1;
 
@@ -968,35 +991,170 @@ export class BattleScene implements BattleSceneStub {
 		}
 		return `${buf} <small>(${cond[2]} or ${cond[3]} turns)</small>`;
 	}
-	weatherLeft() {
+	climateWeatherLeft() {
 		if (this.battle.gen < 7 && this.battle.hardcoreMode) return '';
 
 		let weatherhtml = ``;
 
-		if (this.battle.weather) {
+		if (this.battle.climateWeather) {
 			const weatherNameTable: { [id: string]: string } = {
 				sunnyday: 'Sun',
 				desolateland: 'Intense Sun',
 				raindance: 'Rain',
 				primordialsea: 'Heavy Rain',
-				sandstorm: 'Sandstorm',
 				hail: 'Hail',
 				snowscape: 'Snow',
-				deltastream: 'Strong Winds',
+				bloodmoon: 'Blood Moon',
+				foghorn: 'Fog',
+				sandstorm: 'Sandstorm',
 			};
-			weatherhtml = `${weatherNameTable[this.battle.weather] || this.battle.weather}`;
-			if (this.battle.weatherMinTimeLeft !== 0) {
-				weatherhtml += ` <small>(${this.battle.weatherMinTimeLeft} or ${this.battle.weatherTimeLeft} turns)</small>`;
-			} else if (this.battle.weatherTimeLeft !== 0) {
-				weatherhtml += ` <small>(${this.battle.weatherTimeLeft} turn${this.battle.weatherTimeLeft === 1 ? '' : 's'})</small>`;
+			weatherhtml = `${weatherNameTable[this.battle.climateWeather] || this.battle.climateWeather}`;
+			if (this.battle.climateWeatherMinTimeLeft !== 0) {
+				weatherhtml += ` <small>(${this.battle.climateWeatherMinTimeLeft} or ${this.battle.climateWeatherTimeLeft} turns)</small>`;
+			} else if (this.battle.climateWeatherTimeLeft !== 0) {
+				weatherhtml += ` <small>(${this.battle.climateWeatherTimeLeft} turn${this.battle.climateWeatherTimeLeft === 1 ? '' : 's'})</small>`;
 			}
-			const nullifyWeather = this.battle.abilityActive(['Air Lock', 'Cloud Nine']);
+			const nullifyWeather = this.battle.abilityActive(['Air Lock', 'Cloud Nine', 'Nullify']);
 			weatherhtml = `${nullifyWeather ? '<s>' : ''}${weatherhtml}${nullifyWeather ? '</s>' : ''}`;
 		}
 
-		for (const pseudoWeather of this.battle.pseudoWeather) {
-			weatherhtml += this.pseudoWeatherLeft(pseudoWeather);
+		return weatherhtml;
+	}
+	irritantWeatherLeft() {
+		if (this.battle.gen < 7 && this.battle.hardcoreMode) return '';
+
+		let weatherhtml = ``;
+
+		if (this.battle.irritantWeather) {
+			const weatherNameTable: { [id: string]: string } = {
+				sandstorm: 'Sandstorm',
+				duststorm: 'Dust Storm',
+				pollinate: 'Pollen Storm',
+				swarmsignal: 'Pheromones',
+				smogspread: 'Smog',
+				sprinkle: 'Fairy Dust',
+			};
+			weatherhtml = `${weatherNameTable[this.battle.irritantWeather] || this.battle.irritantWeather}`;
+			if (this.battle.irritantWeatherMinTimeLeft !== 0) {
+				weatherhtml += ` <small>(${this.battle.irritantWeatherMinTimeLeft} or ${this.battle.irritantWeatherTimeLeft} turns)</small>`;
+			} else if (this.battle.irritantWeatherTimeLeft !== 0) {
+				weatherhtml += ` <small>(${this.battle.irritantWeatherTimeLeft} turn${this.battle.irritantWeatherTimeLeft === 1 ? '' : 's'})</small>`;
+			}
+			/* if (this.climateWeatherLeft()) {
+				weatherhtml = `<br />` + weatherhtml;
+			} */
+			const nullifyWeather = this.battle.abilityActive('Nullify');
+			weatherhtml = `${nullifyWeather ? '<s>' : ''}${weatherhtml}${nullifyWeather ? '</s>' : ''}`;
 		}
+
+		return weatherhtml;
+	}
+	energyWeatherLeft() {
+		if (this.battle.gen < 7 && this.battle.hardcoreMode) return '';
+
+		let weatherhtml = ``;
+
+		if (this.battle.energyWeather) {
+			const weatherNameTable: { [id: string]: string } = {
+				auraprojection: 'Battle Aura',
+				haunt: 'Paranormal Activity',
+				daydream: 'Dreamscape',
+				dragonforce: 'Dragon Force',
+				supercell: 'Thunderstorm',
+				magnetize: 'Magnetosphere',
+			};
+			weatherhtml = `${weatherNameTable[this.battle.energyWeather] || this.battle.energyWeather}`;
+			if (this.battle.energyWeatherMinTimeLeft !== 0) {
+				weatherhtml += ` <small>(${this.battle.energyWeatherMinTimeLeft} or ${this.battle.energyWeatherTimeLeft} turns)</small>`;
+			} else if (this.battle.energyWeatherTimeLeft !== 0) {
+				weatherhtml += ` <small>(${this.battle.energyWeatherTimeLeft} turn${this.battle.energyWeatherTimeLeft === 1 ? '' : 's'})</small>`;
+			}
+			/* if (this.climateWeatherLeft()) {
+				weatherhtml = `<br />` + weatherhtml;
+			}
+			if (this.irritantWeatherLeft()) {
+				weatherhtml = `<br />` + weatherhtml;
+			} */
+			const nullifyWeather = this.battle.abilityActive('Nullify');
+			weatherhtml = `${nullifyWeather ? '<s>' : ''}${weatherhtml}${nullifyWeather ? '</s>' : ''}`;
+		}
+
+		return weatherhtml;
+	}
+	clearingWeatherLeft() {
+		if (this.battle.gen < 7 && this.battle.hardcoreMode) return '';
+
+		let weatherhtml = ``;
+
+		if (this.battle.clearingWeather) {
+			const weatherNameTable: { [id: string]: string } = {
+				strongwinds: 'Strong Winds',
+				deltastream: 'Delta Stream',
+			};
+			weatherhtml = `${weatherNameTable[this.battle.clearingWeather] || this.battle.clearingWeather}`;
+			if (this.battle.clearingWeatherMinTimeLeft !== 0) {
+				weatherhtml += ` <small>(${this.battle.clearingWeatherMinTimeLeft} or ${this.battle.clearingWeatherTimeLeft} turns)</small>`;
+			} else if (this.battle.clearingWeatherTimeLeft !== 0) {
+				weatherhtml += ` <small>(${this.battle.clearingWeatherTimeLeft} turn${this.battle.clearingWeatherTimeLeft === 1 ? '' : 's'})</small>`;
+			}
+			/* if (this.climateWeatherLeft()) {
+				weatherhtml = `<br />` + weatherhtml;
+			}
+			if (this.irritantWeatherLeft()) {
+				weatherhtml = `<br />` + weatherhtml;
+			}
+			if (this.energyWeatherLeft()) {
+				weatherhtml = `<br />` + weatherhtml;
+			} */
+			const nullifyWeather = this.battle.abilityActive('Nullify');
+			weatherhtml = `${nullifyWeather ? '<s>' : ''}${weatherhtml}${nullifyWeather ? '</s>' : ''}`;
+		}
+
+		return weatherhtml;
+	}
+	cataclysmWeatherLeft() { // also includes psuedoweathers
+		if (this.battle.gen < 7 && this.battle.hardcoreMode) return '';
+
+		let weatherhtml = ``;
+
+		if (this.battle.cataclysmWeather) {
+			const weatherNameTable: { [id: string]: string } = {
+				cataclysmiclight: 'Cataclysmic Light',
+			};
+			weatherhtml = `${weatherNameTable[this.battle.cataclysmWeather] || this.battle.cataclysmWeather}`;
+			if (this.battle.cataclysmWeatherMinTimeLeft !== 0) {
+				weatherhtml += ` <small>(${this.battle.cataclysmWeatherMinTimeLeft} or ${this.battle.cataclysmWeatherTimeLeft} turns)</small>`;
+			} else if (this.battle.cataclysmWeatherTimeLeft !== 0) {
+				weatherhtml += ` <small>(${this.battle.cataclysmWeatherTimeLeft} turn${this.battle.cataclysmWeatherTimeLeft === 1 ? '' : 's'})</small>`;
+			}
+			/* if (this.climateWeatherLeft()) {
+				weatherhtml = `<br />` + weatherhtml;
+			}
+			if (this.irritantWeatherLeft()) {
+				weatherhtml = `<br />` + weatherhtml;
+			}
+			if (this.energyWeatherLeft()) {
+				weatherhtml = `<br />` + weatherhtml;
+			}
+			if (this.clearingWeatherLeft()) {
+				weatherhtml = `<br />` + weatherhtml;
+			} */
+			const nullifyWeather = this.battle.abilityActive('Nullify');
+			weatherhtml = `${nullifyWeather ? '<s>' : ''}${weatherhtml}${nullifyWeather ? '</s>' : ''}`;
+		} /* else {
+			if (this.climateWeatherLeft()) {
+				weatherhtml = `<br />` + weatherhtml;
+			}
+			if (this.irritantWeatherLeft()) {
+				weatherhtml = `<br />` + weatherhtml;
+			}
+			if (this.energyWeatherLeft()) {
+				weatherhtml = `<br />` + weatherhtml;
+			}
+			if (this.clearingWeatherLeft()) {
+				weatherhtml = `<br />` + weatherhtml;
+			}
+		} */
 
 		return weatherhtml;
 	}
@@ -1007,58 +1165,195 @@ export class BattleScene implements BattleSceneStub {
 		}
 		return buf;
 	}
-	upkeepWeather() {
-		const isIntense = ['desolateland', 'primordialsea', 'deltastream'].includes(this.curWeather);
-		this.$weather.animate({
+	pseudoWeathersLeft() {
+		let buf = ``;
+		for (const pseudoWeather of this.battle.pseudoWeather) {
+			buf += this.pseudoWeatherLeft(pseudoWeather);
+		}
+		return buf;
+	}
+	upkeepClimateWeather() {
+		const isIntense = ['desolateland', 'primordialsea'].includes(this.curClimateWeather);
+		this.$climateWeather.animate({
 			opacity: 1.0,
 		}, 300).animate({
 			opacity: isIntense ? 0.9 : 0.5,
 		}, 300);
 	}
+	upkeepIrritantWeather() {
+		this.$irritantWeather.animate({
+			opacity: 1.0,
+		}, 300).animate({
+			opacity: 0.5,
+		}, 300);
+	}
+	upkeepEnergyWeather() {
+		this.$energyWeather.animate({
+			opacity: 1.0,
+		}, 300).animate({
+			opacity: 0.5,
+		}, 300);
+	}
+	upkeepClearingWeather() {
+		const isClearingIntense = ['deltastream'].includes(this.curClearingWeather);
+		this.$clearingWeather.animate({
+			opacity: 1.0,
+		}, 300).animate({
+			opacity: isClearingIntense ? 0.9 : 0.5,
+		}, 300);
+	}
+	upkeepCataclysmWeather() {
+		this.$cataclysmWeather.animate({
+			opacity: 1.0,
+		}, 300).animate({
+			opacity: 0.5,
+		}, 300);
+	}
 	updateWeather(instant?: boolean) {
 		if (!this.animating) return;
-		let isIntense = false;
-		let weather = this.battle.weather;
-		if (this.battle.abilityActive(['Air Lock', 'Cloud Nine'])) {
-			weather = '' as ID;
+		let isClimateIntense = false;
+		let isClearingIntense = false;
+		let climateWeather = this.battle.climateWeather;
+		let irritantWeather = this.battle.irritantWeather;
+		let energyWeather = this.battle.energyWeather;
+		let clearingWeather = this.battle.clearingWeather;
+		let cataclysmWeather = this.battle.cataclysmWeather;
+		if (this.battle.abilityActive(['Air Lock', 'Cloud Nine', 'Nullify'])) {
+			climateWeather = '' as ID;
+		}
+		if (this.battle.abilityActive('Nullify')) {
+			irritantWeather = '' as ID;
+			energyWeather = '' as ID;
+			clearingWeather = '' as ID;
+			cataclysmWeather = '' as ID;
 		}
 		let terrain = '' as ID;
 		for (const pseudoWeatherData of this.battle.pseudoWeather) {
 			terrain = toID(pseudoWeatherData[0]);
 		}
-		if (weather === 'desolateland' || weather === 'primordialsea' || weather === 'deltastream') {
-			isIntense = true;
+		if (climateWeather === 'desolateland' || climateWeather === 'primordialsea') {
+			isClimateIntense = true;
+		}
+		if (clearingWeather === 'deltastream') {
+			isClearingIntense = true;
 		}
 
-		let weatherhtml = this.weatherLeft();
+		let climateWeatherhtml = this.climateWeatherLeft();
+		let irritantWeatherhtml = this.irritantWeatherLeft();
+		let energyWeatherhtml = this.energyWeatherLeft();
+		let clearingWeatherhtml = this.clearingWeatherLeft();
+		let cataclysmWeatherhtml = this.cataclysmWeatherLeft();
+
+		if (climateWeatherhtml) climateWeatherhtml = `<br />` + climateWeatherhtml;
+		if (irritantWeatherhtml) irritantWeatherhtml = `<br />` + irritantWeatherhtml;
+		if (energyWeatherhtml) energyWeatherhtml = `<br />` + energyWeatherhtml;
+		if (clearingWeatherhtml) clearingWeatherhtml = `<br />` + clearingWeatherhtml;
+		if (cataclysmWeatherhtml) cataclysmWeatherhtml = `<br />` + cataclysmWeatherhtml;
+
+		cataclysmWeatherhtml += this.pseudoWeathersLeft();
 		for (const side of this.battle.sides) {
-			weatherhtml += this.sideConditionsLeft(side);
+			cataclysmWeatherhtml += this.sideConditionsLeft(side);
 		}
-		if (weatherhtml) weatherhtml = `<br />` + weatherhtml;
+		// eslint-disable-next-line @stylistic/max-len
+		let weatherTexthtml = clearingWeatherhtml + climateWeatherhtml + irritantWeatherhtml + energyWeatherhtml + cataclysmWeatherhtml;
+		this.updateStatbars();
 
 		if (instant) {
-			this.$weather.html('<em>' + weatherhtml + '</em>');
-			if (this.curWeather === weather && this.curTerrain === terrain) return;
+			/* this.$climateWeather.html('<em>' + climateWeatherhtml + '</em>');
+			this.$irritantWeather.html('<em>' + irritantWeatherhtml + '</em>');
+			this.$energyWeather.html('<em>' + energyWeatherhtml + '</em>');
+			this.$clearingWeather.html('<em>' + clearingWeatherhtml + '</em>');
+			this.$cataclysmWeather.html('<em>' + cataclysmWeatherhtml + '</em>'); */
+			this.$weatherText.html('<em>' + weatherTexthtml + '</em>');
+			if (this.curClimateWeather === climateWeather && this.curIrritantWeather === irritantWeather &&
+				this.curEnergyWeather === energyWeather && this.curClearingWeather === clearingWeather &&
+				this.curCataclysmWeather === cataclysmWeather && this.curTerrain === terrain) return;
 			this.$terrain.attr('class', terrain ? 'weather ' + terrain + 'weather' : 'weather');
 			this.curTerrain = terrain;
-			this.$weather.attr('class', weather ? 'weather ' + weather + 'weather' : 'weather');
-			this.$weather.css('opacity', isIntense || !weather ? 0.9 : 0.5);
-			this.curWeather = weather;
+			this.$climateWeather.attr('class', climateWeather ? 'weather ' + climateWeather + 'weather' : 'weather');
+			this.$irritantWeather.attr('class', irritantWeather ? 'weather ' + irritantWeather + 'weather' : 'weather');
+			this.$energyWeather.attr('class', energyWeather ? 'weather ' + energyWeather + 'weather' : 'weather');
+			this.$clearingWeather.attr('class', clearingWeather ? 'weather ' + clearingWeather + 'weather' : 'weather');
+			this.$cataclysmWeather.attr('class', cataclysmWeather ? 'weather ' + cataclysmWeather + 'weather' : 'weather');
+			this.$weatherText.attr('class', 'weather weatherText');
+			this.$climateWeather.css('opacity', isClimateIntense || !climateWeather ? 0.9 : 0.5);
+			this.$irritantWeather.css('opacity', !irritantWeather ? 0.9 : 0.5);
+			this.$energyWeather.css('opacity', !energyWeather ? 0.9 : 0.5);
+			this.$clearingWeather.css('opacity', isClearingIntense || !clearingWeather ? 0.9 : 0.5);
+			this.$cataclysmWeather.css('opacity', !cataclysmWeather ? 0.9 : 0.5);
+			this.$weatherText.css('opacity', 0.9);
+			this.curClimateWeather = climateWeather;
+			this.curIrritantWeather = irritantWeather;
+			this.curEnergyWeather = energyWeather;
+			this.curClearingWeather = clearingWeather;
+			this.curCataclysmWeather = cataclysmWeather;
 			return;
 		}
 
-		if (weather !== this.curWeather) {
-			this.$weather.animate({
+		if (climateWeather !== this.curClimateWeather) {
+			this.$climateWeather.animate({
 				opacity: 0,
-			}, this.curWeather ? 300 : 100, () => {
-				this.$weather.html('<em>' + weatherhtml + '</em>');
-				this.$weather.attr('class', weather ? 'weather ' + weather + 'weather' : 'weather');
-				this.$weather.animate({ opacity: isIntense || !weather ? 0.9 : 0.5 }, 300);
+			}, this.curClimateWeather ? 300 : 100, () => {
+				// this.$climateWeather.html('<em>' + climateWeatherhtml + '</em>');
+				this.$climateWeather.attr('class', climateWeather ? 'weather ' + climateWeather + 'weather' : 'weather');
+				this.$climateWeather.animate({ opacity: isClimateIntense || !climateWeather ? 0.9 : 0.5 }, 300);
 			});
-			this.curWeather = weather;
-		} else {
-			this.$weather.html('<em>' + weatherhtml + '</em>');
-		}
+			this.curClimateWeather = climateWeather;
+		} /* else {
+			this.$climateWeather.html('<em>' + climateWeatherhtml + '</em>');
+		} */
+
+		if (irritantWeather !== this.curIrritantWeather) {
+			this.$irritantWeather.animate({
+				opacity: 0,
+			}, this.curIrritantWeather ? 300 : 100, () => {
+				// this.$irritantWeather.html('<em>' + irritantWeatherhtml + '</em>');
+				this.$irritantWeather.attr('class', irritantWeather ? 'weather ' + irritantWeather + 'weather' : 'weather');
+				this.$irritantWeather.animate({ opacity: !irritantWeather ? 0.9 : 0.5 }, 300);
+			});
+			this.curIrritantWeather = irritantWeather;
+		} /* else {
+			this.$irritantWeather.html('<em>' + irritantWeatherhtml + '</em>');
+		} */
+
+		if (energyWeather !== this.curEnergyWeather) {
+			this.$energyWeather.animate({
+				opacity: 0,
+			}, this.curEnergyWeather ? 300 : 100, () => {
+				// this.$energyWeather.html('<em>' + energyWeatherhtml + '</em>');
+				this.$energyWeather.attr('class', energyWeather ? 'weather ' + energyWeather + 'weather' : 'weather');
+				this.$energyWeather.animate({ opacity: !energyWeather ? 0.9 : 0.5 }, 300);
+			});
+			this.curEnergyWeather = energyWeather;
+		} /* else {
+			this.$energyWeather.html('<em>' + energyWeatherhtml + '</em>');
+		} */
+
+		if (clearingWeather !== this.curClearingWeather) {
+			this.$clearingWeather.animate({
+				opacity: 0,
+			}, this.curClearingWeather ? 300 : 100, () => {
+				// this.$clearingWeather.html('<em>' + clearingWeatherhtml + '</em>');
+				this.$clearingWeather.attr('class', clearingWeather ? 'weather ' + clearingWeather + 'weather' : 'weather');
+				this.$clearingWeather.animate({ opacity: isClearingIntense || !clearingWeather ? 0.9 : 0.5 }, 300);
+			});
+			this.curClearingWeather = clearingWeather;
+		} /* else {
+			this.$clearingWeather.html('<em>' + clearingWeatherhtml + '</em>');
+		} */
+
+		if (cataclysmWeather !== this.curCataclysmWeather) {
+			this.$cataclysmWeather.animate({
+				opacity: 0,
+			}, this.curCataclysmWeather ? 300 : 100, () => {
+				// this.$cataclysmWeather.html('<em>' + cataclysmWeatherhtml + '</em>');
+				this.$cataclysmWeather.attr('class', cataclysmWeather ? 'weather ' + cataclysmWeather + 'weather' : 'weather');
+				this.$cataclysmWeather.animate({ opacity: !cataclysmWeather ? 0.9 : 0.5 }, 300);
+			});
+			this.curCataclysmWeather = cataclysmWeather;
+		} /* else {
+			this.$cataclysmWeather.html('<em>' + cataclysmWeatherhtml + '</em>');
+		} */
 
 		if (terrain !== this.curTerrain) {
 			this.$terrain.animate({
@@ -1070,6 +1365,13 @@ export class BattleScene implements BattleSceneStub {
 			});
 			this.curTerrain = terrain;
 		}
+
+		this.$weatherText.animate({
+			opacity: 0.9,
+		}, 100, () => {
+			this.$weatherText.html('<em>' + weatherTexthtml + '</em>');
+			this.$weatherText.attr('class', 'weather weatherText');
+		});
 	}
 	resetTurn() {
 		if (this.battle.turn <= 0) {
@@ -1400,6 +1702,37 @@ export class BattleScene implements BattleSceneStub {
 			this.$spritesFront[spriteIndex].append(web.$el);
 			this.sideConditions[siden][id] = [web];
 			break;
+		case 'steelbarbs':
+			const barb1 = new Sprite(BattleEffects.greenmetal1, {
+				display: 'block',
+				x: x + side.leftof(-30),
+				y: y - 20,
+				z: side.z,
+				opacity: 0.5,
+				scale: 0.8,
+			}, this);
+			const barb2 = new Sprite(BattleEffects.greenmetal2, {
+				display: 'block',
+				x: x + side.leftof(35),
+				y: y - 15,
+				z: side.z,
+				opacity: 0.5,
+				scale: 0.8,
+			}, this);
+			const barb3 = new Sprite(BattleEffects.greenmetal1, {
+				display: 'block',
+				x: x + side.leftof(50),
+				y: y - 10,
+				z: side.z,
+				opacity: 0.5,
+				scale: 0.8,
+			}, this);
+
+			this.$spritesFront[spriteIndex].append(barb1.$el);
+			this.$spritesFront[spriteIndex].append(barb2.$el);
+			this.$spritesFront[spriteIndex].append(barb3.$el);
+			this.sideConditions[siden][id] = [barb1, barb2, barb3];
+			break;
 		}
 	}
 	removeSideCondition(siden: number, id: ID) {
@@ -1599,8 +1932,8 @@ export class BattleScene implements BattleSceneStub {
 			const url = BattleEffects[i].url;
 			if (url) this.preloadImage(url);
 		}
-		this.preloadImage(Dex.resourcePrefix + 'sprites/ani/substitute.gif');
-		this.preloadImage(Dex.resourcePrefix + 'sprites/ani-back/substitute.gif');
+		this.preloadImage(Dex.resourcePrefix + 'sprites/gen5ani/substitute.gif');
+		this.preloadImage(Dex.resourcePrefix + 'sprites/gen5ani-back/substitute.gif');
 	}
 	rollBgm() {
 		this.setBgm(1 + this.numericId % 15);
@@ -1923,6 +2256,30 @@ export class PokemonSprite extends Sprite {
 		// Gen 1
 		lightscreen: ['Light Screen', 'good'],
 		reflect: ['Reflect', 'good'],
+		// swse
+		warpmistatk: ['Warp Mist: Atk', 'good'],
+		warpmistdef: ['Warp Mist: Def', 'good'],
+		warpmistspa: ['Warp Mist: SpA', 'good'],
+		warpmistspd: ['Warp Mist: SpD', 'good'],
+		warpmistspe: ['Warp Mist: Spe', 'good'],
+
+		magnetizeboost1: ['Magnetized: 20%', 'good'],
+		magnetizeboost2: ['Magnetized: 40%', 'good'],
+		magnetizeboost3: ['Magnetized: 60%', 'good'],
+		magnetizeboost4: ['Magnetized: 80%', 'good'],
+		magnetizeboost5: ['Magnetized: 100%', 'good'],
+		magnetizeboost6: ['Magnetized: 120%', 'good'],
+		magnetizeboost7: ['Magnetized: 140%', 'good'],
+		magnetizeboost8: ['Magnetized: 160%', 'good'],
+		sunscreen: ['Sunscreen', 'good'],
+		bearhug: ['Bear Hug', 'bad'],
+		whirlduel: ['Whirlduel', 'bad'],
+		possess: ['Possess', 'bad'],
+		wrangle: ['Wrangle', 'bad'],
+		pricklypear: ['Prickly Pear', 'bad'],
+		resilientoil: ['Resilient Oil', 'good'],
+
+		caffeinecrash: ['Caffeine Crash', 'bad'],
 	};
 	forme = '';
 	cryurl: string | undefined = undefined;
@@ -2578,7 +2935,11 @@ export class PokemonSprite extends Sprite {
 				BattleOtherAnims.schoolingin.anim(scene, [this]);
 			} else if (speciesid === 'wishiwashi') {
 				BattleOtherAnims.schoolingout.anim(scene, [this]);
-			} else if (speciesid === 'mimikyubusted' || speciesid === 'mimikyubustedtotem' ||
+			} else if (speciesid === 'eecroachswarm') { // swse
+				BattleOtherAnims.swarmingin.anim(scene, [this]);
+			} else if (speciesid === 'eecroach') {
+				BattleOtherAnims.swarmingout.anim(scene, [this]);
+			} else if (speciesid === 'mimikyubusted' || speciesid === 'mimikyubustedtotem' || speciesid === 'stackemrockless' ||
 				speciesid === 'aegislash' || speciesid === 'aegislashblade') {
 				// standard animation
 			} else if (speciesid === 'palafinhero') {
@@ -2654,7 +3015,7 @@ export class PokemonSprite extends Sprite {
 		const spriten = +this.isFrontSprite;
 		if (id === 'substitute' || id === 'shedtail') {
 			this.animSub(instant);
-		} else if (id === 'leechseed') {
+		} else if (id === 'leechseed' || id === 'pricklypear') {
 			const pos1 = {
 				display: 'block',
 				x: this.x - 30,
@@ -2687,6 +3048,13 @@ export class PokemonSprite extends Sprite {
 			this.scene.$spritesFront[spriten].append(leechseed2.$el);
 			this.scene.$spritesFront[spriten].append(leechseed3.$el);
 			this.effects['leechseed'] = [leechseed1, leechseed2, leechseed3];
+			const pricklypear1 = new Sprite(BattleEffects.energyball, pos1, this.scene);
+			const pricklypear2 = new Sprite(BattleEffects.energyball, pos2, this.scene);
+			const pricklypear3 = new Sprite(BattleEffects.energyball, pos3, this.scene);
+			this.scene.$spritesFront[spriten].append(pricklypear1.$el);
+			this.scene.$spritesFront[spriten].append(pricklypear2.$el);
+			this.scene.$spritesFront[spriten].append(pricklypear3.$el);
+			this.effects['pricklypear'] = [pricklypear1, pricklypear2, pricklypear3];
 		} else if (id === 'protect' || id === 'magiccoat') {
 			const protect = new Sprite(BattleEffects.protect, {
 				display: 'block',
@@ -2834,12 +3202,16 @@ export class PokemonSprite extends Sprite {
 			status += '<span class="psn">PSN</span> ';
 		} else if (pokemon.status === 'tox') {
 			status += '<span class="psn">TOX</span> ';
+		} else if (pokemon.status === 'blt') {
+			status += '<span class="BLT">BLT</span> ';
 		} else if (pokemon.status === 'slp') {
 			status += '<span class="slp">SLP</span> ';
 		} else if (pokemon.status === 'par') {
 			status += '<span class="par">PAR</span> ';
 		} else if (pokemon.status === 'frz') {
 			status += '<span class="frz">FRZ</span> ';
+		} else if (pokemon.status === 'fst') {
+			status += '<span class="fst">FST</span> ';
 		}
 		if (pokemon.terastallized) {
 			status += `<img src="${Dex.resourcePrefix}sprites/types/${encodeURIComponent(pokemon.terastallized)}.png" alt="${pokemon.terastallized}" class="pixelated" /> `;
@@ -2983,7 +3355,7 @@ const BattleEffects: { [k: string]: SpriteData } = {
 		w: 80, h: 60,
 	},
 	lightning: {
-		url: 'lightning.png', // by Pokemon Showdown user SailorCosmos
+		url: 'lightning.png', // by Kaskade Showdown user SailorCosmos
 		w: 41, h: 229,
 	},
 	rocks: {
@@ -2999,7 +3371,7 @@ const BattleEffects: { [k: string]: SpriteData } = {
 		w: 66, h: 72,
 	},
 	rock3: {
-		url: 'rock3.png', // by Pokemon Showdown user SailorCosmos
+		url: 'rock3.png', // by Kaskade Showdown user SailorCosmos
 		w: 66, h: 72,
 	},
 	leaf1: {
@@ -3015,19 +3387,19 @@ const BattleEffects: { [k: string]: SpriteData } = {
 		w: 29, h: 29,
 	},
 	caltrop: {
-		url: 'caltrop.png', // by Pokemon Showdown user SailorCosmos
+		url: 'caltrop.png', // by Kaskade Showdown user SailorCosmos
 		w: 80, h: 80,
 	},
 	greenmetal1: {
-		url: 'greenmetal1.png', // by Pokemon Showdown user Kalalokki
+		url: 'greenmetal1.png', // by Kaskade Showdown user Kalalokki
 		w: 45, h: 45,
 	},
 	greenmetal2: {
-		url: 'greenmetal2.png', // by Pokemon Showdown user Kalalokki
+		url: 'greenmetal2.png', // by Kaskade Showdown user Kalalokki
 		w: 45, h: 45,
 	},
 	poisoncaltrop: {
-		url: 'poisoncaltrop.png', // by Pokemon Showdown user SailorCosmos
+		url: 'poisoncaltrop.png', // by Kaskade Showdown user SailorCosmos
 		w: 80, h: 80,
 	},
 	shadowball: {
@@ -3063,7 +3435,7 @@ const BattleEffects: { [k: string]: SpriteData } = {
 		w: 24, h: 24,
 	},
 	fist: {
-		url: 'fist.png', // by Pokemon Showdown user SailorCosmos
+		url: 'fist.png', // by Kaskade Showdown user SailorCosmos
 		w: 55, h: 49,
 	},
 	fist1: {
@@ -3071,7 +3443,7 @@ const BattleEffects: { [k: string]: SpriteData } = {
 		w: 49, h: 55,
 	},
 	foot: {
-		url: 'foot.png', // by Pokemon Showdown user SailorCosmos
+		url: 'foot.png', // by Kaskade Showdown user SailorCosmos
 		w: 50, h: 75,
 	},
 	topbite: {
@@ -3083,7 +3455,7 @@ const BattleEffects: { [k: string]: SpriteData } = {
 		w: 108, h: 64,
 	},
 	web: {
-		url: 'web.png', // by Pokemon Showdown user SailorCosmos
+		url: 'web.png', // by Kaskade Showdown user SailorCosmos
 		w: 120, h: 122,
 	},
 	leftclaw: {
@@ -3095,39 +3467,39 @@ const BattleEffects: { [k: string]: SpriteData } = {
 		w: 44, h: 60,
 	},
 	leftslash: {
-		url: 'leftslash.png', // by Pokemon Showdown user Modeling Clay
+		url: 'leftslash.png', // by Kaskade Showdown user Modeling Clay
 		w: 57, h: 56,
 	},
 	rightslash: {
-		url: 'rightslash.png', // by Pokemon Showdown user Modeling Clay
+		url: 'rightslash.png', // by Kaskade Showdown user Modeling Clay
 		w: 57, h: 56,
 	},
 	leftchop: {
-		url: 'leftchop.png', // by Pokemon Showdown user SailorCosmos
+		url: 'leftchop.png', // by Kaskade Showdown user SailorCosmos
 		w: 100, h: 130,
 	},
 	rightchop: {
-		url: 'rightchop.png', // by Pokemon Showdown user SailorCosmos
+		url: 'rightchop.png', // by Kaskade Showdown user SailorCosmos
 		w: 100, h: 130,
 	},
 	angry: {
-		url: 'angry.png', // by Pokemon Showdown user SailorCosmos
+		url: 'angry.png', // by Kaskade Showdown user SailorCosmos
 		w: 30, h: 30,
 	},
 	heart: {
-		url: 'heart.png', // by Pokemon Showdown user SailorCosmos
+		url: 'heart.png', // by Kaskade Showdown user SailorCosmos
 		w: 30, h: 30,
 	},
 	pointer: {
-		url: 'pointer.png', // by Pokemon Showdown user SailorCosmos
+		url: 'pointer.png', // by Kaskade Showdown user SailorCosmos
 		w: 100, h: 100,
 	},
 	sword: {
-		url: 'sword.png', // by Pokemon Showdown user SailorCosmos
+		url: 'sword.png', // by Kaskade Showdown user SailorCosmos
 		w: 48, h: 100,
 	},
 	impact: {
-		url: 'impact.png', // by Pokemon Showdown user SailorCosmos
+		url: 'impact.png', // by Kaskade Showdown user SailorCosmos
 		w: 127, h: 119,
 	},
 	stare: {
@@ -3171,11 +3543,11 @@ const BattleEffects: { [k: string]: SpriteData } = {
 		w: 150, h: 100,
 	},
 	ultra: {
-		url: 'ultra.png', // by Pokemon Showdown user Modeling Clay
+		url: 'ultra.png', // by Kaskade Showdown user Modeling Clay
 		w: 113, h: 165,
 	},
 	hitmark: {
-		url: 'hitmarker.png', // by Pokemon Showdown user Ridaz
+		url: 'hitmarker.png', // by Kaskade Showdown user Ridaz
 		w: 100, h: 100,
 	},
 	protect: {
@@ -3201,6 +3573,12 @@ const BattleEffects: { [k: string]: SpriteData } = {
 	mist: {
 		rawHTML: '<div class="sidecondition-mist" style="display:none;position:absolute" />',
 		w: 100, h: 50,
+	},
+
+	// swse
+	lightbluefireball: {
+		url: 'lightbluefireball.png',
+		w: 64, h: 64,
 	},
 };
 (() => {
@@ -6036,6 +6414,24 @@ export const BattleStatusAnims: AnimTable = {
 			}, 'linear', 'fade');
 		},
 	},
+	fst: {
+		anim(scene, [attacker]) {
+			scene.showEffect('lightbluefireball', {
+				x: attacker.x - 20,
+				y: attacker.y - 15,
+				z: attacker.z,
+				scale: 0.2,
+				opacity: 0.3,
+			}, {
+				x: attacker.x + 40,
+				y: attacker.y + 15,
+				z: attacker.z,
+				scale: 1,
+				opacity: 1,
+				time: 300,
+			}, 'swing', 'fade');
+		},
+	},
 	flinch: {
 		anim(scene, [attacker]) {
 			scene.showEffect('shadowball', {
@@ -6196,3 +6592,6 @@ export const BattleStatusAnims: AnimTable = {
 	},
 };
 BattleStatusAnims['focuspunch'] = { anim: BattleStatusAnims['flinch'].anim };
+// swse
+BattleOtherAnims['swarmingin'] = { anim: BattleOtherAnims['schoolingin'].anim };
+BattleOtherAnims['swarmingout'] = { anim: BattleOtherAnims['schoolingout'].anim };

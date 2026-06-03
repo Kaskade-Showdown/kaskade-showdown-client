@@ -1,5 +1,5 @@
 /**
- * Pokemon Showdown Tooltips
+ * Kaskade Showdown Tooltips
  *
  * A file for generating tooltips for battles. This should be IE7+ and
  * use the DOM directly.
@@ -24,7 +24,11 @@ export class ModifiableValue {
 	serverPokemon: ServerPokemon;
 	itemName: string;
 	abilityName: string;
-	weatherName: string;
+	climateWeatherName: string;
+	irritantWeatherName: string;
+	energyWeatherName: string;
+	clearingWeatherName: string;
+	cataclysmWeatherName: string;
 	isAccuracy = false;
 	constructor(battle: Battle, pokemon: Pokemon, serverPokemon: ServerPokemon) {
 		this.comment = [];
@@ -35,8 +39,16 @@ export class ModifiableValue {
 		this.itemName = this.battle.dex.items.get(serverPokemon.item).name;
 		const ability = serverPokemon.ability || pokemon?.ability || serverPokemon.baseAbility;
 		this.abilityName = this.battle.dex.abilities.get(ability).name;
-		this.weatherName = this.battle.dex.moves.get(battle.weather).exists ?
-			this.battle.dex.moves.get(battle.weather).name : this.battle.dex.abilities.get(battle.weather).name;
+		this.climateWeatherName = this.battle.dex.moves.get(battle.climateWeather).exists ?
+			this.battle.dex.moves.get(battle.climateWeather).name : this.battle.dex.abilities.get(battle.climateWeather).name;
+		this.irritantWeatherName = this.battle.dex.moves.get(battle.irritantWeather).exists ?
+			this.battle.dex.moves.get(battle.irritantWeather).name : this.battle.dex.abilities.get(battle.irritantWeather).name;
+		this.energyWeatherName = this.battle.dex.moves.get(battle.energyWeather).exists ?
+			this.battle.dex.moves.get(battle.energyWeather).name : this.battle.dex.abilities.get(battle.energyWeather).name;
+		this.clearingWeatherName = this.battle.dex.moves.get(battle.clearingWeather).exists ?
+			this.battle.dex.moves.get(battle.clearingWeather).name : this.battle.dex.abilities.get(battle.clearingWeather).name;
+		this.cataclysmWeatherName = this.battle.dex.moves.get(battle.cataclysmWeather).exists ?
+			this.battle.dex.moves.get(battle.cataclysmWeather).name : this.battle.dex.abilities.get(battle.cataclysmWeather).name;
 	}
 	reset(value = 0, isAccuracy?: boolean) {
 		this.value = value;
@@ -73,13 +85,69 @@ export class ModifiableValue {
 		if (!this.pokemon?.effectiveAbility(this.serverPokemon)) return false;
 		return true;
 	}
-	tryWeather(weatherName?: string) {
-		if (!this.weatherName) return false;
-		if (!weatherName) weatherName = this.weatherName;
-		else if (weatherName !== this.weatherName) return false;
+	tryClimateWeather(weatherName?: string) {
+		if (!this.climateWeatherName) return false;
+		if (!weatherName) weatherName = this.climateWeatherName;
+		else if (weatherName !== this.climateWeatherName) return false;
 		for (const side of this.battle.sides) {
 			for (const active of side.active) {
-				if (active && ['Air Lock', 'Cloud Nine'].includes(active.ability)) {
+				if (active && ['Air Lock', 'Cloud Nine', 'Nullify'].includes(active.ability)) {
+					this.comment.push(` (${weatherName} suppressed by ${active.ability})`);
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+	tryIrritantWeather(weatherName?: string) {
+		if (!this.irritantWeatherName) return false;
+		if (!weatherName) weatherName = this.irritantWeatherName;
+		else if (weatherName !== this.irritantWeatherName) return false;
+		for (const side of this.battle.sides) {
+			for (const active of side.active) {
+				if (active && ['Nullify'].includes(active.ability)) {
+					this.comment.push(` (${weatherName} suppressed by ${active.ability})`);
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+	tryEnergyWeather(weatherName?: string) {
+		if (!this.energyWeatherName) return false;
+		if (!weatherName) weatherName = this.energyWeatherName;
+		else if (weatherName !== this.energyWeatherName) return false;
+		for (const side of this.battle.sides) {
+			for (const active of side.active) {
+				if (active && ['Nullify'].includes(active.ability)) {
+					this.comment.push(` (${weatherName} suppressed by ${active.ability})`);
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+	tryClearingWeather(weatherName?: string) {
+		if (!this.clearingWeatherName) return false;
+		if (!weatherName) weatherName = this.clearingWeatherName;
+		else if (weatherName !== this.clearingWeatherName) return false;
+		for (const side of this.battle.sides) {
+			for (const active of side.active) {
+				if (active && ['Nullify'].includes(active.ability)) {
+					this.comment.push(` (${weatherName} suppressed by ${active.ability})`);
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+	tryCataclysmWeather(weatherName?: string) {
+		if (!this.cataclysmWeatherName) return false;
+		if (!weatherName) weatherName = this.cataclysmWeatherName;
+		else if (weatherName !== this.cataclysmWeatherName) return false;
+		for (const side of this.battle.sides) {
+			for (const active of side.active) {
+				if (active && ['Nullify'].includes(active.ability)) {
 					this.comment.push(` (${weatherName} suppressed by ${active.ability})`);
 					return false;
 				}
@@ -97,10 +165,34 @@ export class ModifiableValue {
 		if (!this.tryAbility(abilityName)) return false;
 		return this.modify(factor, abilityName);
 	}
-	weatherModify(factor: number, weatherName?: string, name?: string) {
-		if (!weatherName) weatherName = this.weatherName;
+	climateWeatherModify(factor: number, weatherName?: string, name?: string) {
+		if (!weatherName) weatherName = this.climateWeatherName;
 		if (!weatherName) return false;
-		if (!this.tryWeather(weatherName)) return false;
+		if (!this.tryClimateWeather(weatherName)) return false;
+		return this.modify(factor, name || weatherName);
+	}
+	irritantWeatherModify(factor: number, weatherName?: string, name?: string) {
+		if (!weatherName) weatherName = this.irritantWeatherName;
+		if (!weatherName) return false;
+		if (!this.tryIrritantWeather(weatherName)) return false;
+		return this.modify(factor, name || weatherName);
+	}
+	energyWeatherModify(factor: number, weatherName?: string, name?: string) {
+		if (!weatherName) weatherName = this.energyWeatherName;
+		if (!weatherName) return false;
+		if (!this.tryEnergyWeather(weatherName)) return false;
+		return this.modify(factor, name || weatherName);
+	}
+	clearingWeatherModify(factor: number, weatherName?: string, name?: string) {
+		if (!weatherName) weatherName = this.clearingWeatherName;
+		if (!weatherName) return false;
+		if (!this.tryClearingWeather(weatherName)) return false;
+		return this.modify(factor, name || weatherName);
+	}
+	cataclysmWeatherModify(factor: number, weatherName?: string, name?: string) {
+		if (!weatherName) weatherName = this.cataclysmWeatherName;
+		if (!weatherName) return false;
+		if (!this.tryCataclysmWeather(weatherName)) return false;
 		return this.modify(factor, name || weatherName);
 	}
 	modify(factor: number, name?: string) {
@@ -584,8 +676,8 @@ export class BattleTooltips {
 				if (!movePower && move.id.startsWith('hiddenpower')) {
 					movePower = this.battle.dex.moves.get('hiddenpower').zMove!.basePower;
 				}
-				if (move.id === 'weatherball') {
-					switch (this.battle.weather) {
+				if (move.id === 'weatherball') { // updated
+					switch (this.battle.climateWeather) {
 					case 'sunnyday':
 					case 'desolateland':
 						zMove = this.battle.dex.moves.get(BattleTooltips.zMoveTable['Fire']);
@@ -594,12 +686,64 @@ export class BattleTooltips {
 					case 'primordialsea':
 						zMove = this.battle.dex.moves.get(BattleTooltips.zMoveTable['Water']);
 						break;
-					case 'sandstorm':
-						zMove = this.battle.dex.moves.get(BattleTooltips.zMoveTable['Rock']);
-						break;
 					case 'hail':
 					case 'snowscape':
 						zMove = this.battle.dex.moves.get(BattleTooltips.zMoveTable['Ice']);
+						break;
+					case 'bloodmoon':
+						zMove = this.battle.dex.moves.get(BattleTooltips.zMoveTable['Dark']);
+						break;
+					case 'foghorn':
+						zMove = this.battle.dex.moves.get(BattleTooltips.zMoveTable['Normal']);
+						break;
+					case 'sandstorm':
+						zMove = this.battle.dex.moves.get(BattleTooltips.zMoveTable['Rock']);
+						break;
+					}
+					switch (this.battle.irritantWeather) {
+					case 'sandstorm':
+						zMove = this.battle.dex.moves.get(BattleTooltips.zMoveTable['Rock']);
+						break;
+					case 'duststorm':
+						zMove = this.battle.dex.moves.get(BattleTooltips.zMoveTable['Ground']);
+						break;
+					case 'pollinate':
+						zMove = this.battle.dex.moves.get(BattleTooltips.zMoveTable['Grass']);
+						break;
+					case 'swarmsignal':
+						zMove = this.battle.dex.moves.get(BattleTooltips.zMoveTable['Bug']);
+						break;
+					case 'smogspread':
+						zMove = this.battle.dex.moves.get(BattleTooltips.zMoveTable['Poison']);
+						break;
+					case 'sprinkle':
+						zMove = this.battle.dex.moves.get(BattleTooltips.zMoveTable['Fairy']);
+						break;
+					}
+					switch (this.battle.energyWeather) {
+					case 'auraprojection':
+						zMove = this.battle.dex.moves.get(BattleTooltips.zMoveTable['Fighting']);
+						break;
+					case 'haunt':
+						zMove = this.battle.dex.moves.get(BattleTooltips.zMoveTable['Ghost']);
+						break;
+					case 'daydream':
+						zMove = this.battle.dex.moves.get(BattleTooltips.zMoveTable['Psychic']);
+						break;
+					case 'dragonforce':
+						zMove = this.battle.dex.moves.get(BattleTooltips.zMoveTable['Dragon']);
+						break;
+					case 'supercell':
+						zMove = this.battle.dex.moves.get(BattleTooltips.zMoveTable['Electric']);
+						break;
+					case 'magnetize':
+						zMove = this.battle.dex.moves.get(BattleTooltips.zMoveTable['Steel']);
+						break;
+					}
+					switch (this.battle.clearingWeather) {
+					case 'strongwinds':
+					case 'deltastream':
+						zMove = this.battle.dex.moves.get(BattleTooltips.zMoveTable['Flying']);
 						break;
 					}
 				}
@@ -782,6 +926,9 @@ export class BattleTooltips {
 			if (move.flags.wind) {
 				text += `<p class="movetag">&#x2713; Wind <small>(activates Wind Power and Wind Rider)</small></p>`;
 			}
+			if (move.flags.influencing) {
+				text += `<p class="movetag">&#x2713; Influencing <small>(booasted by Enjoin)</small></p>`;
+			}
 			// RBY healing move glitch
 			if (this.battle.gen === 1 && !toID(this.battle.tier).includes('stadium') &&
 				['recover', 'softboiled', 'rest'].includes(move.id)) {
@@ -813,7 +960,7 @@ export class BattleTooltips {
 			if (effectiveness === null) {
 				// do nothing
 			} else if (effectiveness === 0) {
-				text += `<p><span class="effectiveness-icon">&times;</span> <strong>No effect</strong> vs. ${BattleLog.escapeHTML(this.getNickname(possibleTarget))}</p>`;
+				text += `<p><span class="effectiveness-icon">&times;</span> <strong>Has no effect</strong> vs. ${BattleLog.escapeHTML(this.getNickname(possibleTarget))}</p>`;
 			} else if (effectiveness < 0.5) {
 				const effectivenessText = effectiveness === 0.25 ? '&#x00BC;' : effectiveness;
 				text += `<p><span class="effectiveness-icon">&#x25BC;</span> <strong>Mostly ineffective</strong> vs. ${BattleLog.escapeHTML(this.getNickname(possibleTarget))} <small>(${effectivenessText}&times;)</small></p>`;
@@ -824,6 +971,8 @@ export class BattleTooltips {
 				text += `<p><span class="effectiveness-icon">&#x2605;</span> <strong>Extremely effective</strong> vs. ${BattleLog.escapeHTML(this.getNickname(possibleTarget))} <small>(${effectiveness}&times;)</small></p>`;
 			} else if (effectiveness > 1) {
 				text += `<p><span class="effectiveness-icon">&#x29BF;</span> <strong>Super effective</strong> vs. ${BattleLog.escapeHTML(this.getNickname(possibleTarget))} <small>(${effectiveness}&times;)</small></p>`;
+			} else if (effectiveness === 1 && move.category !== 'Status') {
+				text += `<p><span class="effectiveness-icon">&#x25CB;</span> <strong>Effective</strong> vs. ${BattleLog.escapeHTML(this.getNickname(possibleTarget))}</p>`;
 			}
 		}
 
@@ -874,7 +1023,7 @@ export class BattleTooltips {
 			}
 
 			let types = serverPokemon?.terastallized ? [serverPokemon.teraType] : this.getPokemonTypes(pokemon);
-			let knownPokemon = serverPokemon || clientPokemon!;
+			// let knownPokemon = serverPokemon || clientPokemon!;
 
 			if (pokemon.terastallized) {
 				text += `<small>(Terastallized)</small><br />`;
@@ -884,9 +1033,9 @@ export class BattleTooltips {
 			text += `<span class="textaligned-typeicons">${types.map(type => Dex.getTypeIcon(type)).join(' ')}</span>`;
 			if (pokemon.terastallized) {
 				text += `&nbsp; &nbsp; <small>(base: <span class="textaligned-typeicons">${this.getPokemonTypes(pokemon, true).map(type => Dex.getTypeIcon(type)).join(' ')}</span>)</small>`;
-			} else if (knownPokemon.teraType) {
+			} /* else if (knownPokemon.teraType) {
 				text += `&nbsp; &nbsp; <small>(Tera Type: <span class="textaligned-typeicons">${Dex.getTypeIcon(knownPokemon.teraType)}</span>)</small>`;
-			}
+			} */
 			text += `</h2>`;
 		}
 
@@ -921,6 +1070,16 @@ export class BattleTooltips {
 					} else {
 						text += ` Next damage: ${Math.floor(
 							100 / (clientPokemon.volatiles['dynamax'] ? 32 : 16) * Math.min(clientPokemon.statusData.toxicTurns + 1, 15)
+						)}%`;
+					}
+				} else if (pokemon.status === 'blt') {
+					if (pokemon.ability === 'Poison Heal' || pokemon.ability === 'Magic Guard') {
+						text += ` <small>Would take if ability removed: ${Math.floor(
+							100 / 8 * Math.min(clientPokemon.statusData.blightTurns + 1, 7)
+						)}%</small>`;
+					} else {
+						text += ` Next damage: ${Math.floor(
+							100 / (clientPokemon.volatiles['dynamax'] ? 32 : 8) * Math.min(clientPokemon.statusData.blightTurns + 1, 7)
 						)}%`;
 					}
 				} else if (pokemon.status === 'slp') {
@@ -1041,11 +1200,29 @@ export class BattleTooltips {
 		buf += `</tr><table>`;
 		if (!atLeastOne) buf = ``;
 
-		let weatherbuf = scene.weatherLeft() || `(no weather)`;
-		if (weatherbuf.startsWith('<br />')) {
-			weatherbuf = weatherbuf.slice(6);
+		let clearingweatherbuf = scene.clearingWeatherLeft() || `(Strong Winds not active)`;
+		let climateweatherbuf = scene.climateWeatherLeft() || `(No active Climate Weathergy)`;
+		let irritantweatherbuf = scene.irritantWeatherLeft() || `(No active Irritant Weathergy)`;
+		let energyweatherbuf = scene.energyWeatherLeft() || `(No active Energy Weathergy)`;
+		/* let cataclysmweatherbuf = scene.cataclysmWeatherLeft() +
+			scene.pseudoWeathersLeft() || `(No active Cataclysm Weathergy)`; */
+		while (climateweatherbuf.startsWith('<br />')) {
+			climateweatherbuf = climateweatherbuf.slice(6);
 		}
-		buf = `<p>${weatherbuf}</p>` + buf;
+		while (irritantweatherbuf.startsWith('<br />')) {
+			irritantweatherbuf = irritantweatherbuf.slice(6);
+		}
+		while (energyweatherbuf.startsWith('<br />')) {
+			energyweatherbuf = energyweatherbuf.slice(6);
+		}
+		while (clearingweatherbuf.startsWith('<br />')) {
+			clearingweatherbuf = clearingweatherbuf.slice(6);
+		}
+		/* while (cataclysmweatherbuf.startsWith('<br />')) {
+			cataclysmweatherbuf = cataclysmweatherbuf.slice(6);
+		} */
+		// buf = `<p>${clearingweatherbuf}</p>` + `<p>${climateweatherbuf}</p>` + `<p>${irritantweatherbuf}</p>` + `<p>${energyweatherbuf}</p>` + `<p>${cataclysmweatherbuf}</p>` + buf;
+		buf = `<p>${clearingweatherbuf}</p>` + `<p>${climateweatherbuf}</p>` + `<p>${irritantweatherbuf}</p>` + `<p>${energyweatherbuf}</p>` + buf;
 		return `<p>${buf}</p>`;
 	}
 
@@ -1105,6 +1282,10 @@ export class BattleTooltips {
 				stats.atk = Math.floor(stats.atk * 0.5);
 			}
 
+			if (pokemon.status === 'fst') {
+				stats.spa = Math.floor(stats.spa * 0.5);
+			}
+
 			// Paralysis is calculated later in newer generations, so we need to apply it early here
 			if (this.battle.gen <= 2 && pokemon.status === 'par') {
 				stats.spe = Math.floor(stats.spe * 0.25);
@@ -1140,14 +1321,23 @@ export class BattleTooltips {
 
 		// check for light ball, thick club, metal/quick powder
 		// the only stat modifying items in gen 2 were light ball, thick club, metal powder
-		if (item === 'lightball' && speciesName === 'Pikachu' && this.battle.gen !== 4) {
-			if (this.battle.gen > 4) stats.atk *= 2;
-			stats.spa *= 2;
+		if (item === 'lightball') {
+			if (this.battle.gen !== 4 && (speciesName === 'Pikachu' || speciesName === 'Pichu')) {
+				if (this.battle.gen > 4) stats.atk *= 2;
+				stats.spa *= 2;
+			}
+			if (speciesName === 'Raichu' || speciesName === 'Emolga' || speciesName === 'Guruchi') {
+				stats.atk *= 1.5;
+				stats.spa *= 1.5;
+			}
 		}
 
 		if (item === 'thickclub') {
 			if (speciesName === 'Marowak' || speciesName === 'Cubone') {
 				stats.atk *= 2;
+			}
+			if (speciesName === 'Bearvoyance' || speciesName === 'Oracub') {
+				stats.spa *= 1.5;
 			}
 		}
 
@@ -1171,9 +1361,25 @@ export class BattleTooltips {
 			return stats;
 		}
 
-		let weather = this.battle.weather;
-		if (this.battle.abilityActive(['Air Lock', 'Cloud Nine'])) {
-			weather = '' as ID;
+		let climateWeather = this.battle.climateWeather;
+		let irritantWeather = this.battle.irritantWeather;
+		let energyWeather = this.battle.energyWeather;
+		let clearingWeather = this.battle.clearingWeather;
+		let nonGrounded = clientPokemon ? !clientPokemon.isGrounded(serverPokemon) : (
+			item !== 'ironball' && (
+				['levitate', 'surgesurfer', 'relicsoul'].includes(ability) ||
+				item === 'airballoon' ||
+				this.pokemonHasType(pokemon, 'Flying') ||
+				(
+					energyWeather === 'magnetize' && item !== 'energynullifier' &&
+					this.pokemonHasType(pokemon, 'Steel') &&
+					!this.battle.isWeatherStateBoosted('duststorm' as ID)
+				)
+			)
+		);
+		// let cataclysmWeather = this.battle.cataclysmWeather;
+		if (this.battle.abilityActive(['Air Lock', 'Cloud Nine', 'Nullify'])) {
+			climateWeather = '' as ID;
 		}
 
 		if (item === 'choiceband' && !clientPokemon?.volatiles['dynamax']) {
@@ -1185,26 +1391,17 @@ export class BattleTooltips {
 		if (ability === 'hustle' || (ability === 'gorillatactics' && !clientPokemon?.volatiles['dynamax'])) {
 			stats.atk = Math.floor(stats.atk * 1.5);
 		}
-		if (weather) {
-			if (this.battle.gen >= 4 && this.pokemonHasType(pokemon, 'Rock') && weather === 'sandstorm') {
-				stats.spd = Math.floor(stats.spd * 1.5);
-			}
-			if (this.pokemonHasType(pokemon, 'Ice') && weather === 'snowscape') {
-				stats.def = Math.floor(stats.def * 1.5);
-			}
-			if (ability === 'sandrush' && weather === 'sandstorm') {
-				speedModifiers.push(2);
-			}
-			if (ability === 'slushrush' && (weather === 'hail' || weather === 'snowscape')) {
-				speedModifiers.push(2);
-			}
+		if (climateWeather) {
 			if (item !== 'utilityumbrella') {
-				if (weather === 'sunnyday' || weather === 'desolateland') {
+				if (climateWeather === 'sunnyday' || climateWeather === 'desolateland') {
 					if (ability === 'chlorophyll') {
 						speedModifiers.push(2);
 					}
-					if (ability === 'solarpower') {
+					if (ability === 'solarpower' && serverPokemon.stats.spa >= serverPokemon.stats.atk) {
 						stats.spa = Math.floor(stats.spa * 1.5);
+					}
+					if (ability === 'solarpower' && serverPokemon.stats.atk > serverPokemon.stats.spa) {
+						stats.atk = Math.floor(stats.atk * 1.5);
 					}
 					if (ability === 'orichalcumpulse') {
 						stats.atk = Math.floor(stats.atk * 1.3333);
@@ -1221,18 +1418,142 @@ export class BattleTooltips {
 						}
 					}
 				}
-				if (weather === 'raindance' || weather === 'primordialsea') {
+				if (climateWeather === 'raindance' || climateWeather === 'primordialsea') {
 					if (ability === 'swiftswim') {
 						speedModifiers.push(2);
 					}
 				}
+				if (climateWeather === 'snowscape') {
+					if (this.pokemonHasType(pokemon, 'Ice')) {
+						stats.def = Math.floor(stats.def * 1.5);
+						if (this.battle.isWeatherStateBoosted('snowscape' as ID)) {
+							stats.spd = Math.floor(stats.spd * 1.5);
+						}
+					}
+				}
+				if (climateWeather === 'hail' || climateWeather === 'snowscape') {
+					if (ability === 'slushrush') {
+						speedModifiers.push(2);
+					}
+					if (ability === 'glacialarmor') {
+						stats.def = Math.floor(stats.def * 1.4);
+						stats.spd = Math.floor(stats.spd * 1.4);
+					}
+				}
+				if (climateWeather === 'bloodmoon') {
+					if (ability === 'malice' && serverPokemon.stats.spa >= serverPokemon.stats.atk) {
+						stats.spa = Math.floor(stats.spa * 1.5);
+					}
+					if (ability === 'malice' && serverPokemon.stats.atk > serverPokemon.stats.spa) {
+						stats.atk = Math.floor(stats.atk * 1.5);
+					}
+				}
+				if (climateWeather === 'foghorn') {
+					if (ability === 'warpmist' && serverPokemon.stats.spa >= serverPokemon.stats.atk) {
+						stats.spa = Math.floor(stats.spa * 1.2);
+					}
+					if (ability === 'warpmist' && serverPokemon.stats.atk > serverPokemon.stats.spa) {
+						stats.atk = Math.floor(stats.atk * 1.2);
+					}
+				}
+				if (climateWeather === 'sandstorm') {
+					if (this.battle.gen >= 4 && this.pokemonHasType(pokemon, 'Rock')) {
+						stats.spd = Math.floor(stats.spd * 1.5);
+					}
+				}
 			}
+		}
+		if ((climateWeather === 'sandstorm' ||
+			((irritantWeather === 'sandstorm' || irritantWeather === 'duststorm') && item !== 'safetygoggles')) &&
+			ability === 'sandrush') {
+			speedModifiers.push(2);
+		}
+		if (irritantWeather) {
+			if (item !== 'safetygoggles') {
+				if (irritantWeather === 'sandstorm') {
+					if (this.battle.gen >= 4 && this.pokemonHasType(pokemon, 'Rock')) {
+						stats.spd = Math.floor(stats.spd * 1.5);
+					}
+					if (this.battle.isWeatherStateBoosted('sandstorm' as ID)) {
+						if (this.pokemonHasType(pokemon, 'Rock')) {
+							stats.def = Math.floor(stats.def * 1.5);
+						}
+						if (this.pokemonHasType(pokemon, 'Ground') || this.pokemonHasType(pokemon, 'Steel')) {
+							stats.spd = Math.floor(stats.spd * 1.5);
+						}
+					}
+				}
+				if (irritantWeather === 'duststorm') {
+					if (this.pokemonHasType(pokemon, 'Ground')) {
+						stats.spe = Math.floor(stats.spe * 1.25);
+					}
+				}
+				if (irritantWeather === 'pollinate') {
+					if (!(this.pokemonHasType(pokemon, 'Grass') || this.pokemonHasType(pokemon, 'Bug'))) {
+						if (ability !== 'bubblehelm') {
+							stats.atk = Math.floor(stats.atk * 0.75);
+							stats.spa = Math.floor(stats.spa * 0.75);
+						}
+					}
+				}
+				if (irritantWeather === 'swarmsignal') {
+					if (this.pokemonHasType(pokemon, 'Bug') || this.pokemonHasType(pokemon, 'Poison')) {
+						stats.spe = Math.floor(stats.spe * 1.5);
+					}
+				}
+				if (irritantWeather === 'sprinkle') {
+					if (this.pokemonHasType(pokemon, 'Fairy')) {
+						stats.spd = Math.floor(stats.spd * 1.25);
+					}
+				}
+			}
+		}
+		if (energyWeather) {
+			if (item !== 'energynullifier') {
+				/* if (energyWeather === 'haunt') {
+				} */
+				/* if (energyWeather === 'dragonforce') {
+				} */
+				if (energyWeather === 'supercell') {
+					if (this.pokemonHasType(pokemon, 'Electric')) {
+						stats.spe = Math.floor(stats.spe * 1.5);
+					}
+					if (ability === 'energizer') {
+						speedModifiers.push(2);
+					}
+				}
+				if (energyWeather === 'magnetize') {
+					if (ability === 'magnapult') {
+						speedModifiers.push(2);
+					}
+				}
+			}
+		}
+		if (clearingWeather) {
+			if (clearingWeather === 'strongwinds') {
+				if (nonGrounded) {
+					stats.spe = Math.floor(stats.spe * 1.25);
+				}
+			}
+		}
+		const shadowstepWeatherActive =
+			(item !== 'utilityumbrella' && climateWeather === 'bloodmoon') ||
+			(item !== 'energynullifier' && energyWeather === 'haunt');
+		if (shadowstepWeatherActive && ability === 'shadowstep') {
+			speedModifiers.push(2);
 		}
 		if (ability === 'defeatist' && serverPokemon.hp <= serverPokemon.maxhp / 2) {
 			stats.atk = Math.floor(stats.atk * 0.5);
 			stats.spa = Math.floor(stats.spa * 0.5);
 		}
 		if (clientPokemon) {
+			for (let i = 1; i <= 8; i++) {
+				if (clientPokemon.volatiles[`magnetizeboost${i}`]) {
+					stats.atk = Math.floor(stats.atk * (1 + 0.2 * i));
+					stats.spa = Math.floor(stats.spa * (1 + 0.2 * i));
+					break;
+				}
+			}
 			if (clientPokemon.volatiles['slowstart']) {
 				stats.atk = Math.floor(stats.atk * 0.5);
 				speedModifiers.push(0.5);
@@ -1248,6 +1569,9 @@ export class BattleTooltips {
 						stats[statName] = Math.floor(stats[statName] * 1.3);
 					}
 				}
+				if (clientPokemon.volatiles['warpmist' + statName]) {
+					stats[statName] = Math.floor(stats[statName] * 1.3);
+				}
 			}
 		}
 		if (pokemon.status) {
@@ -1262,10 +1586,14 @@ export class BattleTooltips {
 			stats.def = Math.floor(stats.def * 1.5);
 			stats.spd = Math.floor(stats.spd * 1.5);
 		}
-		if (ability === 'grasspelt' && this.battle.hasPseudoWeather('Grassy Terrain')) {
-			stats.def = Math.floor(stats.def * 1.5);
+		if (ability === 'grasspelt') {
+			if (this.battle.hasPseudoWeather('Grassy Terrain') ||
+				(serverPokemon.item !== 'safetygoggles' && this.battle.irritantWeather.includes('Pollen Storm'))) {
+				stats.def = Math.floor(stats.def * 1.5);
+			}
 		}
-		if (this.battle.hasPseudoWeather('Electric Terrain')) {
+		if (this.battle.hasPseudoWeather('Electric Terrain') ||
+			(serverPokemon.item !== 'energynullifier' && this.battle.irritantWeather.includes('Thunderstorm'))) {
 			if (ability === 'surgesurfer') {
 				speedModifiers.push(2);
 			}
@@ -1341,14 +1669,14 @@ export class BattleTooltips {
 			if (ability === 'misspelled') {
 				stats.spa = Math.floor(stats.spa * 1.5);
 			}
-			if (ability === 'fortifyingfrost' && weather === 'snowscape') {
+			if (ability === 'fortifyingfrost' && climateWeather === 'snowscape') {
 				stats.spa = Math.floor(stats.spa * 1.5);
 				stats.spd = Math.floor(stats.spd * 1.5);
 			}
-			if (weather === 'deserteddunes' && this.pokemonHasType(pokemon, 'Rock')) {
+			if (climateWeather === 'deserteddunes' && this.pokemonHasType(pokemon, 'Rock')) {
 				stats.spd = Math.floor(stats.spd * 1.25);
 			}
-			if (weather === 'stormsurge' && ability === 'swiftswim') {
+			if (climateWeather === 'stormsurge' && ability === 'swiftswim') {
 				speedModifiers.push(2);
 			}
 			if (pokemon.status && ability === 'fortifiedmetal') {
@@ -1364,14 +1692,14 @@ export class BattleTooltips {
 				stats.def *= 2;
 			}
 			if (ability === 'climatechange') {
-				if (weather === 'snowscape') {
+				if (climateWeather === 'snowscape') {
 					stats.def = Math.floor(stats.def * 1.5);
 					stats.spd = Math.floor(stats.spd * 1.5);
 				}
-				if (weather === 'sunnyday' || weather === 'desolateland') stats.spa = Math.floor(stats.spa * 1.5);
+				if (climateWeather === 'sunnyday' || climateWeather === 'desolateland') stats.spa = Math.floor(stats.spa * 1.5);
 			}
 			if (item !== 'utilityumbrella' && ability === 'ridethesun' &&
-				(weather === 'sunnyday' || weather === 'desolateland')) {
+				(climateWeather === 'sunnyday' || climateWeather === 'desolateland')) {
 				speedModifiers.push(2);
 			}
 			if (ability === 'soulsurfer' && this.battle.hasPseudoWeather('Electric Terrain')) {
@@ -1665,27 +1993,72 @@ export class BattleTooltips {
 			if (value.itemModify(0)) moveType = item.naturalGift.type;
 		}
 		// Weather and pseudo-weather type changes.
-		if (move.id === 'weatherball') {
+		if (move.id === 'weatherball') { // updated
 			if (value.abilityModify(0, 'Mega Sol')) {
 				moveType = 'Fire';
-			} else if (value.weatherModify(0)) {
-				switch (this.battle.weather) {
+			} else {
+				switch (this.battle.getRecentWeather(pokemon, serverPokemon)) {
 				case 'sunnyday':
 				case 'desolateland':
-					if (value.tryItem('Utility Umbrella')) break;
-					moveType = 'Fire';
+					if (value.climateWeatherModify(0)) moveType = 'Fire';
 					break;
 				case 'raindance':
 				case 'primordialsea':
-					if (value.tryItem('Utility Umbrella')) break;
-					moveType = 'Water';
-					break;
-				case 'sandstorm':
-					moveType = 'Rock';
+					if (value.climateWeatherModify(0)) moveType = 'Water';
 					break;
 				case 'hail':
 				case 'snowscape':
-					moveType = 'Ice';
+					if (value.climateWeatherModify(0)) moveType = 'Ice';
+					break;
+				case 'bloodmoon':
+					if (value.climateWeatherModify(0)) moveType = 'Dark';
+					break;
+				case 'foghorn':
+					if (value.climateWeatherModify(0)) moveType = 'Normal';
+					break;
+				case 'sandstorm':
+					if (this.battle.climateWeather === 'sandstorm' ? value.climateWeatherModify(0) :
+						value.irritantWeatherModify(0)) moveType = 'Rock';
+					break;
+				case 'duststorm':
+					if (value.irritantWeatherModify(0)) moveType = 'Ground';
+					break;
+				case 'pollinate':
+					if (value.irritantWeatherModify(0)) moveType = 'Grass';
+					break;
+				case 'swarmsignal':
+					if (value.irritantWeatherModify(0)) moveType = 'Bug';
+					break;
+				case 'smogspread':
+					if (value.irritantWeatherModify(0)) moveType = 'Poison';
+					break;
+				case 'sprinkle':
+					if (value.irritantWeatherModify(0)) moveType = 'Fairy';
+					break;
+				case 'auraprojection':
+					if (value.energyWeatherModify(0)) moveType = 'Fighting';
+					break;
+				case 'haunt':
+					if (value.energyWeatherModify(0)) moveType = 'Ghost';
+					break;
+				case 'daydream':
+					if (value.energyWeatherModify(0)) moveType = 'Psychic';
+					break;
+				case 'dragonforce':
+					if (value.energyWeatherModify(0)) moveType = 'Dragon';
+					break;
+				case 'supercell':
+					if (value.energyWeatherModify(0)) moveType = 'Electric';
+					break;
+				case 'magnetize':
+					if (value.energyWeatherModify(0)) moveType = 'Steel';
+					break;
+				case 'strongwinds':
+				case 'deltastream':
+					if (value.clearingWeatherModify(0)) moveType = 'Flying';
+					break;
+				case 'cataclysmiclight':
+					if (value.cataclysmWeatherModify(0)) moveType = '???';
 					break;
 				}
 			}
@@ -1712,6 +2085,16 @@ export class BattleTooltips {
 		if (move.id === 'aurawheel' && pokemon.getSpeciesForme() === 'Morpeko-Hangry') {
 			moveType = 'Dark';
 		}
+
+		// Frostburn Claw's type depends on global turn count
+		if (move.id === 'frostburnclaw') {
+			if (this.battle.turn % 2 === 1) {
+				moveType = 'Fire';
+			} else {
+				moveType = 'Ice';
+			}
+		}
+
 		// Raging Bull's type depends on the Tauros forme
 		if (move.id === 'ragingbull') {
 			switch (pokemon.getSpeciesForme()) {
@@ -1757,14 +2140,22 @@ export class BattleTooltips {
 			}
 
 			if (!(move.isZ && move.category !== 'Status') && !move.id.startsWith('hiddenpower')) {
+				if (moveType === 'Normal' && this.battle.isWeatherStateBoosted('foghorn' as ID) &&
+					value.climateWeatherModify(0, 'Fog')) {
+					moveType = '???';
+				}
 				if (moveType === 'Normal') {
 					if (value.abilityModify(0, 'Aerilate')) moveType = 'Flying';
 					if (value.abilityModify(0, 'Dragonize')) moveType = 'Dragon';
 					if (value.abilityModify(0, 'Galvanize')) moveType = 'Electric';
 					if (value.abilityModify(0, 'Pixilate')) moveType = 'Fairy';
 					if (value.abilityModify(0, 'Refrigerate')) moveType = 'Ice';
+					if (value.abilityModify(0, 'Vegetate')) moveType = 'Grass';
 				}
 				if (value.abilityModify(0, 'Normalize')) moveType = 'Normal';
+				if (move.flags['sound']) {
+					if (value.abilityModify(0, 'Trumpet Weevil')) moveType = 'Bug';
+				}
 			}
 
 			// There aren't any max moves with the sound flag, but if there were, Liquid Voice would make them water type
@@ -1798,9 +2189,9 @@ export class BattleTooltips {
 				pokemon.terastallized) {
 				moveType = 'Stellar';
 			}
-			if (move.id === 'weatherball' && value.weatherModify(0)) {
-				if (this.battle.weather === 'stormsurge' && !value.tryItem('Utility Umbrella')) moveType = 'Water';
-				if (this.battle.weather === 'deserteddunes') moveType = 'Rock';
+			if (move.id === 'weatherball' && value.climateWeatherModify(0)) {
+				if (this.battle.climateWeather === 'stormsurge' && item.id !== 'utilityumbrella') moveType = 'Water';
+				if (this.battle.climateWeather === 'deserteddunes') moveType = 'Rock';
 			}
 			if (move.id === 'o' || move.id === 'worriednoises') {
 				moveType = pokemonTypes[0];
@@ -1843,11 +2234,17 @@ export class BattleTooltips {
 		if (attackType === 'Water' && abilityid === 'stormdrain' && dex.gen >= 5) return 0;
 		if (attackType === 'Electric' && abilityid === 'voltabsorb') return 0;
 		if (attackType === 'Water' && abilityid === 'waterabsorb') return 0;
+		if (attackType === 'Water' && abilityid === 'steamengine') return 0;
 		if (attackType === 'Ground' && abilityid === 'eartheater') return 0;
 		if (attackType === 'Fire' && abilityid === 'wellbakedbody') return 0;
 
 		if (attackType === 'Fire' && abilityid === 'primordialsea' && !strict) return 0;
 		if (attackType === 'Water' && abilityid === 'desolateland' && !strict) return 0;
+
+		if (attackType === 'Ground' && abilityid === 'surgesurfer') return 0;
+		if (attackType === 'Electric' && abilityid === 'powerplumage') return 0;
+		if (attackType === 'Bug' && abilityid === 'flytrap') return 0;
+		if (attackType === 'Ground' && abilityid === 'relicsoul') return 0;
 
 		let factor = 1;
 		if ((attackType === 'Fire' || attackType === 'Ice') && abilityid === 'thickfat') factor *= 0.5;
@@ -1858,6 +2255,8 @@ export class BattleTooltips {
 		if ((attackType === 'Electric' || attackType === 'Rock' || attackType === 'Ice') && abilityid === 'deltastream') {
 			factor *= 0.5;
 		}
+		if (attackType === 'Water' && abilityid === 'hydrophobic') factor *= 0.5;
+		if (attackType === 'Psychic' && abilityid === 'foil') factor *= 0.5;
 		return factor;
 	}
 	getMoveEffectiveness(
@@ -1886,13 +2285,14 @@ export class BattleTooltips {
 		let inflictsEffect = null;
 		if (category === 'Status') {
 			if (['glare', 'stunspore', 'thunderwave'].includes(move.id)) inflictsStatus = 'par';
-			if (['toxic', 'poisongas', 'poisonpowder'].includes(move.id)) inflictsStatus = 'psn';
+			if (['toxic', 'poisongas', 'poisonpowder', 'blightspore'].includes(move.id)) inflictsStatus = 'psn';
 			if ([
 				'darkvoid', 'grasswhistle', 'hypnosis', 'lovelykiss', 'sing', 'sleeppowder', 'spore', 'yawn',
 			].includes(move.id)) inflictsStatus = 'slp';
 			if (move.id === 'willowisp') inflictsStatus = 'brn';
 			if (['block', 'meanlook', 'spiderweb'].includes(move.id)) inflictsEffect = 'trapped';
 			if (['confuseray', 'supersonic', 'sweetkiss', 'teeterdance'].includes(move.id)) inflictsEffect = 'confusion';
+			if (move.id === 'whitewand') inflictsStatus = 'fst';
 		}
 
 		/** any factor that's "effectiveness-like" rather than literal type effectiveness */
@@ -1900,10 +2300,15 @@ export class BattleTooltips {
 		// Gen 3 type-immunity abilities don't affect status moves
 		if (category === 'Status' && dex.gen <= 3) otherFactor = 1;
 
+		const targetSurgeSurferActive = targetAbility === 'Surge Surfer' &&
+			(this.battle.hasPseudoWeather('Electric Terrain') ||
+				(this.battle.energyWeather === 'supercell' && target.item !== 'energynullifier'));
 		let factor = 1;
-		if (!otherFactor && targetAbility === "Levitate") {
+		if (!otherFactor && (targetAbility === "Levitate" || targetAbility === "Relic Soul" ||
+			targetSurgeSurferActive)) {
 			otherFactor = 1;
-			if (!target.isGrounded() && move.id !== 'thousandarrows' && !hardcoreMode) {
+			if ((!target.isGrounded() || targetSurgeSurferActive) &&
+				move.id !== 'thousandarrows' && !hardcoreMode) {
 				factor = 0; // Levitate acts as a type-based immunity (doesn't affect most status moves)
 			}
 		}
@@ -1912,7 +2317,7 @@ export class BattleTooltips {
 
 			// special type immunities
 			if (inflictsStatus && tType.damageTaken?.[(inflictsStatus || inflictsEffect) as 'trapped'] === Dex.IMMUNE) {
-				if (!(inflictsStatus === 'psn' && sourceAbility === 'Corrosion')) {
+				if (!(['psn'].includes(inflictsStatus) && sourceAbility === 'Corrosion')) {
 					return 0;
 				}
 			}
@@ -1926,14 +2331,21 @@ export class BattleTooltips {
 
 			// regular type effectiveness
 			if (tType.damageTaken?.[attackType] === Dex.IMMUNE) {
-				if (target.item === 'Ring Target') continue;
-				if (targetType === 'Ghost' && (sourceAbility === "Scrappy" || sourceAbility === "Mind's Eye")) continue;
-				if (targetType === 'Ghost' && (target.volatiles['foresight'] || target.volatiles['odorsleuth'])) continue;
-				if (targetType === 'Dark' && (target.volatiles['miracleeye'])) continue;
-				if (targetType === 'Flying' && target.isGrounded()) continue;
-				if (targetType === 'Flying' && move.id === 'thousandarrows' && !target.isGrounded()) {
-					factor = 1;
-					break;
+				if (targetAbility !== "Warp Mist") {
+					if (target.item === 'Ring Target') continue;
+					if (targetType === 'Ghost' && (sourceAbility === "Scrappy" || sourceAbility === "Mind's Eye")) continue;
+					if (targetType === 'Ghost' && (target.volatiles['foresight'] || target.volatiles['odorsleuth'])) continue;
+					if (targetType === 'Dark' && (target.volatiles['miracleeye'])) continue;
+					if (targetType === 'Flying' && target.isGrounded()) continue;
+					if (targetType === 'Flying' && move.id === 'thousandarrows' && !target.isGrounded()) {
+						factor = 1;
+						break;
+					}
+					if (attackType === 'Poison' && targetType === 'Steel' &&
+						sourceAbility === 'Corrosion' && this.battle.irritantWeather === 'smogspread') continue;
+					if (attackType === 'Normal' && targetType === 'Ghost' && this.battle.climateWeather === 'foghorn') continue;
+					if (attackType === 'Ground' && this.battle.isWeatherStateBoosted('duststorm' as ID) && !target.isGrounded()) continue;
+					if (attackType === 'Fire' && (target.volatiles['sunscreen'])) continue;
 				}
 				// Inverse replaces immunities with weaknesses. This has to
 				// be coded here, else it won't calculate secondary type's
@@ -1946,24 +2358,43 @@ export class BattleTooltips {
 				}
 			} else if (move.id === 'freezedry' && targetType === 'Water') {
 				factor *= 2;
+			} else if (move.id === 'emberplume' && targetType === 'Flying') {
+				factor *= 2;
+			} else if (move.id === 'slushball' && targetType === 'Fire') {
+				factor *= 2;
+			} else if (move.id === 'deception' && targetType === 'Fairy') {
+				factor *= 2;
+			// incomplete, does this work
+			} else if (move.id === 'darkdepletion') {
+				if (targetType === 'Grass') {
+					factor *= 2;
+				}
+				if (targetType === 'Water') {
+					factor *= 2;
+				}
 			} else {
 				factor *= [1, 2, 0.5, 0][tType.damageTaken?.[attackType] || 0] ?? 1;
+				if (this.battle.isWeatherStateBoosted('haunt' as ID) && attackType === 'Ghost' && targetType === 'Normal') {
+					factor *= 2;
+				}
 			}
 			if (move.id === 'sheercold' && targetType === 'Ice') otherFactor = 0;
 		}
 
-		// Air Balloon etc. Levitate is already handled but there are a few that aren't
-		if (category !== 'Status' && attackType === 'Ground' && factor && !target.isGrounded()) otherFactor = 0;
+		// Air Balloon, Magnetosphere, etc. Levitate is already handled but there are a few that aren't
+		if (category !== 'Status' && attackType === 'Ground' && factor &&
+			(!target.isGrounded() || targetSurgeSurferActive) &&
+			!this.battle.isWeatherStateBoosted('duststorm' as ID)) otherFactor = 0;
 		if (this.battle.hasPseudoWeather('Misty Terrain') && target.isGrounded() && inflictsStatus) {
 			return 0;
 		}
 		if (this.battle.hasPseudoWeather('Psychic Terrain') && target.isGrounded() && priority > 0) {
 			otherFactor = 0;
 		}
-		if (this.battle.weather === 'primordialsea' && attackType === 'Fire' && move.category !== 'Status') {
+		if (this.battle.climateWeather === 'primordialsea' && attackType === 'Fire' && move.category !== 'Status') {
 			otherFactor = 0;
 		}
-		if (this.battle.weather === 'desolateland' && attackType === 'Water' && move.category !== 'Status') {
+		if (this.battle.climateWeather === 'desolateland' && attackType === 'Water' && move.category !== 'Status') {
 			otherFactor = 0;
 		}
 
@@ -1972,7 +2403,6 @@ export class BattleTooltips {
 		if (targetAbility === "Comatose" && inflictsStatus) return 0;
 		if (targetAbility === "Purifying Salt" && inflictsStatus) return 0;
 		if (targetAbility === "Shields Down" && target.speciesForme === 'Minior-Meteor' && inflictsStatus) return 0;
-		if (targetAbility === "Leaf Guard" && this.battle.weather === 'sunnyday' && inflictsStatus) return 0;
 		if (targetAbility === "Sweet Veil" && inflictsStatus === 'slp') return 0;
 		if (targetAbility === "Pastel Veil" && inflictsStatus === 'psn') return 0;
 		if (["Water Veil", "Water Bubble", "Thermal Exchange"].includes(targetAbility) && inflictsStatus === 'brn') return 0;
@@ -1981,6 +2411,9 @@ export class BattleTooltips {
 		if (targetAbility === "Good as Gold" && category === 'Status') return 0;
 		if (targetAbility === "Own Tempo" && inflictsEffect === 'confusion') return 0;
 		if (sourceAbility === 'Tinted Lens' && factor < 1) otherFactor *= 2;
+		if (this.battle.isWeatherStateBoosted('swarmsignal' as ID) && source.getTypeList().includes('Bug') && factor < 1) {
+			otherFactor *= 2;
+		}
 		if (targetAbility === 'Sturdy' && move.ohko) otherFactor = 0;
 		if (targetAbility === 'Damp' && [
 			'explosion', 'mindblown', 'mistyexplosion', 'selfdestruct',
@@ -2033,7 +2466,7 @@ export class BattleTooltips {
 			foeActive = [...foeActive, ...pokemon.side.active].filter(active => active !== pokemon);
 		}
 
-		if (this.battle.hardcoreMode) {
+		if (!this.battle.hardcoreMode) {
 			let tags = '';
 			for (const possibleTarget of foeActive) {
 				if (!possibleTarget) continue;
@@ -2051,7 +2484,7 @@ export class BattleTooltips {
 					tags += `\u2605`;
 				} else if (effectiveness > 1) {
 					tags += `\u29BF`;
-				} else {
+				} else if (effectiveness === 1 && move.category !== 'Status') {
 					tags += `\u25CB`;
 				}
 			}
@@ -2059,17 +2492,7 @@ export class BattleTooltips {
 			return [moveType, tags] as const;
 		}
 
-		let tags = '\u00D7';
-		for (const possibleTarget of foeActive) {
-			if (!possibleTarget) continue;
-			const effectiveness = this.getMoveEffectiveness(pokemon, move, moveType, category, possibleTarget);
-			if (effectiveness !== 0) {
-				tags = '';
-				break;
-			}
-		}
-
-		return [moveType, tags] as const;
+		return [moveType, ''] as const;
 	}
 
 	// Gets the current accuracy for a move.
@@ -2083,12 +2506,21 @@ export class BattleTooltips {
 			return value;
 		}
 		if (move.id === 'blizzard' && this.battle.gen >= 4) {
-			value.weatherModify(0, 'Hail');
-			value.weatherModify(0, 'Snowscape');
+			value.climateWeatherModify(0, 'Hail');
+			value.climateWeatherModify(0, 'Snowscape');
 		}
 		if (['hurricane', 'thunder', 'bleakwindstorm', 'wildboltstorm', 'sandsearstorm'].includes(move.id)) {
-			value.weatherModify(0, 'Rain Dance');
-			value.weatherModify(0, 'Primordial Sea');
+			value.climateWeatherModify(0, 'Rain Dance');
+			value.climateWeatherModify(0, 'Primordial Sea');
+		}
+		if (move.flags['powder']) {
+			value.irritantWeatherModify(0, 'Pollinate');
+		}
+		if (move.type === 'Steel') {
+			value.energyWeatherModify(0, 'Magnetize');
+		}
+		if (move.flags['wind']) {
+			value.clearingWeatherModify(0, 'Strong Winds');
 		}
 		value.abilityModify(0, 'No Guard');
 		if (!value.value) return value;
@@ -2119,9 +2551,33 @@ export class BattleTooltips {
 		// Accuracy modifiers start
 
 		let accuracyModifiers = [];
+		if (!(move.type === 'Normal' || value.tryAbility('Droughtproof'))) {
+			if (value.tryClimateWeather('Foghorn')) {
+				accuracyModifiers.push(3686);
+				value.modify(0.9, 'Fog');
+			}
+		}
+		if ((this.pokemonHasType(pokemon, 'Bug') || this.pokemonHasType(pokemon, 'Poison')) &&
+			!(value.tryItem('Safety Goggles') || value.tryAbility('Overcoat'))) {
+			if (value.tryIrritantWeather('Swarm Signal')) {
+				accuracyModifiers.push(5461);
+				value.modify(4 / 3, 'Pheromones');
+			}
+		}
+		if (move.type === 'Fighting') {
+			if (value.tryEnergyWeather('Aura Projection')) {
+				accuracyModifiers.push(4915);
+				value.modify(6 / 5, 'Aura Projection');
+			}
+		}
+
 		if (this.battle.hasPseudoWeather('Gravity')) {
 			accuracyModifiers.push(6840);
 			value.modify(5 / 3, "Gravity");
+		}
+		if (this.battle.hasPseudoWeather('Pearl Drop') && pokemon.getSpeciesForme() !== 'Clamtrip') {
+			accuracyModifiers.push(3686);
+			value.modify(0.9, "Pearl Drop");
 		}
 
 		for (const active of pokemon.side.active) {
@@ -2151,8 +2607,8 @@ export class BattleTooltips {
 			if (move.id === 'alting' && pokemon.shiny) {
 				value.set(100);
 			}
-			if (move.flags['wind'] && this.battle.weather === 'stormsurge') {
-				value.weatherModify(0, 'Storm Surge');
+			if (move.flags['wind'] && this.battle.climateWeather === 'stormsurge') {
+				value.climateWeatherModify(0, 'Storm Surge');
 			}
 			if (value.tryAbility('Misspelled') && move.category === 'Special') {
 				accuracyModifiers.push(3277);
@@ -2191,8 +2647,8 @@ export class BattleTooltips {
 
 		if (move.id === 'hurricane' || move.id === 'thunder') {
 			if (value.tryAbility('Mega Sol')) value.set(50, 'Mega Sol'); // TODO check implementation
-			if (value.tryWeather('Sunny Day')) value.set(50, 'Sunny Day');
-			if (value.tryWeather('Desolate Land')) value.set(50, 'Desolate Land');
+			if (value.tryClimateWeather('Sunny Day')) value.set(50, 'Sunny Day');
+			if (value.tryClimateWeather('Desolate Land')) value.set(50, 'Desolate Land');
 		}
 
 		// Chained modifiers round down on 0.5
@@ -2313,7 +2769,7 @@ export class BattleTooltips {
 			value.setRange(10, 150);
 		}
 		if (['venoshock', 'barbbarrage'].includes(move.id) && target) {
-			if (['psn', 'tox'].includes(target.status)) {
+			if (['psn', 'tox', 'blt'].includes(target.status)) {
 				value.modify(2, move.name + ' + Poison');
 			}
 		}
@@ -2322,29 +2778,32 @@ export class BattleTooltips {
 				value.modify(2, 'Wake-Up Slap + Sleep');
 			}
 		}
-		if (move.id === 'weatherball') {
-			if (!value.abilityModify(2, "Mega Sol") && this.battle.weather !== 'deltastream') {
-				switch (this.battle.weather) {
-				case 'sunnyday':
-				case 'desolateland':
-					if (value.tryItem('Utility Umbrella')) break;
-					value.weatherModify(2);
+		if (move.type === '???' && this.battle.isWeatherStateBoosted('foghorn' as ID)) {
+			value.climateWeatherModify(1.5, 'Fog');
+		}
+		if (move.id === 'weatherball') { // updated
+			if (!value.abilityModify(2, "Mega Sol")) {
+				switch (this.battle.getRecentWeather(pokemon, serverPokemon)) {
+				case this.battle.climateWeather:
+					value.climateWeatherModify(2);
 					break;
-				case 'raindance':
-				case 'primordialsea':
-					if (value.tryItem('Utility Umbrella')) break;
-					value.weatherModify(2);
+				case this.battle.irritantWeather:
+					value.irritantWeatherModify(2);
 					break;
-				case 'sandstorm':
-				case 'hail':
-				case 'snowscape':
-					value.weatherModify(2);
+				case this.battle.energyWeather:
+					value.energyWeatherModify(2);
+					break;
+				case this.battle.clearingWeather:
+					value.clearingWeatherModify(2);
+					break;
+				case this.battle.cataclysmWeather:
+					value.cataclysmWeatherModify(2);
 					break;
 				}
 			}
 		}
 		if (move.id === 'hydrosteam') {
-			value.weatherModify(1.5, 'Sunny Day');
+			value.climateWeatherModify(1.5, 'Sunny Day');
 		}
 		if (move.id === 'psyblade' && this.battle.hasPseudoWeather('Electric Terrain')) {
 			value.modify(1.5, 'Electric Terrain');
@@ -2447,10 +2906,10 @@ export class BattleTooltips {
 		if (pokemon.status === 'brn' && move.category === 'Special') {
 			value.abilityModify(1.5, "Flare Boost");
 		}
-		if (move.flags['punch']) {
-			value.abilityModify(1.2, 'Iron Fist');
+		if (move.flags['punch'] || move.id === 'poisonjab') { // updated
+			value.abilityModify(1.5, 'Iron Fist');
 		}
-		if (move.flags['pulse']) {
+		if (move.flags['pulse'] || ['flashcannon', 'zapcannon', 'hydrocannon', 'armorcannon'].includes(move.id)) {
 			value.abilityModify(1.5, "Mega Launcher");
 		}
 		if (move.flags['bite']) {
@@ -2459,11 +2918,8 @@ export class BattleTooltips {
 		if (value.value <= 60) {
 			value.abilityModify(1.5, "Technician");
 		}
-		if (['psn', 'tox'].includes(pokemon.status) && move.category === 'Physical') {
+		if (['psn', 'tox', 'blt'].includes(pokemon.status) && move.category === 'Physical') {
 			value.abilityModify(1.5, "Toxic Boost");
-		}
-		if (['Rock', 'Ground', 'Steel'].includes(moveType) && this.battle.weather === 'sandstorm') {
-			if (value.tryAbility("Sand Force")) value.weatherModify(1.3, "Sandstorm", "Sand Force");
 		}
 		if (move.secondaries) {
 			value.abilityModify(1.3, "Sheer Force");
@@ -2489,6 +2945,54 @@ export class BattleTooltips {
 				value.abilityModify(1.25, "Rivalry");
 			}
 		}
+		if (moveType === 'Bug' && (pokemon.hp <= pokemon.maxhp / 3 || this.battle.irritantWeather === 'swarmsignal')) {
+			value.abilityModify(1.5, "Swarm");
+		}
+		if (move.id === 'wildmagic') {
+			value.abilityModify(2, "Power Above");
+			value.abilityModify(2, "Power Within");
+		}
+		if (moveType === 'Fairy') {
+			value.abilityModify(1.3, "Chakra");
+		}
+		let amazeAssaultBP = 90;
+		if (serverPokemon.item !== 'utilityumbrella') {
+			if ('Ice'.includes(moveType) && this.battle.climateWeather === 'hail') {
+				if (value.tryAbility("Absolute Zero")) value.climateWeatherModify(1.3, "Hail", "Absolute Zero");
+			}
+			if ('Ice'.includes(moveType) && this.battle.climateWeather === 'snowscape') {
+				if (value.tryAbility("Absolute Zero")) value.climateWeatherModify(1.3, "Snow", "Absolute Zero");
+			}
+			if (this.battle.climateWeather) amazeAssaultBP += 15;
+		}
+		if (serverPokemon.item !== 'safetygoggles' && !value.tryAbility('Overcoat')) {
+			if (['Rock', 'Ground', 'Steel'].includes(moveType) && this.battle.irritantWeather === 'sandstorm') {
+				if (value.tryAbility("Earth Force")) value.irritantWeatherModify(1.3, "Sandstorm", "Earth Force");
+			}
+			if (['Rock', 'Ground', 'Steel'].includes(moveType) && this.battle.irritantWeather === 'duststorm') {
+				if (value.tryAbility("Earth Force")) value.irritantWeatherModify(1.3, "Dust Storm", "Earth Force");
+			}
+			if (moveType === 'Poison' && this.battle.irritantWeather === 'smogspread') {
+				if (value.tryAbility("Carbon Capture")) value.irritantWeatherModify(2, "Smog", "Carbon Capture");
+			}
+			if (['Fairy', 'Grass', 'Fire', 'Water'].includes(moveType) && (this.battle.irritantWeather === 'sprinkle')) {
+				if (value.tryAbility("Power Above")) value.irritantWeatherModify(1.3, "Fairy Dust", "Power Above");
+			}
+			if (this.battle.irritantWeather) amazeAssaultBP += 15;
+
+		}
+		if (serverPokemon.item !== 'energynullifier') {
+			if (move.category === 'Special' && (this.battle.energyWeather === 'daydream')) {
+				if (value.tryAbility("Smoke and Mirrors")) value.energyWeatherModify(1.2, "Dreamscape", "Smoke and Mirrors");
+			}
+			if (['Dragon', 'Fire', 'Electric', 'Ice'].includes(moveType) && (this.battle.energyWeather === 'dragonforce')) {
+				if (value.tryAbility("Power Within")) value.energyWeatherModify(1.3, "Dragon Force", "Power Within");
+			}
+			if (this.battle.energyWeather) amazeAssaultBP += 15;
+		}
+		if (this.battle.clearingWeather) amazeAssaultBP += 15;
+		if (this.battle.cataclysmWeather) amazeAssaultBP += 15;
+		if (move.id === 'amazeassault') value.set(amazeAssaultBP);
 		const noTypeOverride = [
 			'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'struggle', 'technoblast', 'terrainpulse', 'weatherball',
 		];
@@ -2503,9 +3007,13 @@ export class BattleTooltips {
 				value.abilityModify(1.2, "Galvanize");
 				value.abilityModify(this.battle.gen > 6 ? 1.2 : 1.3, "Pixilate");
 				value.abilityModify(this.battle.gen > 6 ? 1.2 : 1.3, "Refrigerate");
+				value.abilityModify(1.2, "Vegetate");
 			}
 			if (this.battle.gen > 6) {
 				value.abilityModify(1.2, "Normalize");
+			}
+			if (move.flags['sound']) {
+				value.abilityModify(1.5, "Trumpet Weevil");
 			}
 		}
 		if (move.recoil || move.hasCrashDamage) {
@@ -2552,34 +3060,50 @@ export class BattleTooltips {
 		}
 
 		// Terrain
+		const surgeSurferActive =
+			(this.battle.hasPseudoWeather('Electric Terrain') ||
+				(this.battle.energyWeather === 'supercell' && serverPokemon.item !== 'energynullifier')) &&
+				value.tryAbility("Surge Surfer");
+		const targetSurgeSurferActive = !!target && target.ability === 'Surge Surfer' &&
+			(this.battle.hasPseudoWeather('Electric Terrain') ||
+				(this.battle.energyWeather === 'supercell' && target.item !== 'energynullifier'));
 		if ((this.battle.hasPseudoWeather('Electric Terrain') && moveType === 'Electric') ||
 			(this.battle.hasPseudoWeather('Grassy Terrain') && moveType === 'Grass') ||
 			(this.battle.hasPseudoWeather('Psychic Terrain') && moveType === 'Psychic')) {
-			if (pokemon.isGrounded(serverPokemon)) {
+			if (pokemon.isGrounded(serverPokemon) || surgeSurferActive) {
 				value.modify(this.battle.gen > 7 ? 1.3 : 1.5, 'Terrain boost');
 			}
 		} else if (this.battle.hasPseudoWeather('Misty Terrain') && moveType === 'Dragon') {
-			if (target ? target.isGrounded() : true) {
+			if (target ? (target.isGrounded() || targetSurgeSurferActive) : true) {
 				value.modify(0.5, 'Misty Terrain + grounded target');
 			}
 		} else if (
 			this.battle.hasPseudoWeather('Grassy Terrain') && ['earthquake', 'bulldoze', 'magnitude'].includes(move.id)
 		) {
-			if (target ? target.isGrounded() : true) {
+			if (target ? (target.isGrounded() || targetSurgeSurferActive) : true) {
 				value.modify(0.5, 'Grassy Terrain + grounded target');
 			}
 		}
 		if (
+			this.battle.hasPseudoWeather('Misty Terrain') &&
+			moveType !== 'Fairy' &&
+			(move.target === 'allAdjacent' || move.target === 'allAdjacentFoes') &&
+			(target ? (target.isGrounded() || targetSurgeSurferActive) : true)
+		) {
+			value.modify(0.5, 'Misty Terrain + grounded target');
+		}
+		if (
 			move.id === 'expandingforce' &&
 			this.battle.hasPseudoWeather('Psychic Terrain') &&
-			pokemon.isGrounded(serverPokemon)
+			(pokemon.isGrounded(serverPokemon) || surgeSurferActive)
 		) {
 			value.modify(1.5, 'Expanding Force + Psychic Terrain boost');
 		}
 		if (move.id === 'mistyexplosion' && this.battle.hasPseudoWeather('Misty Terrain')) {
 			value.modify(1.5, 'Misty Explosion + Misty Terrain boost');
 		}
-		if (move.id === 'risingvoltage' && this.battle.hasPseudoWeather('Electric Terrain') && target?.isGrounded()) {
+		if (move.id === 'risingvoltage' && this.battle.hasPseudoWeather('Electric Terrain') &&
+			(target?.isGrounded() || targetSurgeSurferActive)) {
 			value.modify(2, 'Rising Voltage + Electric Terrain boost');
 		}
 
@@ -2599,6 +3123,9 @@ export class BattleTooltips {
 		// Burn isn't really a base power modifier, so it needs to be applied after the Tera BP floor
 		if (this.battle.gen > 2 && serverPokemon.status === 'brn' && move.id !== 'facade' && move.category === 'Physical') {
 			if (!value.tryAbility("Guts")) value.modify(0.5, 'Burn');
+		}
+		if (serverPokemon.status === 'fst' && move.category === 'Special') {
+			value.modify(0.5, 'Frostbite');
 		}
 
 		if (
@@ -2753,7 +3280,7 @@ export class BattleTooltips {
 
 		// Plates
 		if (item.onPlate === moveType && !item.zMove) {
-			value.itemModify(1.2);
+			value.itemModify(1.3);
 			return value;
 		}
 
@@ -3008,7 +3535,7 @@ export class BattleStatGuesser {
 					if (move.id === 'substitute') moveCount['Stall']++;
 					moveCount['Setup']++;
 				} else {
-					if (['toxic', 'leechseed', 'willowisp'].includes(move.id)) {
+					if (['toxic', 'leechseed', 'willowisp', 'whitewand'].includes(move.id)) {
 						moveCount['Stall']++;
 					}
 					moveCount['Support']++;
@@ -3045,7 +3572,8 @@ export class BattleStatGuesser {
 		let physicalBulk = (stats.hp + 75) * (stats.def + 87);
 		let specialBulk = (stats.hp + 75) * (stats.spd + 87);
 
-		if (hasMove['willowisp'] || hasMove['acidarmor'] || hasMove['irondefense'] || hasMove['cottonguard']) {
+		if (hasMove['willowisp'] || hasMove['acidarmor'] || hasMove['irondefense'] ||
+			hasMove['cottonguard'] || hasMove['shelter']) {
 			physicalBulk *= 1.6;
 			moveCount['PhysicalStall']++;
 		} else if (hasMove['scald'] || hasMove['bulkup'] || hasMove['coil'] || hasMove['cosmicpower']) {
@@ -3100,7 +3628,7 @@ export class BattleStatGuesser {
 			physicalBulk *= 1 + 0.1 * (1 + moveCount['Stall'] / 1.5);
 			specialBulk *= 1 + 0.1 * (1 + moveCount['Stall'] / 1.5);
 		}
-		if ((itemid === 'flameorb' || itemid === 'toxicorb') && abilityid !== 'magicguard') {
+		if ((itemid === 'flameorb' || itemid === 'toxicorb' || itemid === 'frostorb') && abilityid !== 'magicguard') {
 			if (itemid === 'toxicorb' && abilityid === 'poisonheal') {
 				physicalBulk *= 1 + 0.1 * (2 + moveCount['Stall']);
 				specialBulk *= 1 + 0.1 * (2 + moveCount['Stall']);
@@ -3134,7 +3662,8 @@ export class BattleStatGuesser {
 
 		if (
 			hasMove['agility'] || hasMove['dragondance'] || hasMove['quiverdance'] ||
-			hasMove['rockpolish'] || hasMove['shellsmash'] || hasMove['flamecharge']
+			hasMove['rockpolish'] || hasMove['shellsmash'] || hasMove['flamecharge'] ||
+			hasMove['earthrush']
 		) {
 			isFast = true;
 		} else if (abilityid === 'unburden' || abilityid === 'speedboost' || abilityid === 'motordrive') {
@@ -3369,6 +3898,21 @@ export class BattleStatGuesser {
 					SRweak--;
 				}
 			}
+			let SBweaknesses = ['Fairy', 'Ice', 'Rock'];
+			let SBresistances = ['Electric', 'Fire', 'Steel', 'Water'];
+			let SBweak = 0;
+			if (set.ability !== 'Magic Guard') {
+				if (SBweaknesses.includes(species.types[0])) {
+					SBweak++;
+				} else if (SBresistances.includes(species.types[0])) {
+					SBweak--;
+				}
+				if (SBweaknesses.includes(species.types[1])) {
+					SBweak++;
+				} else if (SBresistances.includes(species.types[1])) {
+					SBweak--;
+				}
+			}
 			const ensureHPDivisibility = (currentEVTotal: number) => {
 				let hpDivisibility = 0;
 				let hpShouldBeDivisible = false;
@@ -3384,9 +3928,9 @@ export class BattleStatGuesser {
 				} else if (hasMove['substitute'] && (set.item || '').endsWith('Berry')) {
 					hpDivisibility = 4;
 					hpShouldBeDivisible = true;
-				} else if (SRweak >= 2 || hasMove['bellydrum']) {
+				} else if ((SRweak || SBweak) >= 2 || hasMove['bellydrum']) {
 					hpDivisibility = 2;
-				} else if (SRweak >= 1 || hasMove['substitute'] || hasMove['transform']) {
+				} else if ((SRweak || SBweak) >= 1 || hasMove['substitute'] || hasMove['transform']) {
 					hpDivisibility = 4;
 				} else if (set.ability !== 'Magic Guard') {
 					hpDivisibility = 8;
@@ -3460,10 +4004,6 @@ export class BattleStatGuesser {
 			minusStat = 'atk';
 		} else if (stats.def > stats.spe && stats.spd > stats.spe && !evs['spe']) {
 			minusStat = 'spe';
-		} else if (plusStat === 'def' || plusStat === 'spd') {
-			// defensive set, don't sacrifice the other defensive stat
-			// physical moves are frequently run for utility rather than damage
-			minusStat = evs['atk'] && !evs['spe'] ? 'spe' : 'atk';
 		} else if (stats.def > stats.spd) {
 			minusStat = 'spd';
 		} else {

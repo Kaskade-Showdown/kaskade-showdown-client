@@ -1,7 +1,7 @@
 /* exported toId */
 function toId() {
 	// toId has been renamed toID
-	alert("You have an old extension/script for Pokemon Showdown which is incompatible with this client. It needs to be removed or updated.");
+	alert("You have an old extension/script for Kaskade Showdown which is incompatible with this client. It needs to be removed or updated.");
 }
 
 (function ($) {
@@ -247,7 +247,7 @@ function toId() {
 			if (assertion.charAt(0) === '\r') assertion = assertion.slice(1);
 			if (assertion.charAt(0) === '\n') assertion = assertion.slice(1);
 			if (assertion.indexOf('<') >= 0) {
-				app.addPopupMessage("Something is interfering with our connection to the login server. Most likely, your internet provider needs you to re-log-in, or your internet provider is blocking Pokémon Showdown.");
+				app.addPopupMessage("Something is interfering with our connection to the login server. Most likely, your internet provider needs you to re-log-in, or your internet provider is blocking Kaskade Showdown.");
 				return;
 			}
 			if (assertion === ';') {
@@ -506,7 +506,7 @@ function toId() {
 					self.updateLayout();
 				}
 
-				if (Dex.prefs('bwgfx') || Dex.prefs('noanim')) {
+				if (!Dex.prefs('bwgfx') || Dex.prefs('noanim')) {
 					// since xy data is loaded by default, only call
 					// loadSpriteData if we want bw sprites or if we need bw
 					// sprite data (if animations are disabled)
@@ -532,7 +532,7 @@ function toId() {
 
 				if (showNotification !== false && (self.popups.length || !self.focused) && window.Notification) {
 					self.rooms[''].requestNotifications();
-					self.rooms[''].notifyOnce("Disconnected", "You have been disconnected from Pokémon Showdown.", 'disconnected');
+					self.rooms[''].notifyOnce("Disconnected", "You have been disconnected from Kaskade Showdown.", 'disconnected');
 				}
 
 				self.rooms[''].updateFormats();
@@ -1189,6 +1189,7 @@ function toId() {
 				this.user.set({
 					name: parsed.name,
 					userid: userid,
+					group: parsed.group,
 					named: named,
 					avatar: parts[3],
 					settings: settings,
@@ -1973,6 +1974,9 @@ function toId() {
 			}
 			room.id = newid;
 			if (room.battle) room.battle.roomid = newid;
+			if (room.type === 'battle') {
+				room.isHiddenBattle = BattleRoom.checkHiddenBattle(newid);
+			}
 			room.title = newtitle;
 			room.$el[0].id = 'room-' + newid;
 			this.rooms[newid] = room;
@@ -2076,7 +2080,7 @@ function toId() {
 			if (room.id === this.fragment) this.updateTitle(room);
 		},
 		updateTitle: function (room) {
-			document.title = room.title ? room.title + " - Showdown!" : "Showdown!";
+			document.title = room.title ? room.title + " - Kaskade Showdown!" : "Kaskade Showdown!";
 		},
 		updateAutojoin: function () {
 			if (!Config.server.registered) return;
@@ -3076,7 +3080,7 @@ function toId() {
 			if (warning) {
 				buf += '<p><strong style="color:red">' + (BattleLog.escapeHTML(data.warning) || 'You have been warned for breaking the rules.') + '</strong></p>';
 			}
-			buf += '<h2>Pok&eacute;mon Showdown Rules</h2>';
+			buf += '<h2>Kaskade Showdown Rules</h2>';
 			buf += '<p><b>Global</b></p>' +
 				'<p><b>1.</b> Be nice to people. Respect people. Don\'t be rude or mean to people.</p>' +
 				'<p><b>2.</b> Follow US laws (PS is based in the US). No porn (minors use PS), don\'t distribute pirated material, and don\'t slander others.</p>' +

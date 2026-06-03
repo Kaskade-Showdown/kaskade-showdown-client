@@ -34,9 +34,9 @@
 			if (app.down) {
 				buf += '<div class="menugroup" style="background: rgba(10,10,10,.6)">';
 				if (app.down === 'ddos') {
-					buf += '<p class="error"><strong>Pok&eacute;mon Showdown is offline due to a DDoS attack!</strong></p>';
+					buf += '<p class="error"><strong>Kaskade Showdown is offline due to a DDoS attack!</strong></p>';
 				} else {
-					buf += '<p class="error"><strong>Pok&eacute;mon Showdown is offline due to technical difficulties!</strong></p>';
+					buf += '<p class="error"><strong>Kaskade Showdown is offline due to technical difficulties!</strong></p>';
 				}
 				buf += '<p><div style="text-align:center"><img width="96" height="96" src="//play.pokemonshowdown.com/sprites/gen5/teddiursa.png" alt="" class="pixelated" /></div> Bear with us as we freak out.</p>';
 				buf += '<p>(We\'ll be back up in a few hours.)</p>';
@@ -58,10 +58,10 @@
 			buf += '<p><button class="button mainmenu4" name="send" value="/smogtours">Tournaments</button></p>';
 			buf += '</div>';
 
-			buf += '<div class="menugroup"><p><button class="button mainmenu4 onlineonly disabled" name="joinRoom" value="battles">Watch a battle</button></p>';
-			buf += '<p><button class="button mainmenu5 onlineonly disabled" name="finduser">Find a user</button></p>';
-			buf += '<p><button class="button mainmenu6 onlineonly disabled" name="send" value="/friends">Friends</button></p>';
-			buf += '<p><button class="button mainmenu7" name="joinRoom" value="resources">Info & Resources</button></p></div>';
+			buf += '<div class="menugroup"><p><button class="button mainmenu5 onlineonly disabled" name="joinRoom" value="battles">Watch a battle</button></p>';
+			buf += '<p><button class="button mainmenu6 onlineonly disabled" name="finduser">Find a user</button></p>';
+			buf += '<p><button class="button mainmenu7 onlineonly disabled" name="send" value="/friends">Friends</button></p>';
+			buf += '<p><button class="button mainmenu8" name="joinRoom" value="resources">Info & Resources</button></p></div>';
 
 			this.$('.mainmenu').html(buf);
 
@@ -1281,10 +1281,11 @@
 				// avoiding that decision for now because it requires either an ugly hack
 				// or an overhaul of BattleFormats.
 				this.open = Storage.prefs('openformats') || {
-					"S/V Singles": true, "S/V Doubles": true, "Unofficial Metagames": true, "National Dex": true, "Ladder Spotlight": true,
-					"Other Metagames": true,
-					// For AFD
-					"Random Meta of the Decade": true
+					"Randomized Metas": true,
+					"Misc. Randomized Metas": true,
+					"Doubles": true, "Doubles Other Metagames": true,
+					"Singles": true, "Other Metagames": true,
+					"Dex-based Metas": true
 				};
 			}
 			if (!this.starred) this.starred = Storage.prefs('starredformats') || {};
