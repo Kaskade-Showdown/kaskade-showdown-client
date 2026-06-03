@@ -231,7 +231,7 @@ export const Dex = new class implements ModdedDex {
 	pokeballs: string[] | null = null;
 
 	resourcePrefix = (() => {
-		return `https://raw.githubusercontent.com/Kaskade-Showdown/kaskade-showdown-client/master/play.pokemonshowdown.com/`;
+		return `https://raw.githubusercontent.com/Kaskade-Showdown/kaskade-audio-visual/master/play.pokemonshowdown.com/`;
 	})();
 
 	fxPrefix = (() => {
