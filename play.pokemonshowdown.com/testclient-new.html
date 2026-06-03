@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html><head>
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0" />
@@ -35,7 +35,7 @@
 			<div class="mainmenufooter">
 				<div class="bgcredit"></div>
 				<small>
-					<a href="//kaskadeshowdown.com/replays/" target="_blank">Replays</a><br />
+					<a href="//play.kaskadeshowdown.com/replays/" target="_blank">Replays</a><br />
 					<a href="https://discord.gg/sFV7EabFU5" target="_blank">Discord</a> | <a href="https://swirlingseasons.wiki.gg/" target="_blank">Wiki</a> | <a href="https://docs.google.com/spreadsheets/d/1mUW2Ri72_5BzJaDHmGzaBMjDtyAW8nth6djeHCQqFHo/edit?usp=sharing" target="_blank">Detailed Google Sheet</a>
 				</small>
 			</div>
@@ -63,7 +63,7 @@
 				whitelist: [],
 				routes: {
 					root: "api.kaskadeshowdown.com",
-					client: "kaskadeshowdown.com",
+					client: "play.kaskadeshowdown.com",
 					dex: "dex.kaskadeshowdown.com",
 					replays: "replay.kaskadeshowdown.com",
 					users: "kaskadeshowdown.com/users"
@@ -81,7 +81,7 @@
 		}
 		function loadRemoteData(src) {
 			var scriptEl = document.createElement('script');
-			scriptEl.src = src.replace(/.*\/(data|js)\//g, 'https://kaskadeshowdown.com/$1/');
+			scriptEl.src = src.replace(/.*\/(data|js)\//g, 'https://play.kaskadeshowdown.com/$1/');
 			document.head.appendChild(scriptEl);
 		}
 		Config.testclient = true;
@@ -111,7 +111,7 @@
 	<script src="js/client-main.js"></script>
 	<script nomodule src="js/lib/sockjs-1.4.0-nwjsfix.min.js"></script>
 	<script src="js/client-connection.js"></script>
-	<script> Net.defaultRoute = 'https://kaskadeshowdown.com'; </script>
+	<script> Net.defaultRoute = 'https://play.kaskadeshowdown.com'; </script>
 
 	<script src="js/lib/preact.min.js"></script>
 	<script src="js/panels.js"></script>
@@ -159,8 +159,8 @@
 	<script src="js/battle-team-editor.js?"></script>
 	<script src="js/panel-teambuilder-team.js?"></script>
 
-	<script src="https://kaskadeshowdown.com/data/pokedex-mini.js"></script>
-	<script src="https://kaskadeshowdown.com/data/pokedex-mini-bw.js"></script>
+	<script src="https://play.kaskadeshowdown.com/data/pokedex-mini.js"></script>
+	<script src="https://play.kaskadeshowdown.com/data/pokedex-mini-bw.js"></script>
 	<script src="data/typechart.js" onerror="loadRemoteData(this.src)"></script>
 	<script src="data/aliases.js" onerror="loadRemoteData(this.src)"></script>
 	<script src="js/lib/d3.v3.min.js"></script>
