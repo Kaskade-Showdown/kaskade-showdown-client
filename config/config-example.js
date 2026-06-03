@@ -175,5 +175,6 @@ Config.roomsFirstOpenScript = function () {
 };
 
 Config.customcolors = {
-	'zarel': 'aeo'
+	'zarel': 'aeo',
+	'botnyak': '#C0C0C0'
 };
