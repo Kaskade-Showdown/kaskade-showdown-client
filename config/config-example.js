@@ -7,6 +7,7 @@ Config.bannedHosts = ['cool.jit.su', 'pokeball-nixonserver.rhcloud.com'];
 
 Config.whitelist = [
 	// swse
+	'kaskadeshowdown.com',
 	'wiki.gg',
 	// general sites
 	'wikipedia.org',
