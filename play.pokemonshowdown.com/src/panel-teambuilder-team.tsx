@@ -18,7 +18,6 @@ class TeamRoom extends PSRoom {
 	/** Doesn't _literally_ always exist, but does in basically all code
 	 * and constantly checking for its existence is legitimately annoying... */
 	team!: Team;
-	teamDeleted = false;
 	forceReload = false;
 	override clientCommands = this.parseClientCommands({
 		'validate'(target) {
@@ -33,16 +32,9 @@ class TeamRoom extends PSRoom {
 		super(options);
 		const team = PS.teams.byKey[this.id.slice(5)] || null;
 		this.team = team!;
-		this.title = `[Team] ${this.team?.name || 'Not found'}`;
+		this.title = `[Team] ${this.team?.name || 'Error'}`;
 		if (team) this.setFormat(team.format);
 		this.load();
-	}
-	getTeam() {
-		const team = PS.teams.byKey[this.id.slice(5)] || null;
-		this.teamDeleted = !team && (!!this.team || this.teamDeleted);
-		this.team = team!;
-		this.title = `[Team] ${this.team?.name || (this.teamDeleted ? 'Team deleted' : 'Not found')}`;
-		return team;
 	}
 	setFormat(format: string) {
 		const team = this.team;
@@ -210,7 +202,7 @@ class TeamPanel extends PSRoomPanel<TeamRoom> {
 	}
 	override render() {
 		const { room } = this.props;
-		const team = room.getTeam();
+		const team = room.team;
 		if (!team || room.forceReload) {
 			if (room.forceReload) {
 				room.forceReload = false;
@@ -221,7 +213,7 @@ class TeamPanel extends PSRoomPanel<TeamRoom> {
 					<i class="fa fa-chevron-left" aria-hidden></i> List
 				</a>
 				<p class="error">
-					{room.teamDeleted ? 'Team was deleted' : 'Team doesn\'t exist'}
+					Team doesn't exist
 				</p>
 			</PSPanelWrapper>;
 		}

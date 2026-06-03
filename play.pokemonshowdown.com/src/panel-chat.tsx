@@ -52,7 +52,7 @@ export class ChatRoom extends PSRoom {
 	log: BattleLog | null = null;
 	tour: ChatTournament | null = null;
 	lastMessage: Args | null = null;
-	lastViewedTime: number | null = null;
+	lastMessageTime: number | null = null;
 
 	joinLeave: { join: string[], leave: string[], messageId: string } | null = null;
 	/** in order from least to most recent */
@@ -175,7 +175,6 @@ export class ChatRoom extends PSRoom {
 			break;
 		case ':':
 			this.timeOffset = Math.trunc(Date.now() / 1000) - (parseInt(args[1], 10) || 0);
-			PS.lastMessageTime = args[1];
 			break;
 		}
 		super.receiveLine(args);
@@ -192,7 +191,7 @@ export class ChatRoom extends PSRoom {
 			// then cut off roomintro from the end
 			let cutOffStart = 0;
 			let cutOffEnd = lines.length;
-			const cutOffTime = PS.connection?.lastMessageTimeBeforeReconnect || parseInt(PS.lastMessageTime);
+			const cutOffTime = parseInt(PS.lastMessageTime);
 			const cutOffExactLine = this.lastMessage ? '|' + this.lastMessage?.join('|') : '';
 			let reconnectMessage = '|raw|<div class="infobox">You reconnected.</div>';
 			for (let i = 0; i < lines.length; i++) {
@@ -317,13 +316,13 @@ export class ChatRoom extends PSRoom {
 		// because the time offset to the server can vary slightly, subtract it to not have it affect comparisons between dates
 		const time = serverTime - (this.timeOffset || 0);
 		if (PS.isVisiblePanel(this)) {
-			this.lastViewedTime = null;
+			this.lastMessageTime = null;
 			lastMessageDates[PS.server.id][this.id] = time;
 			PS.prefs.set('logtimes', lastMessageDates);
 		} else {
 			// To be saved on focus
-			const lastViewedTime = this.lastViewedTime || 0;
-			if (lastViewedTime < time) this.lastViewedTime = time;
+			const lastMessageTime = this.lastMessageTime || 0;
+			if (lastMessageTime < time) this.lastMessageTime = time;
 		}
 		if (ChatRoom.getHighlight(message, this.id)) {
 			const mayNotify = time > lastMessageDate;

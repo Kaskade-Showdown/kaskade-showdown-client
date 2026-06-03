@@ -13,7 +13,6 @@ declare const POKEMON_SHOWDOWN_TESTCLIENT_KEY: string | undefined;
 export class PSConnection {
 	socket: WebSocket | null = null;
 	connected = false;
-	lastMessageTimeBeforeReconnect = 0;
 	queue: string[] = [];
 	reconnectDelay = 1000;
 	private reconnectCap = 15000;
@@ -69,7 +68,6 @@ export class PSConnection {
 				switch (type) {
 				case 'connected':
 					console.log('\u2705 (CONNECTED via worker)');
-					this.lastMessageTimeBeforeReconnect = parseInt(PS.lastMessageTime) || 0;
 					this.connected = true;
 					if (PS.prefs.avatar) worker.postMessage({ type: 'send', data: `/avatar ${PS.prefs.avatar},1` });
 					this.queue.forEach(msg => worker.postMessage({ type: 'send', data: msg }));
@@ -123,7 +121,6 @@ export class PSConnection {
 
 		socket.onopen = () => {
 			console.log('\u2705 (CONNECTED)');
-			this.lastMessageTimeBeforeReconnect = parseInt(PS.lastMessageTime) || 0;
 			this.connected = true;
 			this.reconnectDelay = 1000;
 			if (PS.prefs.avatar) socket.send(`/avatar ${PS.prefs.avatar},1`);
