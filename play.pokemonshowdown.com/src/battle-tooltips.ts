@@ -2521,6 +2521,7 @@ export class BattleTooltips {
 		}
 		if (move.flags['wind']) {
 			value.clearingWeatherModify(0, 'Strong Winds');
+			value.clearingWeatherModify(0, 'Delta Stream');
 		}
 		value.abilityModify(0, 'No Guard');
 		if (!value.value) return value;
