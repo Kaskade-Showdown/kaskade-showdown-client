@@ -2252,9 +2252,6 @@ export class BattleTooltips {
 		if (attackType === 'Fire' && abilityid === 'heatproof') factor *= 0.5;
 		if (attackType === 'Ghost' && abilityid === 'purifyingsalt') factor *= 0.5;
 		if (attackType === 'Fire' && abilityid === 'fluffy') factor *= 2;
-		if ((attackType === 'Electric' || attackType === 'Rock' || attackType === 'Ice') && abilityid === 'deltastream') {
-			factor *= 0.5;
-		}
 		if (attackType === 'Water' && abilityid === 'hydrophobic') factor *= 0.5;
 		if (attackType === 'Psychic' && abilityid === 'foil') factor *= 0.5;
 		return factor;
@@ -2373,7 +2370,11 @@ export class BattleTooltips {
 					factor *= 2;
 				}
 			} else {
-				factor *= [1, 2, 0.5, 0][tType.damageTaken?.[attackType] || 0] ?? 1;
+				let typeFactor = ([1, 2, 0.5, 0][tType.damageTaken?.[attackType] || 0]) ?? 1;
+				if (this.battle.clearingWeather === 'deltastream' && targetType === 'Flying' && typeFactor > 1) {
+					typeFactor = 1;
+				}
+				factor *= typeFactor;
 				if (this.battle.isWeatherStateBoosted('haunt' as ID) && attackType === 'Ghost' && targetType === 'Normal') {
 					factor *= 2;
 				}
