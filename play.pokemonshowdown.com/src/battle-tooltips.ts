@@ -2361,7 +2361,6 @@ export class BattleTooltips {
 				factor *= 2;
 			} else if (move.id === 'deception' && targetType === 'Fairy') {
 				factor *= 2;
-			// incomplete, does this work
 			} else if (move.id === 'darkdepletion') {
 				if (targetType === 'Grass') {
 					factor *= 2;
