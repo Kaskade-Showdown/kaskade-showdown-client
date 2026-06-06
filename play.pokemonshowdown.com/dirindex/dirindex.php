@@ -707,7 +707,7 @@ if ($sort_by === 'name' || $sort_by === 'N') {
 		<div class="nav-wrapper"><ul class="nav">
 			<li><a class="button nav-first" href="//pokemonshowdown.com/"><img src="//play.pokemonshowdown.com/pokemonshowdownbeta.png" srcset="//play.pokemonshowdown.com/pokemonshowdownbeta.png 1x, //play.pokemonshowdown.com/pokemonshowdownbeta@2x.png 2x" alt="Pok&eacute;mon Showdown" width="146" height="44" /> Home</a></li>
 			<li><a class="button" href="//pokemonshowdown.com/dex/">Pok&eacute;dex</a></li>
-			<li><a class="button" href="//replay.pokemonshowdown.com/">Replay</a></li>
+			<li><a class="button" href="//replay.pokemonshowdown.com/">Replays</a></li>
 			<li><a class="button purplebutton" href="//smogon.com/dex/" target="_blank">Strategy</a></li>
 			<li><a class="button nav-last purplebutton" href="//smogon.com/forums/" target="_blank">Forum</a></li>
 			<li><a class="button greenbutton nav-first nav-last" href="//play.pokemonshowdown.com/">Play</a></li>
