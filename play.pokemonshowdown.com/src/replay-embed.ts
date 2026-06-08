@@ -33,7 +33,7 @@ function requireScript(url: string) {
 	document.head.appendChild(scriptEl);
 }
 
-linkStyle('https://play.kaskadeshowdown.com/style/font-awesome.css?');
+linkStyle('https://play.pokemonshowdown.com/style/font-awesome.css?');
 linkStyle('https://play.kaskadeshowdown.com/style/battle.css?a7');
 linkStyle('https://play.kaskadeshowdown.com/style/replay.css?a7');
 linkStyle('https://play.kaskadeshowdown.com/style/utilichart.css?a7');
