@@ -974,6 +974,9 @@ class BattlePokemonSearch extends BattleTypedSearch<'pokemon'> {
 		let results: SearchRow[] = [];
 		for (let id in BattlePokedex) {
 			switch (id) {
+			case 'llampas':
+				results.push(['header', "Kaskade"]);
+				break;
 			case 'bulbasaur':
 				results.push(['header', "Generation 1"]);
 				break;
