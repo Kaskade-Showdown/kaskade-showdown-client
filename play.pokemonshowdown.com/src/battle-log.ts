@@ -60,6 +60,7 @@ export class BattleLog {
 	constructor(elem: HTMLDivElement, scene?: BattleScene | null, innerElem?: HTMLDivElement) {
 		this.elem = elem;
 
+		innerElem ||= elem.querySelector<HTMLDivElement>('.inner') || undefined;
 		if (!innerElem) {
 			elem.setAttribute('role', 'log');
 			elem.innerHTML = '';
@@ -71,9 +72,12 @@ export class BattleLog {
 
 		if (scene) {
 			this.scene = scene;
-			const preemptElem = document.createElement('div');
-			preemptElem.className = 'inner-preempt message-log';
-			elem.appendChild(preemptElem);
+			let preemptElem = elem.querySelector<HTMLDivElement>('.inner-preempt');
+			if (!preemptElem) {
+				preemptElem = document.createElement('div');
+				preemptElem.className = 'inner-preempt message-log';
+				elem.appendChild(preemptElem);
+			}
 			this.preemptElem = preemptElem;
 			this.battleParser = new BattleTextParser();
 		}
@@ -103,8 +107,11 @@ export class BattleLog {
 	};
 	reset() {
 		this.innerElem.innerHTML = '';
+		if (this.preemptElem) this.preemptElem.innerHTML = '';
 		this.atBottom = true;
 		this.skippedLines = false;
+		this.joinLeave = null;
+		this.lastRename = null;
 	}
 	destroy() {
 		this.elem.onscroll = null;
@@ -230,7 +237,7 @@ export class BattleLog {
 				if (this.joinLeave.joins.length) buf += `; `;
 				buf += `${this.textList(this.joinLeave.leaves)} left`;
 			}
-			this.joinLeave.element.innerHTML = `<small>${BattleLog.escapeHTML(buf)}</small>`;
+			this.joinLeave.element.innerHTML = `<small class="gray">${BattleLog.escapeHTML(buf)}</small>`;
 			(preempt ? this.preemptElem : this.innerElem).appendChild(this.joinLeave.element);
 			return;
 		}
@@ -247,7 +254,7 @@ export class BattleLog {
 				this.lastRename.element.className = 'chat';
 			}
 			this.lastRename.to = user.group + user.name;
-			this.lastRename.element.innerHTML = `<small>${BattleLog.escapeHTML(this.lastRename.to)} renamed from ${BattleLog.escapeHTML(this.lastRename.from)}.</small>`;
+			this.lastRename.element.innerHTML = `<small class="gray">${BattleLog.escapeHTML(this.lastRename.to)} renamed from ${BattleLog.escapeHTML(this.lastRename.from)}.</small>`;
 			(preempt ? this.preemptElem : this.innerElem).appendChild(this.lastRename.element);
 			return;
 		}

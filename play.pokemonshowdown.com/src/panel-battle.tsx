@@ -155,6 +155,13 @@ export class BattleRoom extends ChatRoom {
 		* null = initializing, we don't know yet */
 	rejoining: boolean | null = null;
 
+	override interruptClose(explicit?: boolean, elem?: HTMLElement | null) {
+		if (!this.battle.ended && this.users[PS.user.userid]?.startsWith('☆') && !this.battle.isReplay) {
+			PS.join('forfeitbattle' as RoomID, { parentElem: elem, parentRoomid: this.id });
+			return `You are still in ${this.title}`;
+		}
+		return super.interruptClose(explicit, elem);
+	}
 	static checkHiddenBattle(id: RoomID) {
 		return /^battle-[a-z0-9]+-\d+-[^-]+$/.test(id);
 	}
@@ -725,8 +732,8 @@ class BattlePanel extends PSRoomPanel<BattleRoom> {
 		const userSlot = choices.index() + Math.floor(battle.mySide.n / 2) * battle.pokemonControlled;
 		const userSlotCross = battle.farSide.active.length - 1 - userSlot;
 
-		return [
-			battle.farSide.active.map((pokemon, i) => {
+		return <>
+			{battle.farSide.active.map((pokemon, i) => {
 				let disabled = false;
 				if (moveTarget === 'adjacentAlly' || moveTarget === 'adjacentAllyOrSelf') {
 					disabled = true;
@@ -741,9 +748,9 @@ class BattlePanel extends PSRoomPanel<BattleRoom> {
 					disabled: disabled && 'fade',
 					tooltip: `activepokemon|1|${i}`,
 				});
-			}).reverse(),
-			<div style="clear: left"></div>,
-			battle.nearSide.active.map((pokemon, i) => {
+			}).reverse()}
+			<div style={{ clear: 'left' }}></div>
+			{battle.nearSide.active.map((pokemon, i) => {
 				let disabled = false;
 				if (moveTarget === 'adjacentFoe') {
 					disabled = true;
@@ -759,8 +766,8 @@ class BattlePanel extends PSRoomPanel<BattleRoom> {
 					disabled: disabled && 'fade',
 					tooltip: `activepokemon|0|${i}`,
 				});
-			}),
-		];
+			})}
+		</>;
 	}
 	renderSwitchMenu(
 		request: BattleMoveRequest | BattleSwitchRequest, choices: BattleChoiceBuilder, ignoreTrapping?: boolean
@@ -1108,7 +1115,7 @@ class BattlePanel extends PSRoomPanel<BattleRoom> {
 				{hardcoreStyle}
 				<BattleDiv room={room} />
 				<ChatLog
-					class="battle-log hasuserlist" room={room} top={this.battleHeight} noSubscription
+					class="battle-log hasuserlist" room={room} top={this.battleHeight} noSubscription hasPreempt
 				>
 					<div class="battle-controls" role="complementary" aria-label="Battle Controls">
 						{this.renderControls()}
@@ -1132,7 +1139,7 @@ class BattlePanel extends PSRoomPanel<BattleRoom> {
 			{hardcoreStyle}
 			<BattleDiv room={room} />
 			<ChatLog
-				class="battle-log hasuserlist" room={room} left={640} noSubscription
+				class="battle-log hasuserlist" room={room} left={640} noSubscription hasPreempt
 			>
 				{}
 			</ChatLog>
