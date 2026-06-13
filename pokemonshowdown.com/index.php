@@ -88,10 +88,11 @@ include_once __DIR__ . '/../config/ads-landing.inc.php';
 		<div class="nav-wrapper"><ul class="nav">
 			<li><a class="button nav-first cur" href="/"><img src="/images/pokemonshowdownbeta.png" srcset="/images/pokemonshowdownbeta.png 1x, /images/pokemonshowdownbeta@2x.png 2x" alt="Kaskade Showdown" width="146" height="44" /> Home</a></li>
 			<li><a class="button" href="/dex/">Pok&eacute;dex</a></li>
-			<li><a class="button" href="//replay.pokemonshowdown.com/">Replays</a></li>
-			<li><a class="button purplebutton" href="//smogon.com/dex/" target="_blank">Strategy</a></li>
-			<li><a class="button nav-last purplebutton" href="//smogon.com/forums/" target="_blank">Forum</a></li>
-			<li><a class="button greenbutton nav-first nav-last" href="//play.pokemonshowdown.com/">Play</a></li>
+			<li><a class="button" href="/replay/">Replays</a></li>
+			<li><a class="button purplebutton" href="https://discord.gg/sFV7EabFU5">Discord</a></li>
+			<li><a class="button purplebutton" href="https://swirlingseasons.wiki.gg/">Wiki</a></li>
+			<li><a class="button nav-last purplebutton" href="https://docs.google.com/spreadsheets/d/1mUW2Ri72_5BzJaDHmGzaBMjDtyAW8nth6djeHCQqFHo/edit?usp=sharing">Google Sheet</a></li>
+			<li><a class="button greenbutton nav-first nav-last" href="//play.kaskadeshowdown.com/">Play</a></li>
 		</ul></div>
 	</header>
 
@@ -287,7 +288,7 @@ if (BrowserDetect.OS === 'Mac') {
 			<a class="blocklink" href="http://www.smogon.com/stats/" target="_blank"><i class="fa fa-sort-amount-desc"></i> Usage stats</a>
 		</li>
 		<li>
-			<a class="blocklink" href="https://github.com/smogon/Pokemon-Showdown" target="_blank"><i class="fa fa-github"></i> GitHub repository</a>
+			<a class="blocklink" href="https://github.com/Kaskade-Showdown/kaskade-showdown" target="_blank"><i class="fa fa-github"></i> GitHub repository</a>
 		</li>
 	</ul>
 	<p style="text-align: center; clear: both">
